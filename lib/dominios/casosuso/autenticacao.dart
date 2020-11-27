@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 
-import '../entidades/Conta.dart';
+import '../entidades/conta.dart';
 
 abstract class Autenticacao{
   Future<Conta> autoriza({
