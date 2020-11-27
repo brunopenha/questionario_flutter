@@ -29,12 +29,21 @@ class ClienteHttpSimulado extends Mock implements ClienteHttp {}
 
 void main(){
   
+  // sut - System Under Test
+  AutenticacaoRemota sut;
+  ClienteHttpSimulado clienteHttp;
+  String urlFake;
+  
+
+  setUp(() {
+    clienteHttp = ClienteHttpSimulado();
+    urlFake = faker.internet.httpUrl();
+    sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlFake);
+    
+  });
+
   test("Deveria chamar o ClienteHttp com a URL correta", () async{
 
-    final clienteHttp = ClienteHttpSimulado();
-    final urlFake = faker.internet.httpUrl();
-    // sut - System Under Test
-    final sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlFake);
     
     await sut.autoriza();
 
