@@ -14,14 +14,15 @@ class AutenticacaoRemota {
   });
 
   Future<void> autoriza() async {
-    await clienteHttp.requisita(url: url);
+    await clienteHttp.requisita(url: url, metodo:'post');
   }
 }
 
 abstract class ClienteHttp{
   Future<void> requisita({
-    @required String url
-  }){}
+    @required String url,
+    @required String metodo
+  });
 }
 
 class ClienteHttpSimulado extends Mock implements ClienteHttp {}
@@ -37,6 +38,8 @@ void main(){
     
     await sut.autoriza();
 
-    verify(clienteHttp.requisita(url:urlFake));
+    verify(clienteHttp.requisita(url:urlFake, metodo:'post'));
+
+
   });
 }
