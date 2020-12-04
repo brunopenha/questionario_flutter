@@ -15,13 +15,13 @@
 
 1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
 
-> ## Exceção - Resposta inválida
+> ## Exceção - Requisição inválida
 
 1. Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor
 
-1. Sistema retorna uma mensagem de erro inesperado
+1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Credenciais inválidas
 
