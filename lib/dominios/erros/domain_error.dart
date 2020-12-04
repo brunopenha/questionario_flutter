@@ -1,3 +1,4 @@
 enum ErrosDominio {
-  inesperado
+  inesperado,
+  credenciaisInvalidas
 }

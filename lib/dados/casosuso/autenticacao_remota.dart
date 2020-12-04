@@ -18,8 +18,11 @@ class AutenticacaoRemota {
     final body = ParametrosAutenticacaoRemota.aPartirDoDominio(parametro).criaJson();
     try{
       await clienteHttp.requisita(url: url, metodo:'post', corpo: body);
-    } on ErrosHttp {
-        throw ErrosDominio.inesperado;
+    } on ErrosHttp catch (erro) {
+       
+        throw erro == ErrosHttp.unauthorized ?
+           ErrosDominio.credenciaisInvalidas :
+           ErrosDominio.inesperado;
     }
     
   }

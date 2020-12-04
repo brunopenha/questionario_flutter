@@ -71,4 +71,14 @@ void main(){
 
     expect(future, throwsA(ErrosDominio.inesperado)); 
   });
+
+  test("Deveria lançar CredenciaisInvalidas se o ClienteHttp retornar 401", () async{
+
+    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
+      .thenThrow(ErrosHttp.unauthorized);
+      
+    final future = sut.autoriza(parametro);
+
+    expect(future, throwsA(ErrosDominio.credenciaisInvalidas)); 
+  });
 }
