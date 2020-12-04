@@ -1,8 +1,9 @@
 import 'package:test/test.dart';
-
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:meta/meta.dart'; // Para incluir parametros obrigatorios
+
+import 'package:questionario/dominios/casosuso/casosuso.dart';
 
 class AutenticacaoRemota {
   final ClienteHttp clienteHttp;
@@ -13,15 +14,17 @@ class AutenticacaoRemota {
     @required this.url
   });
 
-  Future<void> autoriza() async {
-    await clienteHttp.requisita(url: url, metodo:'post');
+  Future<void> autoriza(ParametrosAutenticacao parametro) async {
+    final body = {'email':parametro.email, 'senha':parametro.senha};
+    await clienteHttp.requisita(url: url, metodo:'post', body: body);
   }
 }
 
 abstract class ClienteHttp{
   Future<void> requisita({
     @required String url,
-    @required String metodo
+    @required String metodo,
+    Map body
   });
 }
 
@@ -44,10 +47,14 @@ void main(){
 
   test("Deveria chamar o ClienteHttp com a URL correta", () async{
 
-    
-    await sut.autoriza();
+    final ParametrosAutenticacao parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());    
+    await sut.autoriza(parametro);
 
-    verify(clienteHttp.requisita(url:urlFake, metodo:'post'));
+    verify(clienteHttp.requisita(
+      url:urlFake, 
+      metodo:'post',
+      body: { 'email': parametro.email,'senha': parametro.senha}
+      ));
 
 
   });
