@@ -1,22 +1,28 @@
 # Caso de Uso - Autenticação Remota
 
 > ## Caso de sucesso
-1. `:white_check_mark:` Sistema valida os dados
-2. `:white_check_mark:` Sistema faz uma requisição para a URL da API de acesso
+
+1. `:heavy_check_mark:` Sistema valida os dados
+2. `:heavy_check_mark:` Sistema faz uma requisição para a URL da API de acesso
 3. Sistema valida os dados recebidos da API
 4. Sistema entrega os dados da conta do usuário
 
 > ## Exceção - URL inválida
+
 1. Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Dados inválidos
+
 1. Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Resposta inválida
+
 1. Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor
+
 1. Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Credenciais inválidas
+
 1. Sistema retorna uma mensagem de erro informando que as credencias estão erradas

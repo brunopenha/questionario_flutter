@@ -3,6 +3,8 @@ import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 
 import 'package:questionario/dominios/casosuso/casosuso.dart';
+import 'package:questionario/dominios/erros/erros.dart';
+
 import 'package:questionario/dados/http/http.dart';
 import 'package:questionario/dados/casosuso/casosuso.dart';
 
@@ -38,5 +40,16 @@ void main(){
       ));
 
 
+  });
+
+  test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async{
+
+    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
+      .thenThrow(ErrosHttp.badRequest);
+      
+    final parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());    
+    final future = sut.autoriza(parametro);
+
+    expect(future, throwsA(ErrosDominio.inesperado)); 
   });
 }

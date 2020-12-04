@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 
+
 import '../../dominios/casosuso/casosuso.dart';
+import '../../dominios/erros/erros.dart';
 import '../http/http.dart'; // Para incluir parametros obrigatorios
 
 class AutenticacaoRemota {
@@ -14,7 +16,12 @@ class AutenticacaoRemota {
 
   Future<void> autoriza(ParametrosAutenticacao parametro) async {
     final body = ParametrosAutenticacaoRemota.aPartirDoDominio(parametro).criaJson();
-    await clienteHttp.requisita(url: url, metodo:'post', corpo: body);
+    try{
+      await clienteHttp.requisita(url: url, metodo:'post', corpo: body);
+    } on ErrosHttp {
+        throw ErrosDominio.inesperado;
+    }
+    
   }
 }
 
