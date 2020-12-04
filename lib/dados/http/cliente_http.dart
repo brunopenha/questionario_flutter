@@ -4,6 +4,6 @@ abstract class ClienteHttp{
   Future<void> requisita({
     @required String url,
     @required String metodo,
-    Map body
+    Map corpo
   });
 }

@@ -15,5 +15,4 @@ class ParametrosAutenticacao{
     @required this.senha
   });
 
-  Map criaJson() => {'email':email, 'senha':senha};
 }

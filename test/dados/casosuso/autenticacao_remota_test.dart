@@ -34,7 +34,7 @@ void main(){
     verify(clienteHttp.requisita(
       url:urlFake, 
       metodo:'post',
-      body: { 'email': parametro.email,'senha': parametro.senha}
+      corpo: { 'email': parametro.email,'senha': parametro.senha}
       ));
 
 

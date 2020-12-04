@@ -13,6 +13,22 @@ class AutenticacaoRemota {
   });
 
   Future<void> autoriza(ParametrosAutenticacao parametro) async {
-    await clienteHttp.requisita(url: url, metodo:'post', body: parametro.criaJson());
+    final body = ParametrosAutenticacaoRemota.aPartirDoDominio(parametro).criaJson();
+    await clienteHttp.requisita(url: url, metodo:'post', corpo: body);
   }
+}
+
+class ParametrosAutenticacaoRemota{
+  final String email;
+  final String senha;
+
+  ParametrosAutenticacaoRemota({
+    @required this.email,
+    @required this.senha
+  });
+
+  factory ParametrosAutenticacaoRemota.aPartirDoDominio(ParametrosAutenticacao entidade) =>
+    ParametrosAutenticacaoRemota(email: entidade.email, senha: entidade.senha);
+
+  Map criaJson() => {'email':email, 'senha':senha};
 }
