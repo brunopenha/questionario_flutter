@@ -19,13 +19,13 @@ void main(){
    sut;
   ClienteHttpSimulado clienteHttp;
   String urlFake;
-  
+  ParametrosAutenticacao parametro;
 
   setUp(() {
     clienteHttp = ClienteHttpSimulado();
     urlFake = faker.internet.httpUrl();
     sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlFake);
-    
+    parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());
   });
 
   test("Deveria chamar o ClienteHttp com a URL correta", () async{
@@ -47,7 +47,6 @@ void main(){
     when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
       .thenThrow(ErrosHttp.badRequest);
       
-    final parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());    
     final future = sut.autoriza(parametro);
 
     expect(future, throwsA(ErrosDominio.inesperado)); 
