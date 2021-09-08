@@ -17,13 +17,13 @@ void main(){
   
   ClienteHttpSimulado clienteHttp;
   String urlSimulada;
-  ParametrosAutenticacao parametro;
+  ParametrosAutenticacao parametros;
 
   setUp(() {
     clienteHttp = ClienteHttpSimulado();
     urlSimulada = faker.internet.httpUrl();
     sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlSimulada);
-    parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());
+    parametros = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());
   });
 
   test("Deveria chamar o ClienteHttp com a URL correta", () async{
@@ -32,12 +32,12 @@ void main(){
       .thenAnswer((_) async => {'tokenAcesso' : faker.guid.guid(), 'nome' : faker.person.name()});
     
     
-    await sut.autoriza(parametro);
+    await sut.autoriza(parametros);
 
     verify(clienteHttp.requisita(
       url:urlSimulada, 
       metodo:'post',
-      corpo: { 'email': parametro.email,'senha': parametro.senha}
+      corpo: { 'email': parametros.email,'senha': parametros.senha}
       ));
 
 
@@ -52,7 +52,7 @@ void main(){
         )
         .thenThrow(ErrosHttp.badRequest);
       
-    final future = sut.autoriza(parametro);
+    final future = sut.autoriza(parametros);
 
     expect(future, throwsA(ErrosDominio.inesperado)); 
   });
@@ -62,7 +62,7 @@ void main(){
     when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
       .thenThrow(ErrosHttp.notFounded);
       
-    final future = sut.autoriza(parametro);
+    final future = sut.autoriza(parametros);
 
     expect(future, throwsA(ErrosDominio.inesperado)); 
   });
@@ -72,7 +72,7 @@ void main(){
     when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
       .thenThrow(ErrosHttp.serverError);
       
-    final future = sut.autoriza(parametro);
+    final future = sut.autoriza(parametros);
 
     expect(future, throwsA(ErrosDominio.inesperado)); 
   });
@@ -82,20 +82,29 @@ void main(){
     when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
       .thenThrow(ErrosHttp.unauthorized);
       
-    final future = sut.autoriza(parametro);
+    final future = sut.autoriza(parametros);
 
     expect(future, throwsA(ErrosDominio.credenciaisInvalidas)); 
   });
 
-   test("Deveria retornar uma conta se o ClienteHttp retornar 200", () async{
+  test("Deveria retornar uma conta se o ClienteHttp retornar 200", () async{
 
     final tokenAcesso = faker.guid.guid();
 
     when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
       .thenAnswer((_) async => {'tokenAcesso' : tokenAcesso, 'nome' : faker.person.name()});
       
-    final conta = await sut.autoriza(parametro);
+    final conta = await sut.autoriza(parametros);
 
     expect(conta.token, tokenAcesso); 
+  });
+
+  test("Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos", () async{
+
+    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
+      .thenAnswer((_) async => {'tokenAcesso' : 'chave_invalida'});
+      
+    final future = sut.autoriza(parametros);
+    expect(future, throwsA(ErrosDominio.inesperado)); 
   });
 }

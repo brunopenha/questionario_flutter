@@ -4,8 +4,8 @@
 
 1. `:heavy_check_mark:` Sistema valida os dados
 2. `:heavy_check_mark:` Sistema faz uma requisição para a URL da API de acesso
-3. Sistema valida os dados recebidos da API
-4. Sistema entrega os dados da conta do usuário
+3. `:heavy_check_mark:` Sistema valida os dados recebidos da API
+4. `:heavy_check_mark:` Sistema entrega os dados da conta do usuário
 
 > ## Exceção - URL inválida
 
@@ -17,7 +17,7 @@
 
 > ## Exceção - Requisição inválida
 
-1. Sistema retorna uma mensagem de erro inesperado
+1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor
 
