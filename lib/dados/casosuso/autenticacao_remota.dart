@@ -7,7 +7,7 @@ import '../../dominios/erros/erros.dart';
 import '../http/http.dart'; // Para incluir parametros obrigatorios
 import '../modelos/modelos.dart';
 
-class AutenticacaoRemota {
+class AutenticacaoRemota implements Autenticacao {
   final ClienteHttp clienteHttp;
   final String url;
 
