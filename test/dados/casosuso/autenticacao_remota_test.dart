@@ -14,9 +14,9 @@ class ClienteHttpSimulado extends Mock implements ClienteHttp {}
 
 void main(){
   
-  // sut - System Under Test
-  AutenticacaoRemota
-   sut;
+  // sut - System Under Test - "Quem estou testando?"
+  AutenticacaoRemota sut;
+  
   ClienteHttpSimulado clienteHttp;
   String urlFake;
   ParametrosAutenticacao parametro;
