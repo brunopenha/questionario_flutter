@@ -8,8 +8,6 @@ import 'package:questionario/dominios/erros/erros.dart';
 import 'package:questionario/dados/http/http.dart';
 import 'package:questionario/dados/casosuso/casosuso.dart';
 
-
-
 class ClienteHttpSimulado extends Mock implements ClienteHttp {}
 
 void main(){
@@ -18,23 +16,26 @@ void main(){
   AutenticacaoRemota sut;
   
   ClienteHttpSimulado clienteHttp;
-  String urlFake;
+  String urlSimulada;
   ParametrosAutenticacao parametro;
 
   setUp(() {
     clienteHttp = ClienteHttpSimulado();
-    urlFake = faker.internet.httpUrl();
-    sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlFake);
+    urlSimulada = faker.internet.httpUrl();
+    sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlSimulada);
     parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());
   });
 
   test("Deveria chamar o ClienteHttp com a URL correta", () async{
 
-    final ParametrosAutenticacao parametro = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());    
+    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
+      .thenAnswer((_) async => {'tokenAcesso' : faker.guid.guid(), 'nome' : faker.person.name()});
+    
+    
     await sut.autoriza(parametro);
 
     verify(clienteHttp.requisita(
-      url:urlFake, 
+      url:urlSimulada, 
       metodo:'post',
       corpo: { 'email': parametro.email,'senha': parametro.senha}
       ));
@@ -44,8 +45,12 @@ void main(){
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async{
 
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenThrow(ErrosHttp.badRequest);
+    when(
+          clienteHttp.requisita(url: anyNamed('url'), 
+          metodo: anyNamed('metodo'), 
+          corpo: anyNamed('corpo'))
+        )
+        .thenThrow(ErrosHttp.badRequest);
       
     final future = sut.autoriza(parametro);
 
@@ -80,5 +85,17 @@ void main(){
     final future = sut.autoriza(parametro);
 
     expect(future, throwsA(ErrosDominio.credenciaisInvalidas)); 
+  });
+
+   test("Deveria retornar uma conta se o ClienteHttp retornar 200", () async{
+
+    final tokenAcesso = faker.guid.guid();
+
+    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
+      .thenAnswer((_) async => {'tokenAcesso' : tokenAcesso, 'nome' : faker.person.name()});
+      
+    final conta = await sut.autoriza(parametro);
+
+    expect(conta.token, tokenAcesso); 
   });
 }
