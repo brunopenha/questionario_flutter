@@ -5,6 +5,4 @@ class Conta {
 
   Conta({@required this.token});
 
-  factory Conta.doJson(Map json) => 
-    Conta(token: json['tokenAcesso']);
 }

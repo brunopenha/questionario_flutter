@@ -5,6 +5,7 @@ import '../../dominios/casosuso/casosuso.dart';
 import '../../dominios/entidades/entidades.dart';
 import '../../dominios/erros/erros.dart';
 import '../http/http.dart'; // Para incluir parametros obrigatorios
+import '../modelos/modelos.dart';
 
 class AutenticacaoRemota {
   final ClienteHttp clienteHttp;
@@ -19,7 +20,7 @@ class AutenticacaoRemota {
     final body = ParametrosAutenticacaoRemota.aPartirDoDominio(parametro).criaJson();
     try{
       final responseHttp = await clienteHttp.requisita(url: url, metodo:'post', corpo: body);
-      return Conta.doJson(responseHttp);
+      return ContaRemotaModel.doJson(responseHttp).paraEntidade();
     } on ErrosHttp catch (erro) {
        
         throw erro == ErrosHttp.unauthorized ?
