@@ -19,19 +19,33 @@ void main(){
   String urlSimulada;
   ParametrosAutenticacao parametros;
 
+  Map mockDadosValidos() => {'tokenAcesso' : faker.guid.guid(), 'nome' : faker.person.name()};       
+
+  PostExpectation requisicaoMockada() => 
+      when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')));
+  
+  void mockDadosHttp(Map dados){
+    requisicaoMockada()
+    .thenAnswer((_) async => dados);
+    
+  }
+
+  void mockErrosHttp(ErrosHttp erro){
+    requisicaoMockada()
+    .thenThrow(erro);
+    
+  }
+
   setUp(() {
     clienteHttp = ClienteHttpSimulado();
     urlSimulada = faker.internet.httpUrl();
     sut = AutenticacaoRemota(clienteHttp:clienteHttp, url: urlSimulada);
     parametros = ParametrosAutenticacao(email: faker.internet.email(), senha: faker.internet.password());
+    mockDadosHttp(mockDadosValidos());
   });
 
   test("Deveria chamar o ClienteHttp com a URL correta", () async{
-
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenAnswer((_) async => {'tokenAcesso' : faker.guid.guid(), 'nome' : faker.person.name()});
-    
-    
+   
     await sut.autoriza(parametros);
 
     verify(clienteHttp.requisita(
@@ -45,12 +59,7 @@ void main(){
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async{
 
-    when(
-          clienteHttp.requisita(url: anyNamed('url'), 
-          metodo: anyNamed('metodo'), 
-          corpo: anyNamed('corpo'))
-        )
-        .thenThrow(ErrosHttp.badRequest);
+    mockErrosHttp(ErrosHttp.badRequest);
       
     final future = sut.autoriza(parametros);
 
@@ -59,8 +68,7 @@ void main(){
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 404", () async{
 
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenThrow(ErrosHttp.notFounded);
+    mockErrosHttp(ErrosHttp.notFounded);
       
     final future = sut.autoriza(parametros);
 
@@ -69,8 +77,7 @@ void main(){
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 500", () async{
 
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenThrow(ErrosHttp.serverError);
+    mockErrosHttp(ErrosHttp.serverError);
       
     final future = sut.autoriza(parametros);
 
@@ -79,8 +86,7 @@ void main(){
 
   test("Deveria lançar CredenciaisInvalidas se o ClienteHttp retornar 401", () async{
 
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenThrow(ErrosHttp.unauthorized);
+    mockErrosHttp(ErrosHttp.unauthorized);
       
     final future = sut.autoriza(parametros);
 
@@ -89,20 +95,18 @@ void main(){
 
   test("Deveria retornar uma conta se o ClienteHttp retornar 200", () async{
 
-    final tokenAcesso = faker.guid.guid();
+    final dadosValidos = mockDadosValidos();
 
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenAnswer((_) async => {'tokenAcesso' : tokenAcesso, 'nome' : faker.person.name()});
+    mockDadosHttp(dadosValidos);
       
     final conta = await sut.autoriza(parametros);
 
-    expect(conta.token, tokenAcesso); 
+    expect(conta.token, dadosValidos['tokenAcesso']); 
   });
 
   test("Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos", () async{
 
-    when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')))
-      .thenAnswer((_) async => {'tokenAcesso' : 'chave_invalida'});
+    mockDadosHttp({'tokenAcesso' : 'chave_invalida'});
       
     final future = sut.autoriza(parametros);
     expect(future, throwsA(ErrosDominio.inesperado)); 
