@@ -19,10 +19,13 @@ class AdaptadorHttp implements ClienteHttp {
     };
     final corpoJson = corpo != null ? jsonEncode(corpo) : null;
 
-    final resposta =
-        await cliente.post(url, headers: cabecalho, body: corpoJson);
-
-    return _trataRetorno(resposta);
+    switch (metodo) {
+      case 'post':
+        return _trataRetorno(
+            await cliente.post(url, headers: cabecalho, body: corpoJson));
+      default:
+        throw ErrosHttp.serverError;
+    }
   }
 
   Map _trataRetorno(Response resposta) {

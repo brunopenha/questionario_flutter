@@ -23,4 +23,4 @@
 1. Internal Server Error
 
 > ## Exceção - Verbo http inválido
-1. Internal Server Error
+1. `:heavy_check_mark:` Internal Server Error
