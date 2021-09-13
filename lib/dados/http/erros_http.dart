@@ -1,6 +1,6 @@
 enum ErrosHttp {
   badRequest,
-  notFounded,
+  notFound,
   serverError,
   unauthorized,
   forbidden,

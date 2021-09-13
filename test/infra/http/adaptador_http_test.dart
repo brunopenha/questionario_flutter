@@ -111,6 +111,14 @@ void main() {
       expect(future, throwsA(ErrosHttp.forbidden));
     });
 
+    test('Deveria retornar NorFoundError se o POST retornar 404', () async {
+      retornoMockado(404);
+
+      final future = sut.requisita(url: url, metodo: 'post');
+
+      expect(future, throwsA(ErrosHttp.notFound));
+    });
+
     test('Deveria retornar ServerError se o POST retornar 500', () async {
       retornoMockado(500);
 

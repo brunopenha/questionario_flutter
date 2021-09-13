@@ -13,7 +13,7 @@
 1. `:heavy_check_mark:` 400 - Bad Request
 2. `:heavy_check_mark:` 401 - Unauthorized
 3. `:heavy_check_mark:` 403 - Forbidden
-4. 404 - Not Found
+4. `:heavy_check_mark:` 404 - Not Found
 5. `:heavy_check_mark:` 500 - Internal Server Error
 
 > ## Exceção - Status code diferente dos citados acima
