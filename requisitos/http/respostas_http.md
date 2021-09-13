@@ -20,7 +20,7 @@
 1. `:heavy_check_mark:` Internal Server Error
 
 > ## Exceção - A requisição HTTP deu alguma exceção
-1. Internal Server Error
+1. `:heavy_check_mark:` Internal Server Error
 
 > ## Exceção - Verbo http inválido
 1. `:heavy_check_mark:` Internal Server Error

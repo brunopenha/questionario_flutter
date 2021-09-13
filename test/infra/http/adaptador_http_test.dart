@@ -36,6 +36,10 @@ void main() {
       requisicaoMockada().thenAnswer((_) async => Response(corpo, statusCode));
     }
 
+    void erroMockado() {
+      requisicaoMockada().thenThrow(Exception());
+    }
+
     setUp(() {
       retornoMockado(200);
     });
@@ -130,6 +134,14 @@ void main() {
 
     test('Deveria retornar ServerError se o POST retornar 500', () async {
       retornoMockado(500);
+
+      final future = sut.requisita(url: url, metodo: 'post');
+
+      expect(future, throwsA(ErrosHttp.serverError));
+    });
+
+    test('Deveria retornar ServerError se o POST lançar uma exceção', () async {
+      erroMockado();
 
       final future = sut.requisita(url: url, metodo: 'post');
 
