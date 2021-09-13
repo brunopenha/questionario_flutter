@@ -22,12 +22,18 @@ class AdaptadorHttp {
 class ClienteSimulado extends Mock implements Client {}
 
 void main() {
+  AdaptadorHttp sut;
+  ClienteSimulado cliente;
+  String url;
+
+  setUp(() {
+    cliente = ClienteSimulado();
+    sut = AdaptadorHttp(cliente);
+    url = faker.internet.httpUrl();
+  });
+
   group('post', () {
     test('Deveria chamar o POST com os valores corretos', () async {
-      final cliente = ClienteSimulado();
-      final sut = AdaptadorHttp(cliente);
-      final url = faker.internet.httpUrl();
-
       await sut.request(url: url, metodo: 'post');
 
       verify(cliente.post(url, headers: {
