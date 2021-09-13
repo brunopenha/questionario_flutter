@@ -6,7 +6,7 @@
 2. `:heavy_check_mark:` Passar nos headers o `Content-type: application/json`
 3. `:heavy_check_mark:` Chamar o request com o _body_ correto.
 4. `:heavy_check_mark:` `200 - OK` e resposta com dados
-5. `204 - No Content` e resposta sem dados
+5. `:heavy_check_mark:` `204 - No Content` e resposta sem dados
 
 > ## Erros
 

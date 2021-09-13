@@ -24,7 +24,11 @@ class AdaptadorHttp implements ClienteHttp {
     final resposta =
         await cliente.post(url, headers: cabecalho, body: corpoJson);
 
-    return resposta.body.isEmpty ? null : jsonDecode(resposta.body);
+    if (resposta.statusCode == 200) {
+      return resposta.body.isEmpty ? null : jsonDecode(resposta.body);
+    } else {
+      return null;
+    }
   }
 }
 
@@ -90,6 +94,13 @@ void main() {
 
     test('Deveria retornar null se o POST retornar 204', () async {
       retornoMockado(204, corpo: '');
+      final retorno = await sut.requisita(url: url, metodo: 'post');
+
+      expect(retorno, null);
+    });
+
+    test('Deveria retornar null se o POST retornar 204 com dados', () async {
+      retornoMockado(204);
       final retorno = await sut.requisita(url: url, metodo: 'post');
 
       expect(retorno, null);
