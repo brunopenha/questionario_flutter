@@ -87,5 +87,12 @@ void main() {
 
       expect(retorno, null);
     });
+
+    test('Deveria retornar null se o POST retornar 204', () async {
+      retornoMockado(204, corpo: '');
+      final retorno = await sut.requisita(url: url, metodo: 'post');
+
+      expect(retorno, null);
+    });
   });
 }
