@@ -39,14 +39,21 @@ void main() {
     cliente = ClienteSimulado();
     sut = AdaptadorHttp(cliente);
     url = faker.internet.httpUrl();
-
-    when(cliente.post(any,
-            headers: anyNamed('headers'), body: anyNamed('body')))
-        .thenAnswer((_) async =>
-            Response('{"qualquer_valor" : "qualquer_chave"}', 200));
   });
 
   group('post', () {
+    PostExpectation requisicaoMockada() => when(cliente.post(any,
+        headers: anyNamed('headers'), body: anyNamed('body')));
+
+    void retornoMockado(int statusCode,
+        {String corpo = '{"qualquer_valor" : "qualquer_chave"}'}) {
+      requisicaoMockada().thenAnswer((_) async => Response(corpo, statusCode));
+    }
+
+    setUp(() {
+      retornoMockado(200);
+    });
+
     test('Deveria chamar o POST com os valores corretos', () async {
       await sut.requisita(
           url: url,
@@ -75,10 +82,7 @@ void main() {
 
     test('Deveria retornar null se o POST retornar 200 sem dados no corpo',
         () async {
-      when(cliente.post(any,
-              headers: anyNamed('headers'), body: anyNamed('body')))
-          .thenAnswer((_) async => Response('', 200));
-
+      retornoMockado(200, corpo: '');
       final retorno = await sut.requisita(url: url, metodo: 'post');
 
       expect(retorno, null);
