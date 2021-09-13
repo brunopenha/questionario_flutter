@@ -22,6 +22,10 @@ class AdaptadorHttp implements ClienteHttp {
     final resposta =
         await cliente.post(url, headers: cabecalho, body: corpoJson);
 
+    return _trataRetorno(resposta);
+  }
+
+  Map _trataRetorno(Response resposta) {
     if (resposta.statusCode == 200) {
       return resposta.body.isEmpty ? null : jsonDecode(resposta.body);
     } else {
