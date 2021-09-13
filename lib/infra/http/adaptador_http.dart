@@ -26,12 +26,15 @@ class AdaptadorHttp implements ClienteHttp {
   }
 
   Map _trataRetorno(Response resposta) {
-    if (resposta.statusCode == 200) {
-      return resposta.body.isEmpty ? null : jsonDecode(resposta.body);
-    } else if (resposta.statusCode == 204) {
-      return null;
-    } else {
-      throw ErrosHttp.badRequest;
+    switch (resposta.statusCode) {
+      case 200:
+        return resposta.body.isEmpty ? null : jsonDecode(resposta.body);
+      case 204:
+        return null;
+      case 400:
+        throw ErrosHttp.badRequest;
+      default:
+        throw ErrosHttp.serverError;
     }
   }
 }

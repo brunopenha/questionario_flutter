@@ -14,11 +14,10 @@
 2. 401 - Unauthorized
 3. 403 - Forbidden
 4. 404 - Not Found
-5. 500 - Internal Server Error
+5. `:heavy_check_mark:` 500 - Internal Server Error
 
 > ## Exceção - Status code diferente dos citados acima
-1. Internal Server Error
-
+1. `:heavy_check_mark:` Internal Server Error
 
 > ## Exceção - A requisição HTTP deu alguma exceção
 1. Internal Server Error
