@@ -4,21 +4,27 @@ import 'package:faker/faker.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
+import 'package:questionario/dados/http/http.dart';
 import 'package:test/test.dart';
 
-class AdaptadorHttp {
+class AdaptadorHttp implements ClienteHttp {
   final Client cliente;
 
   AdaptadorHttp(this.cliente);
 
-  Future<void> request(
+  @override
+  Future<Map> requisita(
       {@required String url, @required String metodo, Map corpo}) async {
     final cabecalho = {
       'content-type': 'application/json',
       'accept': 'application/json'
     };
     final corpoJson = corpo != null ? jsonEncode(corpo) : null;
-    await cliente.post(url, headers: cabecalho, body: corpoJson);
+
+    final resposta =
+        await cliente.post(url, headers: cabecalho, body: corpoJson);
+
+    return resposta.body.isEmpty ? null : jsonDecode(resposta.body);
   }
 }
 
@@ -33,11 +39,16 @@ void main() {
     cliente = ClienteSimulado();
     sut = AdaptadorHttp(cliente);
     url = faker.internet.httpUrl();
+
+    when(cliente.post(any,
+            headers: anyNamed('headers'), body: anyNamed('body')))
+        .thenAnswer((_) async =>
+            Response('{"qualquer_valor" : "qualquer_chave"}', 200));
   });
 
   group('post', () {
     test('Deveria chamar o POST com os valores corretos', () async {
-      await sut.request(
+      await sut.requisita(
           url: url,
           metodo: 'post',
           corpo: {'qualquer_chave': 'qualquer_valor'});
@@ -51,9 +62,26 @@ void main() {
     });
 
     test('Deveria chamar o POST sem o corpo na requisição', () async {
-      await sut.request(url: url, metodo: 'post');
+      await sut.requisita(url: url, metodo: 'post');
 
       verify(cliente.post(any, headers: anyNamed("headers")));
+    });
+
+    test('Deveria retornar algum dado se o POST retornar 200', () async {
+      final retorno = await sut.requisita(url: url, metodo: 'post');
+
+      expect(retorno, {'qualquer_valor': 'qualquer_chave'});
+    });
+
+    test('Deveria retornar null se o POST retornar 200 sem dados no corpo',
+        () async {
+      when(cliente.post(any,
+              headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => Response('', 200));
+
+      final retorno = await sut.requisita(url: url, metodo: 'post');
+
+      expect(retorno, null);
     });
   });
 }

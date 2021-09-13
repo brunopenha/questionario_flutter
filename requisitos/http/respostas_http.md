@@ -5,7 +5,7 @@
 1. `:heavy_check_mark:` Request com verbo http válido (POST)
 2. `:heavy_check_mark:` Passar nos headers o `Content-type: application/json`
 3. `:heavy_check_mark:` Chamar o request com o _body_ correto.
-4. `200 - OK` e resposta com dados
+4. `:heavy_check_mark:` `200 - OK` e resposta com dados
 5. `204 - No Content` e resposta sem dados
 
 > ## Erros
