@@ -33,6 +33,8 @@ class AdaptadorHttp implements ClienteHttp {
         return null;
       case 400:
         throw ErrosHttp.badRequest;
+      case 401:
+        throw ErrosHttp.unauthorized;
       default:
         throw ErrosHttp.serverError;
     }
