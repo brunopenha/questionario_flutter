@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:faker/faker.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -15,7 +17,7 @@ class AdaptadorHttp {
       'content-type': 'application/json',
       'accept': 'application/json'
     };
-    await cliente.post(url, headers: cabecalho);
+    await cliente.post(url, headers: cabecalho, body: jsonEncode(corpo));
   }
 }
 
@@ -34,12 +36,17 @@ void main() {
 
   group('post', () {
     test('Deveria chamar o POST com os valores corretos', () async {
-      await sut.request(url: url, metodo: 'post');
+      await sut.request(
+          url: url,
+          metodo: 'post',
+          corpo: {'qualquer_chave': 'qualquer_valor'});
 
-      verify(cliente.post(url, headers: {
-        'content-type': 'application/json',
-        'accept': 'application/json'
-      }));
+      verify(cliente.post(url,
+          headers: {
+            'content-type': 'application/json',
+            'accept': 'application/json'
+          },
+          body: '{"qualquer_chave":"qualquer_valor"}'));
     });
   });
 }
