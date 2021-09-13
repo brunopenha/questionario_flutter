@@ -95,12 +95,20 @@ void main() {
       expect(future, throwsA(ErrosHttp.badRequest));
     });
 
-    test('Deveria retornar UnalthorizedError se o POST retornar 401', () async {
+    test('Deveria retornar UnauthorizedError se o POST retornar 401', () async {
       retornoMockado(401);
 
       final future = sut.requisita(url: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.unauthorized));
+    });
+
+    test('Deveria retornar ForbiddenError se o POST retornar 403', () async {
+      retornoMockado(403);
+
+      final future = sut.requisita(url: url, metodo: 'post');
+
+      expect(future, throwsA(ErrosHttp.forbidden));
     });
 
     test('Deveria retornar ServerError se o POST retornar 500', () async {

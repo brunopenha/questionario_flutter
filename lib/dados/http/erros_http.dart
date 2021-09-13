@@ -3,5 +3,6 @@ enum ErrosHttp {
   notFounded,
   serverError,
   unauthorized,
+  forbidden,
   invalidData
 }

@@ -35,6 +35,8 @@ class AdaptadorHttp implements ClienteHttp {
         throw ErrosHttp.badRequest;
       case 401:
         throw ErrosHttp.unauthorized;
+      case 403:
+        throw ErrosHttp.forbidden;
       default:
         throw ErrosHttp.serverError;
     }
