@@ -17,7 +17,8 @@ class AdaptadorHttp {
       'content-type': 'application/json',
       'accept': 'application/json'
     };
-    await cliente.post(url, headers: cabecalho, body: jsonEncode(corpo));
+    final corpoJson = corpo != null ? jsonEncode(corpo) : null;
+    await cliente.post(url, headers: cabecalho, body: corpoJson);
   }
 }
 
@@ -47,6 +48,12 @@ void main() {
             'accept': 'application/json'
           },
           body: '{"qualquer_chave":"qualquer_valor"}'));
+    });
+
+    test('Deveria chamar o POST sem o corpo na requisição', () async {
+      await sut.request(url: url, metodo: 'post');
+
+      verify(cliente.post(any, headers: anyNamed("headers")));
     });
   });
 }
