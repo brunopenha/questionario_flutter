@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:http/http.dart';
 import 'package:mockito/mockito.dart';
+import 'package:questionario/dados/http/http.dart';
 import 'package:questionario/infra/http/http.dart';
 import 'package:test/test.dart';
 
@@ -76,6 +77,22 @@ void main() {
       final retorno = await sut.requisita(url: url, metodo: 'post');
 
       expect(retorno, null);
+    });
+
+    test('Deveria retornar BadRequestError se o POST retornar 400', () async {
+      retornoMockado(400);
+
+      final future = sut.requisita(url: url, metodo: 'post');
+
+      expect(future, throwsA(ErrosHttp.badRequest));
+    });
+
+    test('Deveria retornar BadRequestError se o POST retornar 400', () async {
+      retornoMockado(400, corpo: '');
+
+      final future = sut.requisita(url: url, metodo: 'post');
+
+      expect(future, throwsA(ErrosHttp.badRequest));
     });
   });
 }

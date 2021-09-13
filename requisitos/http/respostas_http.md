@@ -10,7 +10,7 @@
 
 > ## Erros
 
-1. 400 - Bad Request
+1. `:heavy_check_mark:` 400 - Bad Request
 2. 401 - Unauthorized
 3. 403 - Forbidden
 4. 404 - Not Found
