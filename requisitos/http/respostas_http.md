@@ -2,8 +2,8 @@
 
 > ## Sucesso
 
-1. Request com verbo http válido (POST)
-2. Passar nos headers o `Content-type: application/json`
+1. `:heavy_check_mark:` Request com verbo http válido (POST)
+2. `:heavy_check_mark:` Passar nos headers o `Content-type: application/json`
 3. `200 - OK` e resposta com dados
 4. `204 - No Content` e resposta sem dados
 

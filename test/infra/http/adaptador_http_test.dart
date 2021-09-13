@@ -11,7 +11,11 @@ class AdaptadorHttp {
 
   Future<void> request(
       {@required String url, @required String metodo, Map corpo}) async {
-    await cliente.post(url);
+    final cabecalho = {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    };
+    await cliente.post(url, headers: cabecalho);
   }
 }
 
@@ -26,7 +30,10 @@ void main() {
 
       await sut.request(url: url, metodo: 'post');
 
-      verify(cliente.post(url));
+      verify(cliente.post(url, headers: {
+        'content-type': 'application/json',
+        'accept': 'application/json'
+      }));
     });
   });
 }
