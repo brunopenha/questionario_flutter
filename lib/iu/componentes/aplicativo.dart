@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../telas/telas.dart';
 
 class Aplicativo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
     final corPrimaria = Color.fromRGBO(136, 14, 79, 1);
     final corPrimariaEscura = Color.fromRGBO(96, 0, 39, 1);
     final corPrimariaClara = Color.fromRGBO(188, 71, 123, 1);
