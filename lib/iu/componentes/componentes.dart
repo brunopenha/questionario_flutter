@@ -1,0 +1,1 @@
+export 'aplicativo.dart';
