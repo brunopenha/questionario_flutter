@@ -12,6 +12,7 @@ dependencies:
   http:
 
 dev_dependencies:
+  flutter_launcher_icons:
   flutter_test:
     sdk: flutter
   test:
@@ -23,3 +24,11 @@ flutter:
   uses-material-design: true
   assets:
     - lib/iu/imagens/
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_android: lib/iu/imagens/icones/android.png
+  image_path_ios: lib/iu/imagens/icones/ios.png
+  adaptive_icon_background: lib/iu/imagens/icones/fundo.png
+  adaptive_icon_foreground: lib/iu/imagens/icones/frente.png

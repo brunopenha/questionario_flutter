@@ -1,0 +1,7 @@
+Acesse a pagina:
+https://pub.dev/packages/flutter_launcher_icons#-readme-tab-
+
+Rode isso no projeto:
+
+flutter pub get
+flutter pub run flutter_launcher_icons:main
