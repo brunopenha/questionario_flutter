@@ -2,27 +2,27 @@
 
 > ## Caso de sucesso
 
-1. `:heavy_check_mark:` Sistema valida os dados
-2. `:heavy_check_mark:` Sistema faz uma requisição para a URL da API de acesso
-3. `:heavy_check_mark:` Sistema valida os dados recebidos da API
-4. `:heavy_check_mark:` Sistema entrega os dados da conta do usuário
+1. `✔` Sistema valida os dados
+2. `✔` Sistema faz uma requisição para a URL da API de acesso
+3. `✔` Sistema valida os dados recebidos da API
+4. `✔` Sistema entrega os dados da conta do usuário
 
 > ## Exceção - URL inválida
 
-1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
+1. `✔` Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Dados inválidos
 
-1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
+1. `✔` Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Requisição inválida
 
-1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
+1. `✔` Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Falha no servidor
 
-1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro inesperado
+1. `✔` Sistema retorna uma mensagem de erro inesperado
 
 > ## Exceção - Credenciais inválidas
 
-1. `:heavy_check_mark:` Sistema retorna uma mensagem de erro informando que as credencias estão erradas
+1. `✔` Sistema retorna uma mensagem de erro informando que as credencias estão erradas

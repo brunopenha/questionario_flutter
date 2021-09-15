@@ -41,7 +41,9 @@ class PaginaAcesso extends StatelessWidget {
                     ),
                   ),
                   RaisedButton(
-                    onPressed: () {},
+                    onPressed:
+                        //() {}, // Quando o onPressed fica vazio, ele desabilita o botão
+                        null,
                     child: Text('Entrar'.toUpperCase()),
                   ),
                   FlatButton.icon(
