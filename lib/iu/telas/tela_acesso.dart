@@ -1,42 +1,58 @@
 import 'package:flutter/material.dart';
 
+import '../componentes/componentes.dart';
+
 class PaginaAcesso extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(
-            child: Image(
-              image: AssetImage('lib/iu/imagens/logo.png'),
-            ),
+          CabecalhoAcesso(),
+          Titulo1(
+            texto: 'Login',
           ),
-          Text('Login'.toUpperCase()),
-          Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: 'Email', icon: Icon(Icons.email)),
-                  keyboardType: TextInputType.emailAddress,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                      labelText: 'Senha', icon: Icon(Icons.lock)),
-                  obscureText: true,
-                ),
-                RaisedButton(
-                  onPressed: () {},
-                  child: Text('Entrar'.toUpperCase()),
-                ),
-                FlatButton.icon(
+          Padding(
+            padding: const EdgeInsets.all(32),
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                        labelText: 'Email',
+                        icon: Icon(
+                          Icons.email,
+                          color: Theme.of(context).primaryColorLight,
+                        )),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.0, bottom: 32),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          labelText: 'Senha',
+                          icon: Icon(
+                            Icons.lock,
+                            color: Theme.of(context).primaryColorLight,
+                          )),
+                      obscureText: true,
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: () {},
+                    child: Text('Entrar'.toUpperCase()),
+                  ),
+                  FlatButton.icon(
                     onPressed: () {},
                     icon: Icon(Icons.person),
-                    label: Text('Criar Conta'))
-              ],
+                    label: Text('Criar Conta'),
+                  )
+                ],
+              ),
             ),
-          ),
+          )
         ],
       ),
     ));
