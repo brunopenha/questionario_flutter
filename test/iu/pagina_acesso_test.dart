@@ -8,42 +8,54 @@ import 'package:questionario/iu/paginas/paginas.dart';
 
 class ApresentacaoAcessoSimulado extends Mock implements ApresentacaoAcesso {}
 
+ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
+StreamController<String> emailComErroController;
+StreamController<String> senhaComErroController;
+StreamController<String> falhaAcessoController;
+StreamController<bool> camposSaoValidosController;
+StreamController<bool> paginaEstaCarregandoController;
+
+Future carregaPagina(WidgetTester widgetTester) async {
+  apresentacao = ApresentacaoAcessoSimulado();
+
+  inicializaStreams();
+
+  simulaStreams();
+
+  final pagAcesso = MaterialApp(
+    home: PaginaAcesso(apresentacao),
+  );
+
+  await widgetTester.pumpWidget(pagAcesso); // É aqui que o componente é carregado para ser testado
+}
+
+void simulaStreams() {
+  when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
+  when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
+  when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
+  when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
+  when(apresentacao.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
+}
+
+void inicializaStreams() {
+  emailComErroController = StreamController<String>();
+  senhaComErroController = StreamController<String>();
+  falhaAcessoController = StreamController<String>();
+  camposSaoValidosController = StreamController<bool>();
+  paginaEstaCarregandoController = StreamController<bool>();
+}
+
+void encerraStreams() {
+  emailComErroController.close();
+  senhaComErroController.close();
+  falhaAcessoController.close();
+  camposSaoValidosController.close();
+  paginaEstaCarregandoController.close();
+}
+
 void main() {
-  ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
-  StreamController<String> emailComErroController;
-  StreamController<String> senhaComErroController;
-  StreamController<String> falhaAcessoController;
-  StreamController<bool> camposSaoValidosController;
-  StreamController<bool> paginaEstaCarregandoController;
-
-  Future carregaPagina(WidgetTester widgetTester) async {
-    apresentacao = ApresentacaoAcessoSimulado();
-
-    emailComErroController = StreamController<String>();
-    senhaComErroController = StreamController<String>();
-    falhaAcessoController = StreamController<String>();
-    camposSaoValidosController = StreamController<bool>();
-    paginaEstaCarregandoController = StreamController<bool>();
-
-    when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
-    when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
-    when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
-    when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
-    when(apresentacao.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
-
-    final pagAcesso = MaterialApp(
-      home: PaginaAcesso(apresentacao),
-    );
-
-    await widgetTester.pumpWidget(pagAcesso); // É aqui que o componente é carregado para ser testado
-  }
-
   tearDown(() {
-    emailComErroController.close();
-    senhaComErroController.close();
-    falhaAcessoController.close();
-    camposSaoValidosController.close();
-    paginaEstaCarregandoController.close();
+    encerraStreams();
   });
 
   testWidgets("Deveria carregar com o estado inicial", (WidgetTester widgetTester) async {
