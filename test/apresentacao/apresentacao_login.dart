@@ -20,11 +20,17 @@ class ApresentacaoAcessoStream {
 class ValidadorSimulado extends Mock implements Validador {}
 
 void main() {
-  test('Deveria chamar o Validador com o email correto', () {
-    final validadorSimulado = ValidadorSimulado();
-    final sut = ApresentacaoAcessoStream(validador: validadorSimulado);
-    final textoEmail = faker.internet.email();
+  ApresentacaoAcessoStream sut;
+  ValidadorSimulado validadorSimulado;
+  String textoEmail;
 
+  setUp(() {
+    validadorSimulado = ValidadorSimulado();
+    sut = ApresentacaoAcessoStream(validador: validadorSimulado);
+    textoEmail = faker.internet.email();
+  });
+
+  test('Deveria chamar o Validador com o email correto', () {
     sut.validaEmail(textoEmail);
 
     verify(validadorSimulado.valida(campo: 'email', valor: textoEmail)).called(1);
