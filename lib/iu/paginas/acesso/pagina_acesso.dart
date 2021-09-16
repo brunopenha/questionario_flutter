@@ -60,15 +60,7 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
                           padding: EdgeInsets.only(top: 8.0, bottom: 32),
                           child: EntradaSenha(),
                         ),
-                        StreamBuilder(
-                          stream: widget.apresentacao.camposSaoValidosStream,
-                          builder: (context, snapshot) {
-                            return RaisedButton(
-                              onPressed: snapshot.data == true ? widget.apresentacao.autenticador : null,
-                              child: Text('Entrar'.toUpperCase()),
-                            );
-                          },
-                        ),
+                        BotaoAcesso(),
                         FlatButton.icon(
                           onPressed: () {},
                           icon: Icon(Icons.person),
