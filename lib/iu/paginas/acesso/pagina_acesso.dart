@@ -33,15 +33,7 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
 
         widget.apresentacao.falhaAcessoStream.listen((erro) {
           if (erro != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.red[900],
-                content: Text(
-                  erro,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            );
+            exibeMensagemErro(context, erro);
           }
         });
 
