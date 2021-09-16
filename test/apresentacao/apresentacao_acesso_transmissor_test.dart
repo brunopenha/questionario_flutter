@@ -11,6 +11,8 @@ void main() {
   ValidadorSimulado validadorSimulado;
   String textoEmail;
 
+  String textoSenha;
+
   PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
       campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
 
@@ -22,6 +24,7 @@ void main() {
     validadorSimulado = ValidadorSimulado();
     sut = ApresentacaoAcessoTransmissor(validador: validadorSimulado);
     textoEmail = faker.internet.email();
+    textoSenha = faker.internet.password();
 
     chamaValidadorSimulado();
   });
@@ -54,5 +57,11 @@ void main() {
 
     sut.validaEmail(textoEmail);
     sut.validaEmail(textoEmail);
+  });
+
+  test('Deveria chamar o Validador com a senha correta', () {
+    sut.validaSenha(textoSenha);
+
+    verify(validadorSimulado.valida(campo: 'senha', valor: textoSenha)).called(1);
   });
 }

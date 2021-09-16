@@ -33,4 +33,8 @@ class ApresentacaoAcessoTransmissor {
     _estado.erroEmail = validador.valida(campo: 'email', valor: email);
     _controlador.add(_estado);
   }
+
+  void validaSenha(String textoSenha) {
+    validador.valida(campo: 'senha', valor: textoSenha);
+  }
 }
