@@ -6,8 +6,7 @@ abstract class ApresentacaoAcesso {
   Stream get falhaAcessoStream;
 
   void validaEmail(String email);
-
   void validaSenha(String senha);
-
   void autenticador();
+  void liberaMemoria();
 }

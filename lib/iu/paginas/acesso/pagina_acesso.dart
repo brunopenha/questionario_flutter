@@ -3,16 +3,27 @@ import 'package:flutter/material.dart';
 import '../../componentes/componentes.dart';
 import 'apresentacao_acesso.dart';
 
-class PaginaAcesso extends StatelessWidget {
+class PaginaAcesso extends StatefulWidget {
   final ApresentacaoAcesso apresentacao;
 
   const PaginaAcesso(this.apresentacao);
 
   @override
+  _PaginaAcessoState createState() => _PaginaAcessoState();
+}
+
+class _PaginaAcessoState extends State<PaginaAcesso> {
+  @override
+  void dispose() {
+    super.dispose();
+    widget.apresentacao.liberaMemoria();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(body: Builder(
       builder: (context) {
-        apresentacao.paginaEstaCarregandoStream.listen((estaCarregando) {
+        widget.apresentacao.paginaEstaCarregandoStream.listen((estaCarregando) {
           if (estaCarregando) {
             showDialog(
               context: context,
@@ -45,12 +56,15 @@ class PaginaAcesso extends StatelessWidget {
           }
         });
 
-        apresentacao.falhaAcessoStream.listen((erro) {
+        widget.apresentacao.falhaAcessoStream.listen((erro) {
           if (erro != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: Colors.red[900],
-                content: Text(erro, textAlign: TextAlign.center,),
+                content: Text(
+                  erro,
+                  textAlign: TextAlign.center,
+                ),
               ),
             );
           }
@@ -70,7 +84,7 @@ class PaginaAcesso extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       StreamBuilder<String>(
-                        stream: apresentacao.emailComErroStream,
+                        stream: widget.apresentacao.emailComErroStream,
                         builder: (context, snapshot) {
                           return TextFormField(
                             decoration: InputDecoration(
@@ -82,14 +96,14 @@ class PaginaAcesso extends StatelessWidget {
                               errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                             ),
                             keyboardType: TextInputType.emailAddress,
-                            onChanged: apresentacao.validaEmail,
+                            onChanged: widget.apresentacao.validaEmail,
                           );
                         },
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 8.0, bottom: 32),
                         child: StreamBuilder<String>(
-                          stream: apresentacao.senhaComErroStream,
+                          stream: widget.apresentacao.senhaComErroStream,
                           builder: (context, snapshot) {
                             return TextFormField(
                               decoration: InputDecoration(
@@ -101,16 +115,16 @@ class PaginaAcesso extends StatelessWidget {
                                 errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                               ),
                               obscureText: true,
-                              onChanged: apresentacao.validaSenha,
+                              onChanged: widget.apresentacao.validaSenha,
                             );
                           },
                         ),
                       ),
                       StreamBuilder(
-                        stream: apresentacao.camposSaoValidosStream,
+                        stream: widget.apresentacao.camposSaoValidosStream,
                         builder: (context, snapshot) {
                           return RaisedButton(
-                            onPressed: snapshot.data == true ? apresentacao.autenticador : null,
+                            onPressed: snapshot.data == true ? widget.apresentacao.autenticador : null,
                             child: Text('Entrar'.toUpperCase()),
                           );
                         },

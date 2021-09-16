@@ -16,4 +16,4 @@
 13. ✅ Autenticar usuário com email e a senha informada no formulário
 14. ✅ Exibir mensagem de erro caso o acesso falhe
 15. ✅ Esconder o "Carregando" no fim da ação de acesso
-16. Fechar streams quando a pagina for encerrada
+16. ✅ Fechar streams quando a pagina for encerrada

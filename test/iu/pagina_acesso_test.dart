@@ -197,4 +197,15 @@ void main() {
 
     expect(find.text('Erro no Acesso'), findsOneWidget);
   });
+
+  testWidgets("Deveria fechar os objetos Streams quando a tela fechar - prevenão de vazamento de memória",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    // Aqui é que garanto que será chamado o dispose
+    addTearDown(() => {
+          // Quando esse tearDown for chamado, a pagina já deve ser "destruida"
+          verify(apresentacao.liberaMemoria())
+        });
+  });
 }
