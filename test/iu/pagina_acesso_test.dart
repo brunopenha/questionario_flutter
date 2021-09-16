@@ -57,6 +57,8 @@ void main() {
 
     final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(botao.onPressed, null);
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 
   testWidgets("Deveria validar os valores corretos dos campos", (WidgetTester widgetTester) async {
@@ -165,9 +167,20 @@ void main() {
   testWidgets("Deveria aprensentar a mensagem Carregando", (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
-    paginaEstaCarregandoController.add(true); // habilito o botão
+    paginaEstaCarregandoController.add(true); // apresento o carregando...
     await widgetTester.pump(); // recarrego a tela
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets("Deveria esconder a mensagem Carregando", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    paginaEstaCarregandoController.add(true); // apresento o carregando...
+    await widgetTester.pump(); // recarrego a tela
+    paginaEstaCarregandoController.add(false); // escondo o carregando...
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }
