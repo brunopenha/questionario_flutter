@@ -12,7 +12,7 @@
 9.  ✅ Remover a mensagem de erro de a senha for válida
 10. ✅ Habilitar o botão de acesso se os campos forem válidos
 11. ✅ Desabilitar o botão de acesso se algum dos campos forem inválidos
-12. Exibir "Carregando" no início da ação de acesso
+12. ✅ Exibir "Carregando" no início da ação de acesso
 13. ✅ Autenticar usuário com email e a senha informada no formulário
 14. Exibir mensagem de erro caso o acesso falhe
 15. Esconder o "Carregando" no fim da ação de acesso

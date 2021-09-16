@@ -13,6 +13,7 @@ void main() {
   StreamController<String> emailComErroController;
   StreamController<String> senhaComErroController;
   StreamController<bool> camposSaoValidosController;
+  StreamController<bool> paginaEstaCarregandoController;
 
   Future carregaPagina(WidgetTester widgetTester) async {
     apresentacao = ApresentacaoAcessoSimulado();
@@ -20,23 +21,25 @@ void main() {
     emailComErroController = StreamController<String>();
     senhaComErroController = StreamController<String>();
     camposSaoValidosController = StreamController<bool>();
+    paginaEstaCarregandoController = StreamController<bool>();
 
     when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
     when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
     when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
+    when(apresentacao.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
 
     final pagAcesso = MaterialApp(
       home: PaginaAcesso(apresentacao),
     );
 
-    await widgetTester
-        .pumpWidget(pagAcesso); // É aqui que o componente é carregado para ser testado
+    await widgetTester.pumpWidget(pagAcesso); // É aqui que o componente é carregado para ser testado
   }
 
   tearDown(() {
     emailComErroController.close();
     senhaComErroController.close();
     camposSaoValidosController.close();
+    paginaEstaCarregandoController.close();
   });
 
   testWidgets("Deveria carregar com o estado inicial", (WidgetTester widgetTester) async {
@@ -83,20 +86,17 @@ void main() {
     emailComErroController.add(null); // Emito um evento qualquer
     await widgetTester.pump();
 
-    expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
-        findsOneWidget,
+    expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)), findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Email');
   });
 
-  testWidgets("Não deveria exibir um erro se o email for valido",
-      (WidgetTester widgetTester) async {
+  testWidgets("Não deveria exibir um erro se o email for valido", (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
     emailComErroController.add(''); // Emito um evento qualquer
     await widgetTester.pump();
 
-    expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)),
-        findsOneWidget,
+    expect(find.descendant(of: find.bySemanticsLabel('Email'), matching: find.byType(Text)), findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Email');
   });
 
@@ -109,27 +109,23 @@ void main() {
     expect(find.text('qualquer erro'), findsOneWidget);
   });
 
-  testWidgets("Não deveria exibir um erro se a senha for valida",
-      (WidgetTester widgetTester) async {
+  testWidgets("Não deveria exibir um erro se a senha for valida", (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
     senhaComErroController.add(null); // Emito um evento qualquer
     await widgetTester.pump();
 
-    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
-        findsOneWidget,
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Senha');
   });
 
-  testWidgets("Não deveria exibir um erro se a senha for valida",
-      (WidgetTester widgetTester) async {
+  testWidgets("Não deveria exibir um erro se a senha for valida", (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
     emailComErroController.add(''); // Emito um evento qualquer
     await widgetTester.pump();
 
-    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
-        findsOneWidget,
+    expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)), findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Senha');
   });
 
@@ -164,5 +160,14 @@ void main() {
     await widgetTester.pump(); // recarrego a tela
 
     verify(apresentacao.autenticador()).called(1);
+  });
+
+  testWidgets("Deveria aprensentar a mensagem Carregando", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    paginaEstaCarregandoController.add(true); // habilito o botão
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
