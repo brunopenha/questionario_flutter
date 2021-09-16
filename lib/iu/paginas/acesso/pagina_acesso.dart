@@ -65,7 +65,7 @@ class PaginaAcesso extends StatelessWidget {
                     stream: apresentacao.camposSaoValidosStream,
                     builder: (context, snapshot) {
                       return RaisedButton(
-                        onPressed: snapshot.data == true ? () {} : null,
+                        onPressed: snapshot.data == true ? apresentacao.autenticador : null,
                         child: Text('Entrar'.toUpperCase()),
                       );
                     },

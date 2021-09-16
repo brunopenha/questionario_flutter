@@ -13,8 +13,7 @@
 10. ✅ Habilitar o botão de acesso se os campos forem válidos
 11. ✅ Desabilitar o botão de acesso se algum dos campos forem inválidos
 12. Exibir "Carregando" no início da ação de acesso
-13. Autenticar usuário com email e a senha informada no formulário
+13. ✅ Autenticar usuário com email e a senha informada no formulário
 14. Exibir mensagem de erro caso o acesso falhe
-15. Gravar o token do usuário no cache para mantê-lo conectado
-16. Redirecionar o usuário para a tela de lista de enquetes
-17. Esconder o "Carregando" no fim da ação de acesso.
+15. Esconder o "Carregando" no fim da ação de acesso
+16. Fechar streams quando a pagina for encerrada

@@ -152,4 +152,17 @@ void main() {
     final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(botao.onPressed, null);
   });
+
+  testWidgets("Deveria chamar a autenticacao quando o formulario for enviado",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(true); // habilito o botão
+    await widgetTester.pump(); // recarrego a tela
+
+    await widgetTester.tap(find.byType(RaisedButton)); // cliquei no botão
+    await widgetTester.pump(); // recarrego a tela
+
+    verify(apresentacao.autenticador()).called(1);
+  });
 }
