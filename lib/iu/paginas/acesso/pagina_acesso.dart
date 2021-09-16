@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../componentes/componentes.dart';
 import 'apresentacao_acesso.dart';
+import 'componentes/componentes.dart';
 
 class PaginaAcesso extends StatefulWidget {
   final ApresentacaoAcesso apresentacao;
@@ -47,61 +49,49 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
               ),
               Padding(
                 padding: const EdgeInsets.all(32),
-                child: Form(
-                  child: Column(
-                    children: <Widget>[
-                      StreamBuilder<String>(
-                        stream: widget.apresentacao.emailComErroStream,
-                        builder: (context, snapshot) {
-                          return TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              icon: Icon(
-                                Icons.email,
-                                color: Theme.of(context).primaryColorLight,
-                              ),
-                              errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            onChanged: widget.apresentacao.validaEmail,
-                          );
-                        },
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.0, bottom: 32),
-                        child: StreamBuilder<String>(
-                          stream: widget.apresentacao.senhaComErroStream,
-                          builder: (context, snapshot) {
-                            return TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Senha',
-                                icon: Icon(
-                                  Icons.lock,
-                                  color: Theme.of(context).primaryColorLight,
+                child: Provider(
+                  create: (_) =>
+                      widget.apresentacao, // Estou compartilhando esse presenter com toda a arvore de filhos
+                  child: Form(
+                    child: Column(
+                      children: <Widget>[
+                        EntradaEmail(),
+                        Padding(
+                          padding: EdgeInsets.only(top: 8.0, bottom: 32),
+                          child: StreamBuilder<String>(
+                            stream: widget.apresentacao.senhaComErroStream,
+                            builder: (context, snapshot) {
+                              return TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Senha',
+                                  icon: Icon(
+                                    Icons.lock,
+                                    color: Theme.of(context).primaryColorLight,
+                                  ),
+                                  errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
                                 ),
-                                errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                              ),
-                              obscureText: true,
-                              onChanged: widget.apresentacao.validaSenha,
+                                obscureText: true,
+                                onChanged: widget.apresentacao.validaSenha,
+                              );
+                            },
+                          ),
+                        ),
+                        StreamBuilder(
+                          stream: widget.apresentacao.camposSaoValidosStream,
+                          builder: (context, snapshot) {
+                            return RaisedButton(
+                              onPressed: snapshot.data == true ? widget.apresentacao.autenticador : null,
+                              child: Text('Entrar'.toUpperCase()),
                             );
                           },
                         ),
-                      ),
-                      StreamBuilder(
-                        stream: widget.apresentacao.camposSaoValidosStream,
-                        builder: (context, snapshot) {
-                          return RaisedButton(
-                            onPressed: snapshot.data == true ? widget.apresentacao.autenticador : null,
-                            child: Text('Entrar'.toUpperCase()),
-                          );
-                        },
-                      ),
-                      FlatButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.person),
-                        label: Text('Criar Conta'),
-                      )
-                    ],
+                        FlatButton.icon(
+                          onPressed: () {},
+                          icon: Icon(Icons.person),
+                          label: Text('Criar Conta'),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )
