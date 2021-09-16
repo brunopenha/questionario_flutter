@@ -58,23 +58,7 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
                         EntradaEmail(),
                         Padding(
                           padding: EdgeInsets.only(top: 8.0, bottom: 32),
-                          child: StreamBuilder<String>(
-                            stream: widget.apresentacao.senhaComErroStream,
-                            builder: (context, snapshot) {
-                              return TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Senha',
-                                  icon: Icon(
-                                    Icons.lock,
-                                    color: Theme.of(context).primaryColorLight,
-                                  ),
-                                  errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                                ),
-                                obscureText: true,
-                                onChanged: widget.apresentacao.validaSenha,
-                              );
-                            },
-                          ),
+                          child: EntradaSenha(),
                         ),
                         StreamBuilder(
                           stream: widget.apresentacao.camposSaoValidosStream,
