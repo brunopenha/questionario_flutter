@@ -142,4 +142,14 @@ void main() {
     final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(botao.onPressed, isNotNull);
   });
+
+  testWidgets("Desabilita o botão se os campos forem invalidos", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(false); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(botao.onPressed, null);
+  });
 }
