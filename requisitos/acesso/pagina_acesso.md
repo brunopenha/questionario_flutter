@@ -8,8 +8,8 @@
 5. ✅ Mostrar mensagem de erro se o email for inválido
 6. ✅ Remover mensagem de erro se o email for válido
 7. ✅ Validar senha quando o usuário digitar no campo (para o cadastro de senha)
-8. Mostrar mensagem de erro se a senha for inválida
-9. Remover a mensagem de erro de a senha for válida
+8. ✅ Mostrar mensagem de erro se a senha for inválida
+9. ✅ Remover a mensagem de erro de a senha for válida
 10. Habilitar o botão de acesso se os campos forem válidos
 11. Desabilitar o botão de acesso se algum dos campos forem inválidos
 12. Exibir "Carregando" no início da ação de acesso

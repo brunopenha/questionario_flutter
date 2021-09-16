@@ -43,15 +43,22 @@ class PaginaAcesso extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 8.0, bottom: 32),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          labelText: 'Senha',
-                          icon: Icon(
-                            Icons.lock,
-                            color: Theme.of(context).primaryColorLight,
-                          )),
-                      obscureText: true,
-                      onChanged: apresentacao.validaSenha,
+                    child: StreamBuilder<String>(
+                      stream: apresentacao.senhaComErroStream,
+                      builder: (context, snapshot) {
+                        return TextFormField(
+                          decoration: InputDecoration(
+                            labelText: 'Senha',
+                            icon: Icon(
+                              Icons.lock,
+                              color: Theme.of(context).primaryColorLight,
+                            ),
+                            errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                          ),
+                          obscureText: true,
+                          onChanged: apresentacao.validaSenha,
+                        );
+                      },
                     ),
                   ),
                   RaisedButton(
