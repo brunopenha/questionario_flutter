@@ -4,10 +4,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
-
-abstract class Validador {
-  String valida({@required String campo, @required String valor});
-}
+import 'package:questionario/apresentacao/dependencias/dependencias.dart';
 
 class EstadoAcesso {
   String erroEmail;
