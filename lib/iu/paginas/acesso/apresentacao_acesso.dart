@@ -3,6 +3,7 @@ abstract class ApresentacaoAcesso {
   Stream get senhaComErroStream;
   Stream get camposSaoValidosStream;
   Stream get paginaEstaCarregandoStream;
+  Stream get falhaAcessoStream;
 
   void validaEmail(String email);
 

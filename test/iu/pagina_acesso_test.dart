@@ -12,6 +12,7 @@ void main() {
   ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
   StreamController<String> emailComErroController;
   StreamController<String> senhaComErroController;
+  StreamController<String> falhaAcessoController;
   StreamController<bool> camposSaoValidosController;
   StreamController<bool> paginaEstaCarregandoController;
 
@@ -20,11 +21,13 @@ void main() {
 
     emailComErroController = StreamController<String>();
     senhaComErroController = StreamController<String>();
+    falhaAcessoController = StreamController<String>();
     camposSaoValidosController = StreamController<bool>();
     paginaEstaCarregandoController = StreamController<bool>();
 
     when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
     when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
+    when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
     when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
     when(apresentacao.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
 
@@ -38,6 +41,7 @@ void main() {
   tearDown(() {
     emailComErroController.close();
     senhaComErroController.close();
+    falhaAcessoController.close();
     camposSaoValidosController.close();
     paginaEstaCarregandoController.close();
   });
@@ -182,5 +186,15 @@ void main() {
     await widgetTester.pump(); // recarrego a tela
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets("Deveria apresentar mensagem de erro se a autenticacao falhar",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    falhaAcessoController.add('Erro no Acesso'); // apresento o motivo da falha
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.text('Erro no Acesso'), findsOneWidget);
   });
 }

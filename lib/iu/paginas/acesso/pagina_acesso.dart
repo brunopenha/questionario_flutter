@@ -44,6 +44,18 @@ class PaginaAcesso extends StatelessWidget {
             }
           }
         });
+
+        apresentacao.falhaAcessoStream.listen((erro) {
+          if (erro != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: Colors.red[900],
+                content: Text(erro, textAlign: TextAlign.center,),
+              ),
+            );
+          }
+        });
+
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
