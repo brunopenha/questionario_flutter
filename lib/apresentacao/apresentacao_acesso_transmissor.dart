@@ -19,8 +19,10 @@ class ApresentacaoAcessoTransmissor {
 
   ApresentacaoAcessoTransmissor({@required this.validador});
 
-  Stream<String> get emailComErroStream => _controlador.stream.map(
-      (estado) => estado.erroEmail); // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
+  // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
+  Stream<String> get emailComErroStream => _controlador.stream
+      .map((estado) => estado.erroEmail)
+      .distinct(); // Esse distict faz com que o transmissor emita apenas valores diferente do anterior, evita enviar dois valores iguais seguidamente
 
   void validaEmail(String email) {
     _estado.erroEmail = validador.valida(campo: 'email', valor: email);

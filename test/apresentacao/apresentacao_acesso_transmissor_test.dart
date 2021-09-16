@@ -35,8 +35,9 @@ void main() {
   test('Deveria transmitir erro no email se a validação falhar', () {
     chamaValidadorSimulado(valor: 'Erro no email');
 
-    expectLater(sut.emailComErroStream,
-        emits('Erro no email')); // Vai acontecer depois que rodar a ultima linha do teste
+    // O ouvinte abaixo cada captura do erro
+    // Se executar mais de uma vez, o teste falha
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro no email')));
 
     sut.validaEmail(textoEmail);
   });
