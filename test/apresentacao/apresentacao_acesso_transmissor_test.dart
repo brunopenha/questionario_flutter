@@ -40,10 +40,19 @@ void main() {
   ValidadorSimulado validadorSimulado;
   String textoEmail;
 
+  PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
+      campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
+
+  void chamaValidadorSimulado({String campo, String valor}) {
+    chamadaValidadorSimulado(campo).thenReturn(valor);
+  }
+
   setUp(() {
     validadorSimulado = ValidadorSimulado();
     sut = ApresentacaoAcessoTransmissor(validador: validadorSimulado);
     textoEmail = faker.internet.email();
+
+    chamaValidadorSimulado();
   });
 
   test('Deveria chamar o Validador com o email correto', () {
@@ -53,8 +62,7 @@ void main() {
   });
 
   test('Deveria transmitir erro no email se a validação falhar', () {
-    when(validadorSimulado.valida(campo: anyNamed('campo'), valor: anyNamed('valor')))
-        .thenReturn('Erro no email');
+    chamaValidadorSimulado(valor: 'Erro no email');
 
     expectLater(sut.emailComErroStream,
         emits('Erro no email')); // Vai acontecer depois que rodar a ultima linha do teste
