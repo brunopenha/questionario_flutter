@@ -25,34 +25,9 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
       builder: (context) {
         widget.apresentacao.paginaEstaCarregandoStream.listen((estaCarregando) {
           if (estaCarregando) {
-            showDialog(
-              context: context,
-              barrierDismissible:
-                  false, // não quero que o usuario consiga clicar de fora do Carregando e fechar
-              builder: (context) {
-                return SimpleDialog(
-                  children: <Widget>[
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          'Aguarde ... ',
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ],
-                );
-              },
-            );
+            exibeCarregando(context);
           } else {
-            if (Navigator.canPop(context)) {
-              Navigator.of(context).pop();
-            }
+            escondeCarregando(context);
           }
         });
 
