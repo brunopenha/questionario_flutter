@@ -1,9 +1,9 @@
 abstract class ApresentacaoAcesso {
-  Stream get emailComErroStream;
-  Stream get senhaComErroStream;
-  Stream get camposSaoValidosStream;
-  Stream get paginaEstaCarregandoStream;
-  Stream get falhaAcessoStream;
+  Stream<String> get emailComErroStream;
+  Stream<String> get senhaComErroStream;
+  Stream<String> get camposSaoValidosStream;
+  Stream<bool> get paginaEstaCarregandoStream;
+  Stream<bool> get falhaAcessoStream;
 
   void validaEmail(String email);
   void validaSenha(String senha);
