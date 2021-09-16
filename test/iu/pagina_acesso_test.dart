@@ -12,15 +12,18 @@ void main() {
   ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
   StreamController<String> emailComErroController;
   StreamController<String> senhaComErroController;
+  StreamController<bool> camposSaoValidosController;
 
   Future carregaPagina(WidgetTester widgetTester) async {
     apresentacao = ApresentacaoAcessoSimulado();
 
     emailComErroController = StreamController<String>();
     senhaComErroController = StreamController<String>();
+    camposSaoValidosController = StreamController<bool>();
 
     when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
     when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
+    when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
 
     final pagAcesso = MaterialApp(
       home: PaginaAcesso(apresentacao),
@@ -33,6 +36,7 @@ void main() {
   tearDown(() {
     emailComErroController.close();
     senhaComErroController.close();
+    camposSaoValidosController.close();
   });
 
   testWidgets("Deveria carregar com o estado inicial", (WidgetTester widgetTester) async {
@@ -127,5 +131,15 @@ void main() {
     expect(find.descendant(of: find.bySemanticsLabel('Senha'), matching: find.byType(Text)),
         findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Senha');
+  });
+
+  testWidgets("Habilita o botão se os campos forem validos", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(true); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(botao.onPressed, isNotNull);
   });
 }
