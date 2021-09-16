@@ -6,6 +6,8 @@ import 'dependencias/dependencias.dart';
 
 class EstadoAcesso {
   String erroEmail;
+  // estaValido ele é um valor calculado caso algum dos campos não estejam validos
+  bool get estaValido => false;
 }
 
 class ApresentacaoAcessoTransmissor {
@@ -23,6 +25,9 @@ class ApresentacaoAcessoTransmissor {
   Stream<String> get emailComErroStream => _controlador.stream
       .map((estado) => estado.erroEmail)
       .distinct(); // Esse distict faz com que o transmissor emita apenas valores diferente do anterior, evita enviar dois valores iguais seguidamente
+
+  Stream<bool> get camposSaoValidosStream =>
+      _controlador.stream.map((estado) => estado.estaValido).distinct();
 
   void validaEmail(String email) {
     _estado.erroEmail = validador.valida(campo: 'email', valor: email);

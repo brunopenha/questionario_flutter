@@ -6,7 +6,7 @@
 2.  ✅ Notificar o `emailComErroStream` com o mesmo erro do `Validador`, caso retorne erro
 3.  Notificar o `emailComErroStream` com `null`, caso o `Validador` não retorne erro
 4.  ✅ Não notificar o `emailComErroStream` se o valor for igual ao do último
-5.  Notificar o `camposSaoValidosStream` após alterar o email
+5.  ✅ Notificar o `camposSaoValidosStream` após alterar o email
 6.  Chamar o `Validador` ao alterar a senha
 7.  Notificar o `senhaComErroStream` com o mesmo erro do `Validador`, caso retorne erro
 8.  Notificar o `senhaComErroStream` com `null`, caso o `Validador` não retorne erro

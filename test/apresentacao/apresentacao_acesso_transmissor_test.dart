@@ -39,6 +39,8 @@ void main() {
     // Se executar mais de uma vez, o teste falha
     sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro no email')));
 
+    sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
+
     sut.validaEmail(textoEmail);
   });
 }
