@@ -24,15 +24,22 @@ class PaginaAcesso extends StatelessWidget {
             child: Form(
               child: Column(
                 children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(
-                        labelText: 'Email',
-                        icon: Icon(
-                          Icons.email,
-                          color: Theme.of(context).primaryColorLight,
-                        )),
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: apresentacao.validaEmail,
+                  StreamBuilder<String>(
+                    stream: apresentacao.emailComErroStream,
+                    builder: (context, snapshot) {
+                      return TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          icon: Icon(
+                            Icons.email,
+                            color: Theme.of(context).primaryColorLight,
+                          ),
+                          errorText: snapshot.data,
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: apresentacao.validaEmail,
+                      );
+                    },
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 8.0, bottom: 32),

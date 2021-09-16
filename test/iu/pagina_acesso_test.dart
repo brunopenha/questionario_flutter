@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,9 +10,13 @@ class ApresentacaoAcessoSimulado extends Mock implements ApresentacaoAcesso {}
 
 void main() {
   ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
+  StreamController<String> emailComErroController;
 
   Future carregaPagina(WidgetTester widgetTester) async {
     apresentacao = ApresentacaoAcessoSimulado();
+    emailComErroController = StreamController<String>();
+    when(apresentacao.emailComErroStream)
+        .thenAnswer((_) => emailComErroController.stream);
     final pagAcesso = MaterialApp(
       home: PaginaAcesso(apresentacao),
     );
@@ -18,6 +24,10 @@ void main() {
     await widgetTester.pumpWidget(
         pagAcesso); // É aqui que o componente é carregado para ser testado
   }
+
+  tearDown(() {
+    emailComErroController.close();
+  });
 
   testWidgets("Deveria carregar com o estado inicial",
       (WidgetTester widgetTester) async {
@@ -52,5 +62,16 @@ void main() {
     final textoSenha = faker.internet.password();
     await widgetTester.enterText(find.bySemanticsLabel('Senha'), textoSenha);
     verify(apresentacao.validaSenha(textoSenha));
+  });
+
+  testWidgets("Deveria exibir um erro se o email for invalido",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(
+        widgetTester); // É aqui que o componente é carregado para ser testado
+
+    emailComErroController.add('qualquer erro'); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text('qualquer erro'), findsOneWidget);
   });
 }
