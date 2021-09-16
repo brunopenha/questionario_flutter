@@ -1,8 +1,24 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:questionario/iu/telas/telas.dart';
+import 'package:mockito/mockito.dart';
+import 'package:questionario/iu/paginas/paginas.dart';
+
+class ApresentacaoAcessoSimulado extends Mock implements ApresentacaoAcesso {}
 
 void main() {
+  ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
+
+  Future carregaPagina(WidgetTester widgetTester) async {
+    apresentacao = ApresentacaoAcessoSimulado();
+    final pagAcesso = MaterialApp(
+      home: PaginaAcesso(apresentacao),
+    );
+
+    await widgetTester.pumpWidget(
+        pagAcesso); // É aqui que o componente é carregado para ser testado
+  }
+
   testWidgets("Deveria carregar com o estado inicial",
       (WidgetTester widgetTester) async {
     await carregaPagina(
@@ -28,14 +44,13 @@ void main() {
       (WidgetTester widgetTester) async {
     await carregaPagina(
         widgetTester); // É aqui que o componente é carregado para ser testado
+
+    final textoEmail = faker.internet.email();
+    await widgetTester.enterText(find.bySemanticsLabel('Email'), textoEmail);
+    verify(apresentacao.validaEmail(textoEmail));
+
+    final textoSenha = faker.internet.password();
+    await widgetTester.enterText(find.bySemanticsLabel('Senha'), textoSenha);
+    verify(apresentacao.validaSenha(textoSenha));
   });
-}
-
-Future carregaPagina(WidgetTester widgetTester) async {
-  final pagAcesso = MaterialApp(
-    home: PaginaAcesso(),
-  );
-
-  await widgetTester.pumpWidget(
-      pagAcesso); // É aqui que o componente é carregado para ser testado
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../telas/telas.dart';
+import '../paginas/paginas.dart';
 
 class Aplicativo extends StatelessWidget {
   @override
@@ -48,7 +48,7 @@ class Aplicativo extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             )),
       ),
-      home: PaginaAcesso(),
+      home: PaginaAcesso(null),
     );
   }
 }

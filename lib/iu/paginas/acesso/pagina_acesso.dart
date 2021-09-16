@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../componentes/componentes.dart';
+import '../../componentes/componentes.dart';
+import 'apresentacao_acesso.dart';
 
 class PaginaAcesso extends StatelessWidget {
+  final ApresentacaoAcesso apresentacao;
+
+  const PaginaAcesso(this.apresentacao);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +32,7 @@ class PaginaAcesso extends StatelessWidget {
                           color: Theme.of(context).primaryColorLight,
                         )),
                     keyboardType: TextInputType.emailAddress,
+                    onChanged: apresentacao.validaEmail,
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 8.0, bottom: 32),
@@ -38,6 +44,7 @@ class PaginaAcesso extends StatelessWidget {
                             color: Theme.of(context).primaryColorLight,
                           )),
                       obscureText: true,
+                      onChanged: apresentacao.validaSenha,
                     ),
                   ),
                   RaisedButton(
