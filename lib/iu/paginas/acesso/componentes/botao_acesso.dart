@@ -12,7 +12,7 @@ class BotaoAcesso extends StatelessWidget {
       stream: apresentacao.camposSaoValidosStream,
       builder: (context, snapshot) {
         return RaisedButton(
-          onPressed: snapshot.data == true ? apresentacao.autenticador : null,
+          onPressed: snapshot.data == true ? apresentacao.autenticacao : null,
           child: Text('Entrar'.toUpperCase()),
         );
       },

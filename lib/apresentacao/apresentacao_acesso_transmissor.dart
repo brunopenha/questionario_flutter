@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
+import '../dominios/casosuso/casosuso.dart';
 import 'dependencias/dependencias.dart';
 
 class EstadoAcesso {
@@ -16,6 +17,7 @@ class EstadoAcesso {
 
 class ApresentacaoAcessoTransmissor {
   final Validador validador;
+  final Autenticador autenticador;
 
   // Se houvesse um controlador para cada Streaming, não se utiliza broadcast
   final _controlador = StreamController<
@@ -23,7 +25,7 @@ class ApresentacaoAcessoTransmissor {
 
   var _estado = EstadoAcesso();
 
-  ApresentacaoAcessoTransmissor({@required this.validador});
+  ApresentacaoAcessoTransmissor({@required this.validador, @required this.autenticador});
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
   Stream<String> get emailComErroStream => _controlador.stream
@@ -46,5 +48,9 @@ class ApresentacaoAcessoTransmissor {
     _estado.senha = textoSenha;
     _estado.erroSenha = validador.valida(campo: 'senha', valor: textoSenha);
     atualiza();
+  }
+
+  Future<void> autenticacao() async {
+    await autenticador.autoriza(ParametrosAutenticador(email: _estado.email, senha: _estado.senha));
   }
 }

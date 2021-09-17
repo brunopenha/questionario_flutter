@@ -3,12 +3,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/apresentacao/dependencias/dependencias.dart';
+import 'package:questionario/dominios/casosuso/casosuso.dart';
 
 class ValidadorSimulado extends Mock implements Validador {}
+
+class AutenticadorSimulado extends Mock implements Autenticador {}
 
 void main() {
   ApresentacaoAcessoTransmissor sut;
   ValidadorSimulado validadorSimulado;
+  AutenticadorSimulado autenticadorSimulado;
+
   String textoEmail;
 
   String textoSenha;
@@ -22,7 +27,8 @@ void main() {
 
   setUp(() {
     validadorSimulado = ValidadorSimulado();
-    sut = ApresentacaoAcessoTransmissor(validador: validadorSimulado);
+    autenticadorSimulado = AutenticadorSimulado();
+    sut = ApresentacaoAcessoTransmissor(validador: validadorSimulado, autenticador: autenticadorSimulado);
     textoEmail = faker.internet.email();
     textoSenha = faker.internet.password();
 
@@ -116,5 +122,15 @@ void main() {
     sut.validaEmail(textoEmail);
     await Future.delayed(Duration.zero);
     sut.validaSenha(textoSenha);
+  });
+
+  test('Deveria chamar o Autenticador para validar se os valores estão corretos', () async {
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    await sut.autenticacao();
+
+    verify(autenticadorSimulado.autoriza(ParametrosAutenticador(email: textoEmail, senha: textoSenha)))
+        .called(1);
   });
 }

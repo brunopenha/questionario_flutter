@@ -177,7 +177,7 @@ void main() {
     await widgetTester.tap(find.byType(RaisedButton)); // cliquei no botão
     await widgetTester.pump(); // recarrego a tela
 
-    verify(apresentacao.autenticador()).called(1);
+    verify(apresentacao.autenticacao()).called(1);
   });
 
   testWidgets("Deveria aprensentar a mensagem Carregando", (WidgetTester widgetTester) async {
