@@ -13,15 +13,17 @@ class ValidaEmail implements ValidaCampos {
 }
 
 void main() {
-  test('Deveria retornar null se o email estiver vazio', () {
-    final sut = ValidaEmail('qualquer_campo');
+  ValidaEmail sut;
 
+  setUp(() {
+    sut = ValidaEmail('qualquer_campo');
+  });
+
+  test('Deveria retornar null se o email estiver vazio', () {
     expect(sut.valida(''), null);
   });
 
   test('Deveria retornar null se o email estiver vazio', () {
-    final sut = ValidaEmail('qualquer_campo');
-
     expect(sut.valida(null), null);
   });
 }
