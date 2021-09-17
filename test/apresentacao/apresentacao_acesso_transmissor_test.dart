@@ -183,4 +183,12 @@ void main() {
 
     await sut.autenticacao();
   });
+
+  test('Não deveria transmitir depois que a tela fechar (liberar memória)', () async {
+    expectLater(sut.emailComErroStream, neverEmits(null));
+
+    sut.liberaMemoria();
+
+    sut.validaEmail(textoEmail);
+  });
 }
