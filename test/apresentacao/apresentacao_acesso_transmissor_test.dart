@@ -64,4 +64,17 @@ void main() {
 
     verify(validadorSimulado.valida(campo: 'senha', valor: textoSenha)).called(1);
   });
+
+  test('Deveria transmitir erro na senha se a validação falhar', () {
+    chamaValidadorSimulado(valor: 'Erro na senha');
+
+    // O ouvinte abaixo cada captura do erro
+    // Se executar mais de uma vez, o teste falha
+    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro na senha')));
+
+    sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
+
+    sut.validaSenha(textoEmail);
+    sut.validaSenha(textoEmail);
+  });
 }
