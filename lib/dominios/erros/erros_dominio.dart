@@ -6,7 +6,7 @@ extension ExtensaoErrosDominio on ErrosDominio {
       case ErrosDominio.credenciaisInvalidas:
         return 'Credenciais inválidas';
       default:
-        return '';
+        return 'Algo errado aconteceu. Tente novamente em breve.';
     }
   }
 }

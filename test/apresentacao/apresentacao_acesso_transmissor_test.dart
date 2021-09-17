@@ -149,7 +149,7 @@ void main() {
         .called(1);
   });
 
-  test('Deveria transmitir o evento quando houver ErroCredencialInvalida', () async {
+  test('Deveria transmitir o evento quando houver credenciaisInvalidas', () async {
     chamaAutenticadorSimuladoComErro(ErrosDominio.credenciaisInvalidas);
 
     sut.validaEmail(textoEmail);
@@ -162,6 +162,24 @@ void main() {
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
     sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, 'Credenciais inválidas')));
+
+    await sut.autenticacao();
+  });
+
+  test('Deveria transmitir o evento quando houver erro inesperado', () async {
+    chamaAutenticadorSimuladoComErro(ErrosDominio.inesperado);
+
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    expectLater(
+        sut.estaCarregandoStream,
+        emitsInOrder([
+          false
+        ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
+
+    sut.falhaAcessoStream
+        .listen(expectAsync1((erro) => expect(erro, 'Algo errado aconteceu. Tente novamente em breve.')));
 
     await sut.autenticacao();
   });

@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:questionario/dominios/erros/erros.dart';
 
 import '../dominios/casosuso/casosuso.dart';
+import '../dominios/erros/erros.dart';
 import 'dependencias/dependencias.dart';
 
 class EstadoAcesso {
