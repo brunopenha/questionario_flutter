@@ -11,7 +11,16 @@ class ValidacaoComposta implements Validador {
 
   @override
   String valida({@required String campo, @required String valor}) {
-    return null;
+    String erro;
+
+    for (final validacao in validadores) {
+      erro = validacao.valida(valor);
+
+      if (erro?.isNotEmpty == true) {
+        break;
+      }
+    }
+    return erro;
   }
 }
 
@@ -45,14 +54,22 @@ void main() {
     validacao2Simulado(null);
 
     validacao3 = ValidaCamposSimulado();
-    when(validacao3.campo).thenReturn('qualquer_campo');
+    when(validacao3.campo).thenReturn('outro_campo');
     validacao3Simulado(null);
 
-    sut = ValidacaoComposta([validacao1, validacao2]);
+    sut = ValidacaoComposta([validacao1, validacao2, validacao3]);
+  });
+
+  test('Deveria retornar erro no primeiro campo validado', () {
+    validacao2Simulado('');
+    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), null);
   });
 
   test('Deveria retornar null se todos os validadores retorne null ou vazio', () {
-    validacao2Simulado('');
-    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), null);
+    validacao1Simulado('erro 1');
+    validacao2Simulado('erro 2');
+    validacao3Simulado('erro 3');
+
+    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), 'erro 1');
   });
 }
