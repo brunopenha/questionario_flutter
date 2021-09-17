@@ -8,7 +8,9 @@ class ValidaEmail implements ValidaCampos {
 
   @override
   String valida(String valor) {
-    return null;
+    final regexEmailValido = RegExp(
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+    return valor?.isNotEmpty != true || regexEmailValido.hasMatch(valor) ? null : 'Email inválido';
   }
 }
 
@@ -29,5 +31,9 @@ void main() {
 
   test('Deveria retornar null se o email for valido', () {
     expect(sut.valida('dev@bruno.penha.nom.br'), null);
+  });
+
+  test('Deveria retornar erro se o email for invalido', () {
+    expect(sut.valida('bruno.penha.nom.br'), 'Email inválido');
   });
 }
