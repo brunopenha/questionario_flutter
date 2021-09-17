@@ -10,6 +10,7 @@ class EstadoAcesso {
   String senha;
   String erroEmail;
   String erroSenha;
+  bool estaCarregando = false;
 
   // estaValido ele é um valor calculado caso algum dos campos não estejam validos
   bool get estaValido => erroEmail == null && erroSenha == null && email != null && senha != null;
@@ -36,21 +37,30 @@ class ApresentacaoAcessoTransmissor {
   Stream<bool> get camposSaoValidosStream =>
       _controlador.stream.map((estado) => estado.estaValido).distinct();
 
-  void atualiza() => _controlador.add(_estado);
+  Stream<bool> get estaCarregandoStream =>
+      _controlador.stream.map((estado) => estado.estaCarregando).distinct();
+
+  void _atualiza() => _controlador.add(_estado);
 
   void validaEmail(String textoEmail) {
     _estado.email = textoEmail;
     _estado.erroEmail = validador.valida(campo: 'email', valor: textoEmail);
-    atualiza();
+    _atualiza();
   }
 
   void validaSenha(String textoSenha) {
     _estado.senha = textoSenha;
     _estado.erroSenha = validador.valida(campo: 'senha', valor: textoSenha);
-    atualiza();
+    _atualiza();
   }
 
   Future<void> autenticacao() async {
+    _estado.estaCarregando = true;
+    _atualiza();
+
     await autenticador.autoriza(ParametrosAutenticador(email: _estado.email, senha: _estado.senha));
+
+    _estado.estaCarregando = false;
+    _atualiza();
   }
 }

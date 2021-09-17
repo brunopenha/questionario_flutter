@@ -4,5 +4,4 @@ class Conta {
   final String token;
 
   Conta({@required this.token});
-
 }

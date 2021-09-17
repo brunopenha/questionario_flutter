@@ -1,9 +1,12 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+//
 import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/apresentacao/dependencias/dependencias.dart';
+//
 import 'package:questionario/dominios/casosuso/casosuso.dart';
+import 'package:questionario/dominios/entidades/entidades.dart';
 
 class ValidadorSimulado extends Mock implements Validador {}
 
@@ -25,6 +28,12 @@ void main() {
     chamadaValidadorSimulado(campo).thenReturn(valor);
   }
 
+  PostExpectation chamadaAutenticadorSimulado() => when(autenticadorSimulado.autoriza(any));
+
+  void chamaAutenticadorSimulado({String campo, String valor}) {
+    chamadaAutenticadorSimulado().thenAnswer((_) async => Conta(token: faker.guid.guid()));
+  }
+
   setUp(() {
     validadorSimulado = ValidadorSimulado();
     autenticadorSimulado = AutenticadorSimulado();
@@ -33,6 +42,7 @@ void main() {
     textoSenha = faker.internet.password();
 
     chamaValidadorSimulado();
+    chamaAutenticadorSimulado();
   });
 
   test('Deveria chamar o Validador com o email correto', () {
@@ -132,5 +142,15 @@ void main() {
 
     verify(autenticadorSimulado.autoriza(ParametrosAutenticador(email: textoEmail, senha: textoSenha)))
         .called(1);
+  });
+
+  test('Deveria transmitir os eventos corretos quando o Autenticador validar sem erro', () async {
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    expectLater(sut.estaCarregandoStream,
+        emitsInOrder([true, false])); // Primeiro exibe que esta carregando e depois o inibe
+
+    await sut.autenticacao();
   });
 }

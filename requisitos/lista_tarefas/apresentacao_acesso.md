@@ -15,8 +15,8 @@
 11. ✅ Para o formulário ser válido, todos os `Streams` de erro precisam estar `null` e todos os campos obrigatórios não podem estar vazios.
 12. ✅ Não notificar o `camposSaoValidosStream` se o valor for igual ao ultimo
 13. ✅ Chamar o `Autenticador` com o email e senha válidos
-14. Notificar o `paginaEstaCarregandoStream` com `true` antes de chamar o `Autenticador`
-15. Notificar o `paginaEstaCarregandoStream` com `false` no fim do `Autenticador`
+14. ✅ Notificar o `paginaEstaCarregandoStream` com `true` antes de chamar o `Autenticador`
+15. ✅ Notificar o `paginaEstaCarregandoStream` com `false` no fim do `Autenticador`
 16. Notificar o `falhaAcessoStream` caso o `Autenticador` retorne um `ErroDominio`
 17. Fechar todos os `Streams` no `dispose` (`liberarMemória`)
 18. ⛔ Gravar a `Conta` no cache em caso de sucesso
