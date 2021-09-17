@@ -1,28 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
-import 'package:questionario/apresentacao/dependencias/dependencias.dart';
 import 'package:questionario/validacao/dependencias/dependencias.dart';
-
-class ValidacaoComposta implements Validador {
-  final List<ValidaCampos> validadores;
-
-  ValidacaoComposta(this.validadores);
-
-  @override
-  String valida({@required String campo, @required String valor}) {
-    String erro;
-
-    for (final validacao in validadores.where((val) => val.campo == campo)) {
-      erro = validacao.valida(valor);
-
-      if (erro?.isNotEmpty == true) {
-        break;
-      }
-    }
-    return erro;
-  }
-}
+import 'package:questionario/validacao/validadores/validadores.dart';
 
 class ValidaCamposSimulado extends Mock implements ValidaCampos {}
 
