@@ -81,11 +81,25 @@ void main() {
   test('Deveria transmitir null se a validacao não conter erros na senha', () {
     // O ouvinte abaixo cada captura do erro
     // Se executar mais de uma vez, o teste falha
-    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
+    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
 
     sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
 
     sut.validaSenha(textoSenha);
+    sut.validaSenha(textoSenha);
+  });
+
+  test('Deveria transmitir erro se a validacao conter erros apenas no email', () {
+    // O ouvinte abaixo cada captura do erro
+    // Se executar mais de uma vez, o teste falha
+    chamaValidadorSimulado(campo: 'email', valor: 'Erro no Email');
+
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro no Email')));
+    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
+
+    sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
+
+    sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
   });
 }
