@@ -1,22 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-
-abstract class ValidaCampos {
-  String get campo;
-
-  String valida(String valor);
-}
-
-class ValidaCamposObrigatorios implements ValidaCampos {
-  @override
-  final String campo;
-
-  ValidaCamposObrigatorios(this.campo);
-
-  @override
-  String valida(String valor) {
-    return valor?.isNotEmpty == true ? null : 'Campo obrigatório';
-  }
-}
+import 'package:questionario/validacao/validadores/validadores.dart';
 
 void main() {
   ValidaCamposObrigatorios sut;
