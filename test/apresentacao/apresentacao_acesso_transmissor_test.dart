@@ -7,6 +7,7 @@ import 'package:questionario/apresentacao/dependencias/dependencias.dart';
 //
 import 'package:questionario/dominios/casosuso/casosuso.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 
 class ValidadorSimulado extends Mock implements Validador {}
 
@@ -32,6 +33,10 @@ void main() {
 
   void chamaAutenticadorSimulado({String campo, String valor}) {
     chamadaAutenticadorSimulado().thenAnswer((_) async => Conta(token: faker.guid.guid()));
+  }
+
+  void chamaAutenticadorSimuladoComErro(ErrosDominio erro) {
+    chamadaAutenticadorSimulado().thenThrow(erro);
   }
 
   setUp(() {
@@ -144,12 +149,19 @@ void main() {
         .called(1);
   });
 
-  test('Deveria transmitir os eventos corretos quando o Autenticador validar sem erro', () async {
+  test('Deveria transmitir o evento quando houver ErroCredencialInvalida', () async {
+    chamaAutenticadorSimuladoComErro(ErrosDominio.credenciaisInvalidas);
+
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
 
-    expectLater(sut.estaCarregandoStream,
-        emitsInOrder([true, false])); // Primeiro exibe que esta carregando e depois o inibe
+    expectLater(
+        sut.estaCarregandoStream,
+        emitsInOrder([
+          false
+        ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
+
+    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, 'Credenciais inválidas')));
 
     await sut.autenticacao();
   });

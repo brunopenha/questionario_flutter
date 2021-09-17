@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 
 import '../dominios/casosuso/casosuso.dart';
 import 'dependencias/dependencias.dart';
@@ -10,6 +11,7 @@ class EstadoAcesso {
   String senha;
   String erroEmail;
   String erroSenha;
+  String erroSistema;
   bool estaCarregando = false;
 
   // estaValido ele é um valor calculado caso algum dos campos não estejam validos
@@ -32,7 +34,9 @@ class ApresentacaoAcessoTransmissor {
   Stream<String> get emailComErroStream => _controlador.stream
       .map((estado) => estado.erroEmail)
       .distinct(); // Esse distict faz com que o transmissor emita apenas valores diferente do anterior, evita enviar dois valores iguais seguidamente
+
   Stream<String> get senhaComErroStream => _controlador.stream.map((estado) => estado.erroSenha).distinct();
+  Stream<String> get falhaAcessoStream => _controlador.stream.map((estado) => estado.erroSistema).distinct();
 
   Stream<bool> get camposSaoValidosStream =>
       _controlador.stream.map((estado) => estado.estaValido).distinct();
@@ -58,9 +62,13 @@ class ApresentacaoAcessoTransmissor {
     _estado.estaCarregando = true;
     _atualiza();
 
-    await autenticador.autoriza(ParametrosAutenticador(email: _estado.email, senha: _estado.senha));
-
-    _estado.estaCarregando = false;
-    _atualiza();
+    try {
+      await autenticador.autoriza(ParametrosAutenticador(email: _estado.email, senha: _estado.senha));
+    } on ErrosDominio catch (erro) {
+      _estado.erroSistema = erro.descricao;
+    } finally {
+      _estado.estaCarregando = false;
+      _atualiza();
+    }
   }
 }
