@@ -19,19 +19,17 @@ class ValidaCamposObrigatorios implements ValidaCampos {
 }
 
 void main() {
+  ValidaCamposObrigatorios sut;
+
+  setUp(() {
+    sut = ValidaCamposObrigatorios('qualquer_campo');
+  });
+
   test('Deveria retornar null se o valor não estiver vazio', () {
-    final sut = ValidaCamposObrigatorios('qualquer_campo');
-
-    final erro = sut.valida('qualquer_campo');
-
-    expect(erro, null);
+    expect(sut.valida('qualquer_campo'), null);
   });
 
   test('Deveria retornar erro se o valor estiver vazio', () {
-    final sut = ValidaCamposObrigatorios('qualquer_campo');
-
-    final erro = sut.valida('');
-
-    expect(erro, 'Campo obrigatório');
+    expect(sut.valida(''), 'Campo obrigatório');
   });
 }
