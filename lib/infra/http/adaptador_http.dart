@@ -11,25 +11,28 @@ class AdaptadorHttp implements ClienteHttp {
   AdaptadorHttp(this.cliente);
 
   @override
-  Future<Map> requisita(
-      {@required String url, @required String metodo, Map corpo}) async {
-    final cabecalho = {
-      'content-type': 'application/json',
-      'accept': 'application/json'
-    };
+  Future<Map> requisita({@required String url, @required String metodo, Map corpo}) async {
+    final cabecalho = {'content-type': 'application/json', 'accept': 'application/json'};
     final corpoJson = corpo != null ? jsonEncode(corpo) : null;
+    var retorno = Response('', 500);
+    Future<Response> respostaAssimetrica;
 
     try {
       switch (metodo) {
         case 'post':
-          return _trataRetorno(
-              await cliente.post(url, headers: cabecalho, body: corpoJson));
+//          return _trataRetorno(await cliente.post(url, headers: cabecalho, body: corpoJson));
+          respostaAssimetrica = cliente.post(url, headers: cabecalho, body: corpoJson);
+          break;
         default:
           throw ErrosHttp.serverError;
+      }
+      if (respostaAssimetrica != null) {
+        retorno = await respostaAssimetrica.timeout(Duration(seconds: 10));
       }
     } catch (e) {
       throw ErrosHttp.serverError;
     }
+    return _trataRetorno(retorno);
   }
 
   Map _trataRetorno(Response resposta) {
