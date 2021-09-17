@@ -74,7 +74,18 @@ void main() {
 
     sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
 
-    sut.validaSenha(textoEmail);
-    sut.validaSenha(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaSenha(textoSenha);
+  });
+
+  test('Deveria transmitir null se a validacao não conter erros na senha', () {
+    // O ouvinte abaixo cada captura do erro
+    // Se executar mais de uma vez, o teste falha
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
+
+    sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
+
+    sut.validaSenha(textoSenha);
+    sut.validaSenha(textoSenha);
   });
 }
