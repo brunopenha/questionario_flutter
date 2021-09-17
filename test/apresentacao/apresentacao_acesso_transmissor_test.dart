@@ -102,4 +102,19 @@ void main() {
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
   });
+
+  test('Deveria transmitir null se a validacao não conter erros', () async {
+    // O ouvinte abaixo cada captura do erro
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
+    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
+
+    expectLater(
+        sut.camposSaoValidosStream,
+        emitsInOrder(
+            [false, true])); // Como foi preenchido apenas o email, os outros campos não foram validados
+
+    sut.validaEmail(textoEmail);
+    await Future.delayed(Duration.zero);
+    sut.validaSenha(textoSenha);
+  });
 }

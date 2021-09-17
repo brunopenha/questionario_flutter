@@ -5,11 +5,13 @@ import 'package:meta/meta.dart';
 import 'dependencias/dependencias.dart';
 
 class EstadoAcesso {
+  String email;
+  String senha;
   String erroEmail;
   String erroSenha;
 
   // estaValido ele é um valor calculado caso algum dos campos não estejam validos
-  bool get estaValido => false;
+  bool get estaValido => erroEmail == null && erroSenha == null && email != null && senha != null;
 }
 
 class ApresentacaoAcessoTransmissor {
@@ -34,12 +36,14 @@ class ApresentacaoAcessoTransmissor {
 
   void atualiza() => _controlador.add(_estado);
 
-  void validaEmail(String email) {
-    _estado.erroEmail = validador.valida(campo: 'email', valor: email);
+  void validaEmail(String textoEmail) {
+    _estado.email = textoEmail;
+    _estado.erroEmail = validador.valida(campo: 'email', valor: textoEmail);
     atualiza();
   }
 
   void validaSenha(String textoSenha) {
+    _estado.senha = textoSenha;
     _estado.erroSenha = validador.valida(campo: 'senha', valor: textoSenha);
     atualiza();
   }

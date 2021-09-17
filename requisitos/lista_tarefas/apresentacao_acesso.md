@@ -12,7 +12,7 @@
 8.  ✅ Notificar o `senhaComErroStream` com `null`, caso o `Validador` não retorne erro
 9.  ✅ Não notificar o `senhaComErroStream`  se o valor for igual ao do último
 10. ✅ Notificar o `camposSaoValidosStream` após alterar a senha
-11. Para o formulário ser válido, todos os `Streams` de erro precisam estar `null` e todos os campos obrigatórios não podem estar vazios.
+11. ✅ Para o formulário ser válido, todos os `Streams` de erro precisam estar `null` e todos os campos obrigatórios não podem estar vazios.
 12. ✅ Não notificar o `camposSaoValidosStream` se o valor for igual ao ultimo
 13. Chamar o `Autenticador` com o email e senha válidos
 14. Notificar o `paginaEstaCarregandoStream` com `true` antes de chamar o `Autenticador`
