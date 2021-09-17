@@ -13,7 +13,7 @@ class ValidacaoComposta implements Validador {
   String valida({@required String campo, @required String valor}) {
     String erro;
 
-    for (final validacao in validadores) {
+    for (final validacao in validadores.where((val) => val.campo == campo)) {
       erro = validacao.valida(valor);
 
       if (erro?.isNotEmpty == true) {
@@ -46,7 +46,7 @@ void main() {
 
   setUp(() {
     validacao1 = ValidaCamposSimulado();
-    when(validacao1.campo).thenReturn('qualquer_campo');
+    when(validacao1.campo).thenReturn('outro_campo');
     validacao1Simulado(null);
 
     validacao2 = ValidaCamposSimulado();
@@ -54,22 +54,22 @@ void main() {
     validacao2Simulado(null);
 
     validacao3 = ValidaCamposSimulado();
-    when(validacao3.campo).thenReturn('outro_campo');
+    when(validacao3.campo).thenReturn('qualquer_campo');
     validacao3Simulado(null);
 
     sut = ValidacaoComposta([validacao1, validacao2, validacao3]);
   });
 
-  test('Deveria retornar erro no primeiro campo validado', () {
+  test('retornar null se todos os validadores retorne null ou vazio', () {
     validacao2Simulado('');
     expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), null);
   });
 
-  test('Deveria retornar null se todos os validadores retorne null ou vazio', () {
+  test('Deveria Deveria retornar erro no primeiro campo validado', () {
     validacao1Simulado('erro 1');
     validacao2Simulado('erro 2');
     validacao3Simulado('erro 3');
 
-    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), 'erro 1');
+    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), 'erro 2');
   });
 }
