@@ -14,7 +14,7 @@ class ValidaCamposObrigatorios implements ValidaCampos {
 
   @override
   String valida(String valor) {
-    return valor.isEmpty ? 'Campo obrigatório' : null;
+    return valor?.isNotEmpty == true ? null : 'Campo obrigatório';
   }
 }
 
@@ -31,5 +31,9 @@ void main() {
 
   test('Deveria retornar erro se o valor estiver vazio', () {
     expect(sut.valida(''), 'Campo obrigatório');
+  });
+
+  test('Deveria retornar erro se o valor estiver nulo', () {
+    expect(sut.valida(null), 'Campo obrigatório');
   });
 }
