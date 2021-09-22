@@ -34,7 +34,7 @@ void simulaStreams() {
   when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
   when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
   when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
-  when(apresentacao.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
+  when(apresentacao.estaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
 }
 
 void inicializaStreams() {

@@ -15,19 +15,17 @@ class AdaptadorHttp implements ClienteHttp {
     final cabecalho = {'content-type': 'application/json', 'accept': 'application/json'};
     final corpoJson = corpo != null ? jsonEncode(corpo) : null;
     var retorno = Response('', 500);
-    Future<Response> respostaAssimetrica;
 
     try {
       switch (metodo) {
         case 'post':
-//          return _trataRetorno(await cliente.post(url, headers: cabecalho, body: corpoJson));
-          respostaAssimetrica = cliente.post(url, headers: cabecalho, body: corpoJson);
+          retorno = await cliente.post(url, headers: cabecalho, body: corpoJson);
+          print("Retorno do request:");
+          print(retorno.body);
+          print(retorno.toString());
           break;
         default:
           throw ErrosHttp.serverError;
-      }
-      if (respostaAssimetrica != null) {
-        retorno = await respostaAssimetrica.timeout(Duration(seconds: 10));
       }
     } catch (e) {
       throw ErrosHttp.serverError;

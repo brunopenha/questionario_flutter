@@ -3,7 +3,7 @@ abstract class ApresentacaoAcesso {
   Stream<String> get senhaComErroStream;
   Stream<String> get falhaAcessoStream;
   Stream<bool> get camposSaoValidosStream;
-  Stream<bool> get paginaEstaCarregandoStream;
+  Stream<bool> get estaCarregandoStream;
 
   void validaEmail(String email);
   void validaSenha(String senha);

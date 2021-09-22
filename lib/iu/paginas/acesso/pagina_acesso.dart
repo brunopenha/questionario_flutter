@@ -25,7 +25,7 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
   Widget build(BuildContext context) {
     return Scaffold(body: Builder(
       builder: (context) {
-        widget.apresentacao.paginaEstaCarregandoStream.listen((estaCarregando) {
+        widget.apresentacao.estaCarregandoStream.listen((estaCarregando) {
           if (estaCarregando) {
             exibeCarregando(context);
           } else {

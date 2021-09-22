@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
+import 'package:questionario/iu/paginas/paginas.dart';
 
 import '../dominios/casosuso/casosuso.dart';
 import '../dominios/erros/erros.dart';
@@ -18,7 +19,7 @@ class EstadoAcesso {
   bool get estaValido => erroEmail == null && erroSenha == null && email != null && senha != null;
 }
 
-class ApresentacaoAcessoTransmissor {
+class ApresentacaoAcessoTransmissor implements ApresentacaoAcesso {
   final Validador validador;
   final Autenticador autenticador;
 

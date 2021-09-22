@@ -32,5 +32,7 @@ class ParametrosAutenticacaoRemota {
   factory ParametrosAutenticacaoRemota.aPartirDoDominio(ParametrosAutenticador entidade) =>
       ParametrosAutenticacaoRemota(email: entidade.email, senha: entidade.senha);
 
-  Map criaJson() => {'email': email, 'senha': senha};
+  // acesso a API para verificar os parametros:
+  // https://fordevs.herokuapp.com/api-docs/#/Login/post_login
+  Map criaJson() => {'email': email, 'password': senha};
 }
