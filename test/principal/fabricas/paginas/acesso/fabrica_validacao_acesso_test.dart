@@ -7,6 +7,6 @@ void main() {
     final validacoes = criaValidacoesAcesso();
 
     expect(validacoes,
-        [ValidaCamposObrigatorios('email'), ValidaCamposObrigatorios('senha'), ValidaEmail('email')]);
+        [ValidaCamposObrigatorios('email'), ValidaEmail('email'), ValidaCamposObrigatorios('senha')]);
   });
 }

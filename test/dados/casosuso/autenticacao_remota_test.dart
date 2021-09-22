@@ -41,7 +41,7 @@ void main() {
     await sut.autoriza(parametros);
 
     verify(clienteHttp.requisita(
-        url: urlSimulada, metodo: 'post', corpo: {'email': parametros.email, 'senha': parametros.senha}));
+        url: urlSimulada, metodo: 'post', corpo: {'email': parametros.email, 'password': parametros.senha}));
   });
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async {
