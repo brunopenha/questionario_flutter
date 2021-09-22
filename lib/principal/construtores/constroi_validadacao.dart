@@ -7,8 +7,10 @@ class ConstroiValidacao {
   String nomeCampo;
   List<ValidaCampos> validacoes = [];
 
+  ConstroiValidacao._(); // Torna o construtor como privado - estrategia do Singleton no Dart
+
   static ConstroiValidacao campo(String nomeCampo) {
-    _instancia = ConstroiValidacao();
+    _instancia = ConstroiValidacao._(); // Deixando apenas acessivel de dentro
     _instancia.nomeCampo = nomeCampo;
 
     return _instancia;
