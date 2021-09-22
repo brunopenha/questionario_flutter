@@ -15,6 +15,13 @@ class PaginaAcesso extends StatefulWidget {
 }
 
 class _PaginaAcessoState extends State<PaginaAcesso> {
+  void _escondeTeclado() {
+    final focoAtual = FocusScope.of(context);
+    if (!focoAtual.hasPrimaryFocus) {
+      focoAtual.unfocus();
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -39,39 +46,42 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
           }
         });
 
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              CabecalhoAcesso(),
-              Titulo1(
-                texto: 'Login',
-              ),
-              Padding(
-                padding: const EdgeInsets.all(32),
-                child: Provider(
-                  create: (_) =>
-                      widget.apresentacao, // Estou compartilhando esse presenter com toda a arvore de filhos
-                  child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        EntradaEmail(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0, bottom: 32),
-                          child: EntradaSenha(),
-                        ),
-                        BotaoAcesso(),
-                        FlatButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.person),
-                          label: Text('Criar Conta'),
-                        )
-                      ],
+        return GestureDetector(
+          onTap: _escondeTeclado,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                CabecalhoAcesso(),
+                Titulo1(
+                  texto: 'Login',
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Provider(
+                    create: (_) => widget
+                        .apresentacao, // Estou compartilhando esse presenter com toda a arvore de filhos
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          EntradaEmail(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 8.0, bottom: 32),
+                            child: EntradaSenha(),
+                          ),
+                          BotaoAcesso(),
+                          FlatButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.person),
+                            label: Text('Criar Conta'),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         );
       },
