@@ -1,7 +1,12 @@
+import 'package:equatable/equatable.dart';
+
 import '../dependencias/dependencias.dart';
 
-class ValidaEmail implements ValidaCampos {
+class ValidaEmail extends Equatable implements ValidaCampos {
   final String campo;
+
+  @override
+  List<Object> get props => [campo];
 
   ValidaEmail(this.campo);
 
