@@ -4,5 +4,5 @@ import '../../../../iu/paginas/paginas.dart';
 import '../../fabricas.dart';
 
 Widget criaPaginaAcesso() {
-  return PaginaAcesso(criaTransmissorAcesso());
+  return PaginaAcesso(criaGetxApresentadorAcesso());
 }
