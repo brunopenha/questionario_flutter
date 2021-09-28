@@ -18,6 +18,7 @@ class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso
   var _emailComErro = RxString();
   var _senhaComErro = RxString();
   var _falhaAcesso = RxString();
+  var _navegaPara = RxString();
   var _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
   var _estaCarregando = false.obs;
 
@@ -29,6 +30,7 @@ class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso
 
   Stream<String> get senhaComErroStream => _senhaComErro.stream;
   Stream<String> get falhaAcessoStream => _falhaAcesso.stream;
+  Stream<String> get navegaParaStream => _navegaPara.stream;
 
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
   Stream<bool> get estaCarregandoStream => _estaCarregando.stream;
@@ -57,6 +59,7 @@ class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso
     try {
       final conta = await autenticador.autoriza(ParametrosAutenticador(email: _email, senha: _senha));
       await salvaContaAtual.salva(conta);
+      _navegaPara.value = '/pesquisas';
     } on ErrosDominio catch (erro) {
       _falhaAcesso.value = erro.descricao;
     } finally {

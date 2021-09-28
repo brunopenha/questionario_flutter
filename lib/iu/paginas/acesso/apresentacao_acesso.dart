@@ -2,6 +2,7 @@ abstract class ApresentacaoAcesso {
   Stream<String> get emailComErroStream;
   Stream<String> get senhaComErroStream;
   Stream<String> get falhaAcessoStream;
+  Stream<String> get navegaParaStream;
   Stream<bool> get camposSaoValidosStream;
   Stream<bool> get estaCarregandoStream;
 

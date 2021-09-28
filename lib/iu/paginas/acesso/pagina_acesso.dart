@@ -1,38 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../componentes/componentes.dart';
 import 'apresentacao_acesso.dart';
 import 'componentes/componentes.dart';
 
-class PaginaAcesso extends StatefulWidget {
+class PaginaAcesso extends StatelessWidget {
   final ApresentacaoAcesso apresentacao;
 
   const PaginaAcesso(this.apresentacao);
 
   @override
-  _PaginaAcessoState createState() => _PaginaAcessoState();
-}
-
-class _PaginaAcessoState extends State<PaginaAcesso> {
-  void _escondeTeclado() {
-    final focoAtual = FocusScope.of(context);
-    if (!focoAtual.hasPrimaryFocus) {
-      focoAtual.unfocus();
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.apresentacao.liberaMemoria();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    void _escondeTeclado() {
+      final focoAtual = FocusScope.of(context);
+      if (!focoAtual.hasPrimaryFocus) {
+        focoAtual.unfocus();
+      }
+    }
+
     return Scaffold(body: Builder(
       builder: (context) {
-        widget.apresentacao.estaCarregandoStream.listen((estaCarregando) {
+        apresentacao.estaCarregandoStream.listen((estaCarregando) {
           if (estaCarregando) {
             exibeCarregando(context);
           } else {
@@ -40,9 +30,16 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
           }
         });
 
-        widget.apresentacao.falhaAcessoStream.listen((erro) {
+        apresentacao.falhaAcessoStream.listen((erro) {
           if (erro != null) {
             exibeMensagemErro(context, erro);
+          }
+        });
+
+        // Toda vez que receber uma notificacao do NavegarPara
+        apresentacao.navegaParaStream.listen((pagina) {
+          if (pagina?.isNotEmpty == true) {
+            Get.offAllNamed(pagina);
           }
         });
 
@@ -59,8 +56,8 @@ class _PaginaAcessoState extends State<PaginaAcesso> {
                 Padding(
                   padding: const EdgeInsets.all(32),
                   child: Provider(
-                    create: (_) => widget
-                        .apresentacao, // Estou compartilhando esse presenter com toda a arvore de filhos
+                    create: (_) =>
+                        apresentacao, // Estou compartilhando esse presenter com toda a arvore de filhos
                     child: Form(
                       child: Column(
                         children: <Widget>[

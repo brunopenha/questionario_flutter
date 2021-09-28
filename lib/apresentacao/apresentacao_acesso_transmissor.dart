@@ -40,6 +40,7 @@ class ApresentacaoAcessoTransmissor implements ApresentacaoAcesso {
       _controlador?.stream?.map((estado) => estado.erroSenha)?.distinct();
   Stream<String> get falhaAcessoStream =>
       _controlador?.stream?.map((estado) => estado.erroSistema)?.distinct();
+  Stream<String> get navegaParaStream => throw UnimplementedError();
 
   Stream<bool> get camposSaoValidosStream =>
       _controlador?.stream?.map((estado) => estado.estaValido)?.distinct();

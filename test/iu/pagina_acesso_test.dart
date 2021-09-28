@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:questionario/iu/paginas/paginas.dart';
 
@@ -12,6 +13,7 @@ ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
 StreamController<String> emailComErroController;
 StreamController<String> senhaComErroController;
 StreamController<String> falhaAcessoController;
+StreamController<String> navegaParaController;
 StreamController<bool> camposSaoValidosController;
 StreamController<bool> paginaEstaCarregandoController;
 
@@ -22,8 +24,16 @@ Future carregaPagina(WidgetTester widgetTester) async {
 
   simulaStreams();
 
-  final pagAcesso = MaterialApp(
-    home: PaginaAcesso(apresentacao),
+  final pagAcesso = GetMaterialApp(
+    initialRoute: '/acesso',
+    getPages: [
+      GetPage(name: '/acesso', page: () => PaginaAcesso(apresentacao)),
+      GetPage(
+          name: '/qualquer_rota',
+          page: () => Scaffold(
+                body: Text('Pagina Falsa'),
+              ))
+    ],
   );
 
   await widgetTester.pumpWidget(pagAcesso); // É aqui que o componente é carregado para ser testado
@@ -33,6 +43,7 @@ void simulaStreams() {
   when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
   when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
   when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
+  when(apresentacao.navegaParaStream).thenAnswer((_) => navegaParaController.stream);
   when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
   when(apresentacao.estaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
 }
@@ -41,6 +52,7 @@ void inicializaStreams() {
   emailComErroController = StreamController<String>();
   senhaComErroController = StreamController<String>();
   falhaAcessoController = StreamController<String>();
+  navegaParaController = StreamController<String>();
   camposSaoValidosController = StreamController<bool>();
   paginaEstaCarregandoController = StreamController<bool>();
 }
@@ -49,6 +61,7 @@ void encerraStreams() {
   emailComErroController.close();
   senhaComErroController.close();
   falhaAcessoController.close();
+  navegaParaController.close();
   camposSaoValidosController.close();
   paginaEstaCarregandoController.close();
 }
@@ -210,14 +223,15 @@ void main() {
     expect(find.text('Erro no Acesso'), findsOneWidget);
   });
 
-  testWidgets("Deveria fechar os objetos Streams quando a tela fechar - prevenão de vazamento de memória",
-      (WidgetTester widgetTester) async {
+  testWidgets("Deveria mudar de pagina", (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
-    // Aqui é que garanto que será chamado o dispose
-    addTearDown(() => {
-          // Quando esse tearDown for chamado, a pagina já deve ser "destruida"
-          verify(apresentacao.liberaMemoria())
-        });
+    navegaParaController
+        .add('/qualquer_rota'); // o valor que eu emitir aqui tem que ser o valor que sera recebido na tela
+    await widgetTester.pumpAndSettle(); // A tela demora um pouco aparecer por isso o pumpAndSettle
+
+    expect(Get.currentRoute,
+        '/qualquer_rota'); // Verifico que o nome da pagina que for recebida no Streamer tem que ser o mesmo nome do destino
+    expect(find.text('Pagina Falsa'), findsOneWidget);
   });
 }

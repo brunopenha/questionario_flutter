@@ -21,6 +21,11 @@ class Aplicativo extends StatelessWidget {
       initialRoute: '/acesso',
       getPages: [
         GetPage(name: '/acesso', page: criaPaginaAcesso),
+        GetPage(
+            name: '/pesquisas',
+            page: () => Scaffold(
+                  body: Text('Pesquisas'),
+                )),
       ],
     );
   }
