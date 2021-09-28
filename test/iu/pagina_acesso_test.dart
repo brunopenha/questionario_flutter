@@ -13,7 +13,7 @@ ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
 StreamController<String> emailComErroController;
 StreamController<String> senhaComErroController;
 StreamController<String> falhaAcessoController;
-StreamController<String> navegaParaController;
+StreamController<String> navegaParaControlador;
 StreamController<bool> camposSaoValidosController;
 StreamController<bool> paginaEstaCarregandoController;
 
@@ -43,7 +43,7 @@ void simulaStreams() {
   when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
   when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
   when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
-  when(apresentacao.navegaParaStream).thenAnswer((_) => navegaParaController.stream);
+  when(apresentacao.navegaParaStream).thenAnswer((_) => navegaParaControlador.stream);
   when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
   when(apresentacao.estaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
 }
@@ -52,7 +52,7 @@ void inicializaStreams() {
   emailComErroController = StreamController<String>();
   senhaComErroController = StreamController<String>();
   falhaAcessoController = StreamController<String>();
-  navegaParaController = StreamController<String>();
+  navegaParaControlador = StreamController<String>();
   camposSaoValidosController = StreamController<bool>();
   paginaEstaCarregandoController = StreamController<bool>();
 }
@@ -61,7 +61,7 @@ void encerraStreams() {
   emailComErroController.close();
   senhaComErroController.close();
   falhaAcessoController.close();
-  navegaParaController.close();
+  navegaParaControlador.close();
   camposSaoValidosController.close();
   paginaEstaCarregandoController.close();
 }
@@ -226,12 +226,25 @@ void main() {
   testWidgets("Deveria mudar de pagina", (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
-    navegaParaController
+    navegaParaControlador
         .add('/qualquer_rota'); // o valor que eu emitir aqui tem que ser o valor que sera recebido na tela
     await widgetTester.pumpAndSettle(); // A tela demora um pouco aparecer por isso o pumpAndSettle
 
     expect(Get.currentRoute,
         '/qualquer_rota'); // Verifico que o nome da pagina que for recebida no Streamer tem que ser o mesmo nome do destino
     expect(find.text('Pagina Falsa'), findsOneWidget);
+  });
+
+  testWidgets('Não deveria mudar a pagina', (WidgetTester widgetTester) async {
+    // Carregamos a tela
+    await carregaPagina(widgetTester);
+
+    navegaParaControlador.add('');
+    await widgetTester.pump();
+    expect(Get.currentRoute, '/acesso');
+
+    navegaParaControlador.add(null);
+    await widgetTester.pump();
+    expect(Get.currentRoute, '/acesso');
   });
 }
