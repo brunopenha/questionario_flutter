@@ -3,11 +3,15 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Deveria chamar ObtemCacheArmazenadoComSeguranca com o valor correto', () async {
-    final obtemCacheArmazenadoComSeguranca = ObtemCacheArmazenadoComSegurancaSimulado();
-    final sut =
-        CarregaContaAtualLocalmente(obtemCacheArmazenadoComSeguranca: obtemCacheArmazenadoComSeguranca);
+  ObtemCacheArmazenadoComSegurancaSimulado obtemCacheArmazenadoComSeguranca;
+  CarregaContaAtualLocalmente sut;
 
+  setUp(() {
+    obtemCacheArmazenadoComSeguranca = ObtemCacheArmazenadoComSegurancaSimulado();
+    sut = CarregaContaAtualLocalmente(obtemCacheArmazenadoComSeguranca: obtemCacheArmazenadoComSeguranca);
+  });
+
+  test('Deveria chamar ObtemCacheArmazenadoComSeguranca com o valor correto', () async {
     await sut.carrega();
 
     verify(obtemCacheArmazenadoComSeguranca.obtemComSeguranca('token'));
