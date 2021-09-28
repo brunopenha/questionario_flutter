@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
 
-import '../../dominios/casosuso/casosuso.dart';
-import '../../dominios/entidades/entidades.dart';
-import '../../dominios/erros/erros.dart';
-import '../http/http.dart'; // Para incluir parametros obrigatorios
-import '../modelos/modelos.dart';
+import '../../../dominios/casosuso/casosuso.dart';
+import '../../../dominios/entidades/entidades.dart';
+import '../../../dominios/erros/erros.dart';
+import '../../http/http.dart'; // Para incluir parametros obrigatorios
+import '../../modelos/modelos.dart';
 
 class AutenticacaoRemota implements Autenticador {
   final ClienteHttp clienteHttp;
