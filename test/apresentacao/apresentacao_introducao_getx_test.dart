@@ -6,10 +6,15 @@ import 'package:questionario/iu/paginas/introducao/introducao.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Deveria chamar CarregaContaAtual', () async {
-    final carregaContaAtual = CarregaContaAtualSimulada();
-    final sut = ApresentadorIntroducaoGetx(carregaContaAtual: carregaContaAtual);
+  ApresentadorIntroducaoGetx sut;
+  CarregaContaAtualSimulada carregaContaAtual;
 
+  setUp(() {
+    carregaContaAtual = CarregaContaAtualSimulada();
+    sut = ApresentadorIntroducaoGetx(carregaContaAtual: carregaContaAtual);
+  });
+
+  test('Deveria chamar CarregaContaAtual', () async {
     await sut.verificaContaAtual();
 
     verify(carregaContaAtual.carrega()).called(1);
