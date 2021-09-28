@@ -3,7 +3,8 @@ import 'package:meta/meta.dart';
 
 import '../../dados/cache/cache.dart';
 
-class AdaptadorArmazenamentoLocal implements SalvaArmazenamentoCacheComSeguranca {
+class AdaptadorArmazenamentoLocal
+    implements SalvaArmazenamentoCacheComSeguranca, ObtemCacheArmazenadoComSeguranca {
   final FlutterSecureStorage armazenamentoComSeguranca;
 
   AdaptadorArmazenamentoLocal({@required this.armazenamentoComSeguranca});
@@ -13,7 +14,8 @@ class AdaptadorArmazenamentoLocal implements SalvaArmazenamentoCacheComSeguranca
     await armazenamentoComSeguranca.write(key: chave, value: valor);
   }
 
-  Future<void> obtemComSeguranca({String chave}) async {
-    await armazenamentoComSeguranca.read(key: chave);
+  @override
+  Future<String> obtemComSeguranca(String chave) async {
+    return await armazenamentoComSeguranca.read(key: chave);
   }
 }

@@ -40,15 +40,24 @@ void main() {
   });
 
   group('obtemComSeguranca', () {
-    void obtemComSegurancaComErroSimulado(FlutterSecureStorageSimulado armazenamentoComSeguranca) {
-      when(armazenamentoComSeguranca.write(key: anyNamed('key'), value: anyNamed('value')))
-          .thenThrow(Exception());
+    void obtemComSegurancaSimulado() {
+      when(armazenamentoComSeguranca.read(key: anyNamed('key'))).thenAnswer((_) async => valor);
     }
 
+    setUp(() {
+      obtemComSegurancaSimulado();
+    });
+
     test('Deveria chamar o metodo obtemComSeguranca com os valores corretos', () async {
-      await sut.obtemComSeguranca(chave: chave);
+      await sut.obtemComSeguranca(chave);
 
       verify(armazenamentoComSeguranca.read(key: chave));
+    });
+
+    test('Deveria retornar o valor correto quando houver sucesso', () async {
+      final valorObtido = await sut.obtemComSeguranca(chave);
+
+      expect(valorObtido, valor);
     });
   });
 }
