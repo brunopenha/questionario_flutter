@@ -20,5 +20,5 @@
 16. ✅ Notificar o `falhaAcessoStream` caso o `Autenticador` retorne um `ErroDominio`
 17. ✅ Fechar todos os `Streams` no `dispose` (`liberarMemória`)
 18. ✅ Gravar a `Conta` no cache em caso de sucesso
-19.  Notificar o `falhaAcessoStream` caso o SalvaContaAtual retornar um erro.
+19. ✅ Notificar o `falhaAcessoStream` caso o SalvaContaAtual retornar um erro.
 20.  Levar o usuário para a tela de Questionários em caso de sucesso.

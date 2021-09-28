@@ -33,6 +33,7 @@ void main() {
   }
 
   PostExpectation chamadaAutenticadorSimulado() => when(autenticadorSimulado.autoriza(any));
+  PostExpectation chamadaSalvaContaAtualSimulado() => when(salvaContaAtualSimulado.salva(any));
 
   void chamaAutenticadorSimulado({String campo, String valor}) {
     chamadaAutenticadorSimulado().thenAnswer((_) async => Conta(token: textoToken));
@@ -40,6 +41,10 @@ void main() {
 
   void chamaAutenticadorSimuladoComErro(ErrosDominio erro) {
     chamadaAutenticadorSimulado().thenThrow(erro);
+  }
+
+  void chamaSalvaContaAtualSimuladoComErro() {
+    chamadaSalvaContaAtualSimulado().thenThrow(ErrosDominio.inesperado);
   }
 
   setUp(() {
@@ -201,5 +206,24 @@ void main() {
     await sut.autenticacao();
 
     verify(salvaContaAtualSimulado.salva(Conta(token: textoToken))).called(1);
+  });
+
+  test('Deveria lançar um erro inesperado se SalvaContaAtual tiver algum erro', () async {
+    chamaSalvaContaAtualSimuladoComErro();
+
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    expectLater(
+        sut.estaCarregandoStream,
+        emitsInOrder([
+          true,
+          false
+        ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
+
+    sut.falhaAcessoStream
+        .listen(expectAsync1((erro) => expect(erro, 'Algo errado aconteceu. Tente novamente em breve.')));
+
+    await sut.autenticacao();
   });
 }
