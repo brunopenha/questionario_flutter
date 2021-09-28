@@ -5,4 +5,4 @@
 2. ✅ Sistema retorna os dados da conta do usuário
 
 > ## Exceção - Falha ao gravar no cache
-1. Sistema retorna uma mensagem de erro inesperado
+1. ✅ Sistema retorna uma mensagem de erro inesperado

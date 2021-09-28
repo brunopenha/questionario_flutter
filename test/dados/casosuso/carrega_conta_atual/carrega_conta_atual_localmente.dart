@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:questionario/dominios/casosuso/casosuso.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
 
 class CarregaContaAtualLocalmente implements CarregaContaAtual {
@@ -12,9 +13,12 @@ class CarregaContaAtualLocalmente implements CarregaContaAtual {
 
   @override
   Future<Conta> carrega() async {
-    final tokenRetornado = await obtemCacheArmazenadoComSeguranca.obtemComSeguranca('token');
-
-    return Conta(token: tokenRetornado);
+    try {
+      final tokenRetornado = await obtemCacheArmazenadoComSeguranca.obtemComSeguranca('token');
+      return Conta(token: tokenRetornado);
+    } catch (e) {
+      throw ErrosDominio.inesperado;
+    }
   }
 }
 
@@ -29,8 +33,15 @@ void main() {
   ObtemCacheArmazenadoComSegurancaSimulado obtemCacheArmazenadoComSeguranca;
   String textoToken;
 
+  PostExpectation chamaObtemCacheArmazenadoComSegurancaSimulado() =>
+      when(obtemCacheArmazenadoComSeguranca.obtemComSeguranca(any));
+
   void obtemCacheArmazenadoComSegurancaSimulado() {
-    when(obtemCacheArmazenadoComSeguranca.obtemComSeguranca(any)).thenAnswer((_) async => textoToken);
+    chamaObtemCacheArmazenadoComSegurancaSimulado().thenAnswer((_) async => textoToken);
+  }
+
+  void obtemCacheArmazenadoComSegurancaComErroSimulado() {
+    chamaObtemCacheArmazenadoComSegurancaSimulado().thenThrow(Exception());
   }
 
   setUp(() {
@@ -50,5 +61,13 @@ void main() {
     final conta = await sut.carrega();
 
     expect(conta, Conta(token: textoToken));
+  });
+
+  test('Deveria lançar um erro inesperado se houver uma falha em ObtemCacheArmazenadoComSeguranca', () async {
+    obtemCacheArmazenadoComSegurancaComErroSimulado();
+
+    final future = sut.carrega();
+
+    expect(future, throwsA(ErrosDominio.inesperado));
   });
 }
