@@ -19,6 +19,14 @@ void main() {
 
     verify(carregaContaAtual.carrega()).called(1);
   });
+
+  test('Deveria ir para a pagina de pesquisa quando for tudo ok', () async {
+    // A assertiva vira antes do act
+    // dentro do list sera chamada uma vez e comparar se a pagina se é a esperada
+    sut.navegaParaTransmissor.listen(expectAsync1((pagina) => expect(pagina, '/pesquisas')));
+
+    await sut.verificaContaAtual();
+  });
 }
 
 class CarregaContaAtualSimulada extends Mock implements CarregaContaAtual {}
@@ -33,6 +41,7 @@ class ApresentadorIntroducaoGetx implements ApresentadorIntroducao {
   @override
   Future<void> verificaContaAtual() async {
     await carregaContaAtual.carrega();
+    _navegaPara.value = '/pesquisas';
   }
 
   @override
