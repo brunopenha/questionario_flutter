@@ -43,7 +43,7 @@ void main() {
     // Carregamos a tela
     await carregaPagina(widgetTester);
 
-    verify(apresentador.carregaContaAtual()).called(1);
+    verify(apresentador.verificaContaAtual()).called(1);
   });
 
   testWidgets('Deveria mudar de pagina', (WidgetTester widgetTester) async {

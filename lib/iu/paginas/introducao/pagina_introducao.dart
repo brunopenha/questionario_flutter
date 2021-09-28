@@ -11,7 +11,7 @@ class PaginaIntroducao extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    apresentador.carregaContaAtual();
+    apresentador.verificaContaAtual();
     return Scaffold(
         appBar: AppBar(
           title: Text('Bruno Penha'),

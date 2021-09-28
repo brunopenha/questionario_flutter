@@ -1,4 +1,4 @@
 abstract class ApresentadorIntroducao {
   Stream<String> get navegaParaTransmissor;
-  Future<void> carregaContaAtual();
+  Future<void> verificaContaAtual();
 }
