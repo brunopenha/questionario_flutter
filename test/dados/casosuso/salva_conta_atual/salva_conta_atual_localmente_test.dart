@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
-import 'package:questionario/dominios/casosuso/casosuso.dart';
+import 'package:questionario/dados/cache/cache.dart';
+import 'package:questionario/dados/casosuso/casosuso.dart';
 import 'package:questionario/dominios/entidades/conta.dart';
 import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
@@ -39,24 +39,5 @@ void main() {
   });
 }
 
-abstract class SalvaArmazenamentoCacheComSeguranca {
-  Future<void> salvaComSeguranca({@required String chave, @required String valor});
-}
-
 class SalvaArmazenamentoCacheComSegurancaSimulado extends Mock
     implements SalvaArmazenamentoCacheComSeguranca {}
-
-class SalvaContaAtualLocalmente implements SalvaContaAtual {
-  final SalvaArmazenamentoCacheComSeguranca salvaArmazenamentoCacheComSeguranca;
-
-  SalvaContaAtualLocalmente({@required this.salvaArmazenamentoCacheComSeguranca});
-
-  @override
-  Future<void> salva(Conta conta) async {
-    try {
-      await salvaArmazenamentoCacheComSeguranca.salvaComSeguranca(chave: 'token', valor: conta.token);
-    } catch (erro) {
-      throw ErrosDominio.inesperado;
-    }
-  }
-}
