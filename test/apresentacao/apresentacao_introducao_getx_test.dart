@@ -11,8 +11,14 @@ void main() {
   ApresentadorIntroducaoGetx sut;
   CarregaContaAtualSimulada carregaContaAtual;
 
+  PostExpectation<Future<Conta>> chamaCarregaContaAtualSimulado() => when(carregaContaAtual.carrega());
+
   void carregaContaAtualSimulada({Conta conta}) {
-    when(carregaContaAtual.carrega()).thenAnswer((_) async => conta);
+    chamaCarregaContaAtualSimulado().thenAnswer((_) async => conta);
+  }
+
+  void carregaContaAtualSimuladaComErro() {
+    chamaCarregaContaAtualSimulado().thenThrow(Exception());
   }
 
   setUp(() {
@@ -42,6 +48,14 @@ void main() {
 
     await sut.verificaContaAtual();
   });
+
+  test('Deveria ir para a pagina de acesso quando houver um erro ou exceção', () async {
+    carregaContaAtualSimuladaComErro();
+
+    sut.navegaParaTransmissor.listen(expectAsync1((pagina) => expect(pagina, '/acesso')));
+
+    await sut.verificaContaAtual();
+  });
 }
 
 class CarregaContaAtualSimulada extends Mock implements CarregaContaAtual {}
@@ -55,9 +69,13 @@ class ApresentadorIntroducaoGetx implements ApresentadorIntroducao {
 
   @override
   Future<void> verificaContaAtual() async {
-    final conta = await carregaContaAtual.carrega();
+    try {
+      final conta = await carregaContaAtual.carrega();
 
-    _navegaPara.value = conta == null ? '/acesso' : '/pesquisas';
+      _navegaPara.value = conta == null ? '/acesso' : '/pesquisas';
+    } catch (e) {
+      _navegaPara.value = '/acesso';
+    }
   }
 
   @override
