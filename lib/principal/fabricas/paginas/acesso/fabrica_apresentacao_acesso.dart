@@ -9,5 +9,8 @@ ApresentacaoAcesso criaTransmissorApresentadorAcesso() {
 }
 
 ApresentacaoAcesso criaGetxApresentadorAcesso() {
-  return ApresentacaoAcessoGex(autenticador: criaAuteticacaoRemota(), validador: criaValidadorAcesso());
+  return ApresentacaoAcessoGex(
+      autenticador: criaAuteticacaoRemota(),
+      validador: criaValidadorAcesso(),
+      salvaContaAtual: criaSalvaContaAtualLocalmente());
 }

@@ -13,14 +13,17 @@ class ValidadorSimulado extends Mock implements Validador {}
 
 class AutenticadorSimulado extends Mock implements Autenticador {}
 
+class SalvaContaAtualSimulado extends Mock implements SalvaContaAtual {}
+
 void main() {
   ApresentacaoAcessoGex sut;
   ValidadorSimulado validadorSimulado;
   AutenticadorSimulado autenticadorSimulado;
+  SalvaContaAtualSimulado salvaContaAtualSimulado;
 
   String textoEmail;
-
   String textoSenha;
+  String textoToken;
 
   PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
       campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
@@ -32,7 +35,7 @@ void main() {
   PostExpectation chamadaAutenticadorSimulado() => when(autenticadorSimulado.autoriza(any));
 
   void chamaAutenticadorSimulado({String campo, String valor}) {
-    chamadaAutenticadorSimulado().thenAnswer((_) async => Conta(token: faker.guid.guid()));
+    chamadaAutenticadorSimulado().thenAnswer((_) async => Conta(token: textoToken));
   }
 
   void chamaAutenticadorSimuladoComErro(ErrosDominio erro) {
@@ -42,9 +45,14 @@ void main() {
   setUp(() {
     validadorSimulado = ValidadorSimulado();
     autenticadorSimulado = AutenticadorSimulado();
-    sut = ApresentacaoAcessoGex(validador: validadorSimulado, autenticador: autenticadorSimulado);
+    salvaContaAtualSimulado = SalvaContaAtualSimulado();
+    sut = ApresentacaoAcessoGex(
+        validador: validadorSimulado,
+        autenticador: autenticadorSimulado,
+        salvaContaAtual: salvaContaAtualSimulado);
     textoEmail = faker.internet.email();
     textoSenha = faker.internet.password();
+    textoToken = faker.guid.guid();
 
     chamaValidadorSimulado();
     chamaAutenticadorSimulado();
@@ -184,5 +192,14 @@ void main() {
         .listen(expectAsync1((erro) => expect(erro, 'Algo errado aconteceu. Tente novamente em breve.')));
 
     await sut.autenticacao();
+  });
+
+  test('Deveria chamar o SalvaContaAtual com o valore correto', () async {
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    await sut.autenticacao();
+
+    verify(salvaContaAtualSimulado.salva(Conta(token: textoToken))).called(1);
   });
 }

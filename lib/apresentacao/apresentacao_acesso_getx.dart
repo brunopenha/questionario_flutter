@@ -9,6 +9,7 @@ import 'dependencias/dependencias.dart';
 class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso {
   final Validador validador;
   final Autenticador autenticador;
+  final SalvaContaAtual salvaContaAtual;
 
   String _email;
   String _senha;
@@ -20,7 +21,8 @@ class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso
   var _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
   var _estaCarregando = false.obs;
 
-  ApresentacaoAcessoGex({@required this.validador, @required this.autenticador});
+  ApresentacaoAcessoGex(
+      {@required this.validador, @required this.autenticador, @required this.salvaContaAtual});
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
   Stream<String> get emailComErroStream => _emailComErro.stream;
@@ -53,7 +55,8 @@ class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso
     _estaCarregando.value = true;
 
     try {
-      await autenticador.autoriza(ParametrosAutenticador(email: _email, senha: _senha));
+      final conta = await autenticador.autoriza(ParametrosAutenticador(email: _email, senha: _senha));
+      await salvaContaAtual.salva(conta);
     } on ErrosDominio catch (erro) {
       _falhaAcesso.value = erro.descricao;
     } finally {
