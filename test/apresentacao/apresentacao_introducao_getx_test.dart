@@ -1,10 +1,8 @@
 import 'package:faker/faker.dart';
-import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
+import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/dominios/casosuso/casosuso.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
-import 'package:questionario/iu/paginas/introducao/introducao.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -59,25 +57,3 @@ void main() {
 }
 
 class CarregaContaAtualSimulada extends Mock implements CarregaContaAtual {}
-
-class ApresentadorIntroducaoGetx implements ApresentadorIntroducao {
-  final CarregaContaAtual carregaContaAtual;
-
-  var _navegaPara = RxString();
-
-  ApresentadorIntroducaoGetx({@required this.carregaContaAtual});
-
-  @override
-  Future<void> verificaContaAtual() async {
-    try {
-      final conta = await carregaContaAtual.carrega();
-
-      _navegaPara.value = conta == null ? '/acesso' : '/pesquisas';
-    } catch (e) {
-      _navegaPara.value = '/acesso';
-    }
-  }
-
-  @override
-  Stream<String> get navegaParaTransmissor => _navegaPara.stream;
-}
