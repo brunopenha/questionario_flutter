@@ -1,30 +1,10 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
-import 'package:questionario/dominios/casosuso/casosuso.dart';
+import 'package:questionario/dados/cache/cache.dart';
+import 'package:questionario/dados/casosuso/carrega_conta_atual/carrega_conta_atual.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
-
-class CarregaContaAtualLocalmente implements CarregaContaAtual {
-  final ObtemCacheArmazenadoComSeguranca obtemCacheArmazenadoComSeguranca;
-
-  CarregaContaAtualLocalmente({@required this.obtemCacheArmazenadoComSeguranca});
-
-  @override
-  Future<Conta> carrega() async {
-    try {
-      final tokenRetornado = await obtemCacheArmazenadoComSeguranca.obtemComSeguranca('token');
-      return Conta(token: tokenRetornado);
-    } catch (e) {
-      throw ErrosDominio.inesperado;
-    }
-  }
-}
-
-abstract class ObtemCacheArmazenadoComSeguranca {
-  Future<String> obtemComSeguranca(String chave);
-}
 
 class ObtemCacheArmazenadoComSegurancaSimulado extends Mock implements ObtemCacheArmazenadoComSeguranca {}
 
