@@ -12,4 +12,8 @@ class AdaptadorArmazenamentoLocal implements SalvaArmazenamentoCacheComSeguranca
   Future<void> salvaComSeguranca({@required String chave, @required String valor}) async {
     await armazenamentoComSeguranca.write(key: chave, value: valor);
   }
+
+  Future<void> obtemComSeguranca({String chave}) async {
+    await armazenamentoComSeguranca.read(key: chave);
+  }
 }

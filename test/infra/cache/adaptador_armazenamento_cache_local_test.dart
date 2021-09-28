@@ -10,11 +10,6 @@ void main() {
   String chave;
   String valor;
 
-  void salvaComSegurancaComErroSimulado(FlutterSecureStorageSimulado armazenamentoComSeguranca) {
-    when(armazenamentoComSeguranca.write(key: anyNamed('key'), value: anyNamed('value')))
-        .thenThrow(Exception());
-  }
-
   setUp(() {
     armazenamentoComSeguranca = FlutterSecureStorageSimulado();
     sut = AdaptadorArmazenamentoLocal(armazenamentoComSeguranca: armazenamentoComSeguranca);
@@ -23,18 +18,38 @@ void main() {
     valor = faker.guid.guid();
   });
 
-  test('Deveria chamar o metodo salvaComSeguranca com os valores corretos', () async {
-    await sut.salvaComSeguranca(chave: chave, valor: valor);
+  group('salvaComSeguranca', () {
+    void salvaComSegurancaComErroSimulado(FlutterSecureStorageSimulado armazenamentoComSeguranca) {
+      when(armazenamentoComSeguranca.write(key: anyNamed('key'), value: anyNamed('value')))
+          .thenThrow(Exception());
+    }
 
-    verify(armazenamentoComSeguranca.write(key: chave, value: valor));
+    test('Deveria chamar o metodo salvaComSeguranca com os valores corretos', () async {
+      await sut.salvaComSeguranca(chave: chave, valor: valor);
+
+      verify(armazenamentoComSeguranca.write(key: chave, value: valor));
+    });
+
+    test('Deveria lançar exceção se o metodo salvaComSeguranca lançar exceção', () async {
+      salvaComSegurancaComErroSimulado(armazenamentoComSeguranca);
+      final future = sut.salvaComSeguranca(chave: chave, valor: valor);
+
+      // estou garantindo que o metodo retorou uma exceção, mas é uma exceção qualquer
+      expect(future, throwsA(TypeMatcher<Exception>()));
+    });
   });
 
-  test('Deveria lançar exceção se o metodo salvaComSeguranca lançar exceção', () async {
-    salvaComSegurancaComErroSimulado(armazenamentoComSeguranca);
-    final future = sut.salvaComSeguranca(chave: chave, valor: valor);
+  group('obtemComSeguranca', () {
+    void obtemComSegurancaComErroSimulado(FlutterSecureStorageSimulado armazenamentoComSeguranca) {
+      when(armazenamentoComSeguranca.write(key: anyNamed('key'), value: anyNamed('value')))
+          .thenThrow(Exception());
+    }
 
-    // estou garantindo que o metodo retorou uma exceção, mas é uma exceção qualquer
-    expect(future, throwsA(TypeMatcher<Exception>()));
+    test('Deveria chamar o metodo obtemComSeguranca com os valores corretos', () async {
+      await sut.obtemComSeguranca(chave: chave);
+
+      verify(armazenamentoComSeguranca.read(key: chave));
+    });
   });
 }
 
