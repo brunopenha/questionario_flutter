@@ -11,6 +11,12 @@ void main() {
   Conta conta;
   SalvaArmazenamentoCacheComSeguranca salvaCacheArmazenamentoComSeguranca;
 
+  void simulaErro() {
+    when(salvaCacheArmazenamentoComSeguranca.salvaComSeguranca(
+            chave: anyNamed('chave'), valor: anyNamed('valor')))
+        .thenThrow(Exception());
+  }
+
   setUp(() {
     conta = Conta(token: faker.guid.guid());
     salvaCacheArmazenamentoComSeguranca = SalvaArmazenamentoCacheComSegurancaSimulado();
@@ -25,9 +31,7 @@ void main() {
 
   test('Deveria lançar erro inesperado se o SalvaArmazenamentoCacheComSeguranca levantar uma exceção',
       () async {
-    when(salvaCacheArmazenamentoComSeguranca.salvaComSeguranca(
-            chave: anyNamed('chave'), valor: anyNamed('valor')))
-        .thenThrow(Exception());
+    simulaErro();
 
     final future = sut.salva(conta);
 
