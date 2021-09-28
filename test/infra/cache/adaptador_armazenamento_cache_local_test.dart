@@ -1,8 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
-import 'package:questionario/dados/cache/cache.dart';
+import 'package:questionario/infra/cache/cache.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -37,17 +36,6 @@ void main() {
     // estou garantindo que o metodo retorou uma exceção, mas é uma exceção qualquer
     expect(future, throwsA(TypeMatcher<Exception>()));
   });
-}
-
-class AdaptadorArmazenamentoLocal implements SalvaArmazenamentoCacheComSeguranca {
-  final FlutterSecureStorage armazenamentoComSeguranca;
-
-  AdaptadorArmazenamentoLocal({@required this.armazenamentoComSeguranca});
-
-  @override
-  Future<void> salvaComSeguranca({@required String chave, @required String valor}) async {
-    await armazenamentoComSeguranca.write(key: chave, value: valor);
-  }
 }
 
 class FlutterSecureStorageSimulado extends Mock implements FlutterSecureStorage {}
