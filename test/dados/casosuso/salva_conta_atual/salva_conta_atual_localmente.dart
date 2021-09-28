@@ -7,12 +7,17 @@ import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Deveria chamar SalvaArmazenamentoCacheComSeguranca com os valores corretos', () async {
-    final conta = Conta(token: faker.guid.guid());
-    final salvaCacheArmazenamentoComSeguranca = SalvaArmazenamentoCacheComSegurancaSimulado();
-    final sut =
-        SalvaContaAtualLocalmente(salvaArmazenamentoCacheComSeguranca: salvaCacheArmazenamentoComSeguranca);
+  SalvaContaAtualLocalmente sut;
+  Conta conta;
+  SalvaArmazenamentoCacheComSeguranca salvaCacheArmazenamentoComSeguranca;
 
+  setUp(() {
+    conta = Conta(token: faker.guid.guid());
+    salvaCacheArmazenamentoComSeguranca = SalvaArmazenamentoCacheComSegurancaSimulado();
+    sut = SalvaContaAtualLocalmente(salvaArmazenamentoCacheComSeguranca: salvaCacheArmazenamentoComSeguranca);
+  });
+
+  test('Deveria chamar SalvaArmazenamentoCacheComSeguranca com os valores corretos', () async {
     await sut.salva(conta);
 
     verify(salvaCacheArmazenamentoComSeguranca.salvaComSeguranca(chave: 'token', valor: conta.token));
@@ -20,11 +25,6 @@ void main() {
 
   test('Deveria lançar erro inesperado se o SalvaArmazenamentoCacheComSeguranca levantar uma exceção',
       () async {
-    final conta = Conta(token: faker.guid.guid());
-    final salvaCacheArmazenamentoComSeguranca = SalvaArmazenamentoCacheComSegurancaSimulado();
-    final sut =
-        SalvaContaAtualLocalmente(salvaArmazenamentoCacheComSeguranca: salvaCacheArmazenamentoComSeguranca);
-
     when(salvaCacheArmazenamentoComSeguranca.salvaComSeguranca(
             chave: anyNamed('chave'), valor: anyNamed('valor')))
         .thenThrow(Exception());
