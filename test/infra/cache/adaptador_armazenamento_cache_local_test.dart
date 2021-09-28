@@ -19,7 +19,7 @@ void main() {
   });
 
   group('salvaComSeguranca', () {
-    void salvaComSegurancaComErroSimulado(FlutterSecureStorageSimulado armazenamentoComSeguranca) {
+    void salvaComSegurancaComErroSimulado() {
       when(armazenamentoComSeguranca.write(key: anyNamed('key'), value: anyNamed('value')))
           .thenThrow(Exception());
     }
@@ -31,7 +31,7 @@ void main() {
     });
 
     test('Deveria lançar exceção se o metodo salvaComSeguranca lançar exceção', () async {
-      salvaComSegurancaComErroSimulado(armazenamentoComSeguranca);
+      salvaComSegurancaComErroSimulado();
       final future = sut.salvaComSeguranca(chave: chave, valor: valor);
 
       // estou garantindo que o metodo retorou uma exceção, mas é uma exceção qualquer
@@ -40,8 +40,15 @@ void main() {
   });
 
   group('obtemComSeguranca', () {
+    PostExpectation<Future<String>> chamaObtemComSegurancaSimulado() =>
+        when(armazenamentoComSeguranca.read(key: anyNamed('key')));
+
     void obtemComSegurancaSimulado() {
-      when(armazenamentoComSeguranca.read(key: anyNamed('key'))).thenAnswer((_) async => valor);
+      chamaObtemComSegurancaSimulado().thenAnswer((_) async => valor);
+    }
+
+    void obtemComSegurancaComErroSimulado() {
+      chamaObtemComSegurancaSimulado().thenThrow(Exception());
     }
 
     setUp(() {
@@ -58,6 +65,14 @@ void main() {
       final valorObtido = await sut.obtemComSeguranca(chave);
 
       expect(valorObtido, valor);
+    });
+
+    test('Deveria lançar exceção se o metodo obtemComSeguranca lançar exceção', () async {
+      obtemComSegurancaComErroSimulado();
+      final future = sut.obtemComSeguranca(chave);
+
+      // estou garantindo que o metodo retorou uma exceção, mas é uma exceção qualquer
+      expect(future, throwsA(TypeMatcher<Exception>()));
     });
   });
 }
