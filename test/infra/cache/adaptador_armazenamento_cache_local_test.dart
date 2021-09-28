@@ -11,6 +11,11 @@ void main() {
   String chave;
   String valor;
 
+  void salvaComSegurancaComErroSimulado(FlutterSecureStorageSimulado armazenamentoComSeguranca) {
+    when(armazenamentoComSeguranca.write(key: anyNamed('key'), value: anyNamed('value')))
+        .thenThrow(Exception());
+  }
+
   setUp(() {
     armazenamentoComSeguranca = FlutterSecureStorageSimulado();
     sut = AdaptadorArmazenamentoLocal(armazenamentoComSeguranca: armazenamentoComSeguranca);
@@ -25,6 +30,13 @@ void main() {
     verify(armazenamentoComSeguranca.write(key: chave, value: valor));
   });
 
+  test('Deveria lançar exceção se o metodo salvaComSeguranca lançar exceção', () async {
+    salvaComSegurancaComErroSimulado(armazenamentoComSeguranca);
+    final future = sut.salvaComSeguranca(chave: chave, valor: valor);
+
+    // estou garantindo que o metodo retorou uma exceção, mas é uma exceção qualquer
+    expect(future, throwsA(TypeMatcher<Exception>()));
+  });
 }
 
 class AdaptadorArmazenamentoLocal implements SalvaArmazenamentoCacheComSeguranca {
