@@ -6,17 +6,25 @@ import 'package:questionario/dados/cache/cache.dart';
 import 'package:test/test.dart';
 
 void main() {
+  AdaptadorArmazenamentoLocal sut;
+  FlutterSecureStorageSimulado armazenamentoComSeguranca;
+  String chave;
+  String valor;
+
+  setUp(() {
+    armazenamentoComSeguranca = FlutterSecureStorageSimulado();
+    sut = AdaptadorArmazenamentoLocal(armazenamentoComSeguranca: armazenamentoComSeguranca);
+
+    chave = faker.lorem.word();
+    valor = faker.guid.guid();
+  });
+
   test('Deveria chamar o metodo salvaComSeguranca com os valores corretos', () async {
-    final armazenamentoComSeguranca = FlutterSecureStorageSimulado();
-    final sut = AdaptadorArmazenamentoLocal(armazenamentoComSeguranca: armazenamentoComSeguranca);
-
-    final chave = faker.lorem.word();
-    final valor = faker.guid.guid();
-
     await sut.salvaComSeguranca(chave: chave, valor: valor);
 
     verify(armazenamentoComSeguranca.write(key: chave, value: valor));
   });
+
 }
 
 class AdaptadorArmazenamentoLocal implements SalvaArmazenamentoCacheComSeguranca {
