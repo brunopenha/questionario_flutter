@@ -6,7 +6,7 @@ import '../../paginas.dart';
 class EntradaEmail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final apresentacao = Provider.of<ApresentacaoAcesso>(context);
+    final apresentacao = Provider.of<ApresentadorAcesso>(context);
     return StreamBuilder<String>(
       stream: apresentacao.emailComErroStream,
       builder: (context, snapshot) {

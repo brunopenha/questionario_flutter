@@ -18,14 +18,16 @@ class Aplicativo extends StatelessWidget {
       title: 'Questionário',
       debugShowCheckedModeBanner: false,
       theme: aplicaTemaNoAplicativo(),
-      initialRoute: '/acesso',
+      initialRoute: '/',
       getPages: [
-        GetPage(name: '/acesso', page: criaPaginaAcesso),
+        GetPage(name: '/', page: criaPaginaIntroducao, transition: Transition.fade),
+        GetPage(name: '/acesso', page: criaPaginaAcesso, transition: Transition.fade),
         GetPage(
             name: '/pesquisas',
             page: () => Scaffold(
                   body: Text('Pesquisas'),
-                )),
+                ),
+            transition: Transition.fade),
       ],
     );
   }

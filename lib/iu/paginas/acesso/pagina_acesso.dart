@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../componentes/componentes.dart';
-import 'apresentacao_acesso.dart';
+import 'apresentador_acesso.dart';
 import 'componentes/componentes.dart';
 
 class PaginaAcesso extends StatelessWidget {
-  final ApresentacaoAcesso apresentacao;
+  final ApresentadorAcesso apresentacao;
 
   const PaginaAcesso(this.apresentacao);
 

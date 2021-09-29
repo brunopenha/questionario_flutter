@@ -6,7 +6,7 @@ import '../dominios/casosuso/casosuso.dart';
 import '../dominios/erros/erros.dart';
 import 'dependencias/dependencias.dart';
 
-class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso {
+class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcesso {
   final Validador validador;
   final Autenticador autenticador;
   final SalvaContaAtual salvaContaAtual;
@@ -22,7 +22,7 @@ class ApresentacaoAcessoGex extends GetxController implements ApresentacaoAcesso
   var _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
   var _estaCarregando = false.obs;
 
-  ApresentacaoAcessoGex(
+  ApresentacaoAcessoGetx(
       {@required this.validador, @required this.autenticador, @required this.salvaContaAtual});
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito

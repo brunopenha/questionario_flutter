@@ -16,7 +16,7 @@ class AutenticadorSimulado extends Mock implements Autenticador {}
 class SalvaContaAtualSimulado extends Mock implements SalvaContaAtual {}
 
 void main() {
-  ApresentacaoAcessoGex sut;
+  ApresentacaoAcessoGetx sut;
   ValidadorSimulado validadorSimulado;
   AutenticadorSimulado autenticadorSimulado;
   SalvaContaAtualSimulado salvaContaAtualSimulado;
@@ -51,7 +51,7 @@ void main() {
     validadorSimulado = ValidadorSimulado();
     autenticadorSimulado = AutenticadorSimulado();
     salvaContaAtualSimulado = SalvaContaAtualSimulado();
-    sut = ApresentacaoAcessoGex(
+    sut = ApresentacaoAcessoGetx(
         validador: validadorSimulado,
         autenticador: autenticadorSimulado,
         salvaContaAtual: salvaContaAtualSimulado);

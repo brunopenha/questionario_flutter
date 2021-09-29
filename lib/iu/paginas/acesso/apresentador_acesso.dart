@@ -1,4 +1,4 @@
-abstract class ApresentacaoAcesso {
+abstract class ApresentadorAcesso {
   Stream<String> get emailComErroStream;
   Stream<String> get senhaComErroStream;
   Stream<String> get falhaAcessoStream;

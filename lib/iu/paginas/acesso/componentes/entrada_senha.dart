@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../apresentacao_acesso.dart';
+import '../apresentador_acesso.dart';
 
 class EntradaSenha extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final apresentacao = Provider.of<ApresentacaoAcesso>(context);
+    final apresentacao = Provider.of<ApresentadorAcesso>(context);
     return StreamBuilder<String>(
       stream: apresentacao.senhaComErroStream,
       builder: (context, snapshot) {

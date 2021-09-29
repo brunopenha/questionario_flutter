@@ -19,7 +19,7 @@ class EstadoAcesso {
   bool get estaValido => erroEmail == null && erroSenha == null && email != null && senha != null;
 }
 
-class ApresentacaoAcessoTransmissor implements ApresentacaoAcesso {
+class ApresentacaoAcessoTransmissor implements ApresentadorAcesso {
   final Validador validador;
   final Autenticador autenticador;
 

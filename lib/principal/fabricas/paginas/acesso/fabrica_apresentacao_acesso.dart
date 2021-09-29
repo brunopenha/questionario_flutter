@@ -3,13 +3,13 @@ import 'package:questionario/iu/paginas/paginas.dart';
 import '../../../../apresentacao/apresentacao.dart';
 import '../../fabricas.dart';
 
-ApresentacaoAcesso criaTransmissorApresentadorAcesso() {
+ApresentadorAcesso criaApresentadorAcessoTransmissor() {
   return ApresentacaoAcessoTransmissor(
       autenticador: criaAuteticacaoRemota(), validador: criaValidadorAcesso());
 }
 
-ApresentacaoAcesso criaGetxApresentadorAcesso() {
-  return ApresentacaoAcessoGex(
+ApresentadorAcesso criaApresentadorAcessoGetx() {
+  return ApresentacaoAcessoGetx(
       autenticador: criaAuteticacaoRemota(),
       validador: criaValidadorAcesso(),
       salvaContaAtual: criaSalvaContaAtualLocalmente());

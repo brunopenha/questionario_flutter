@@ -7,9 +7,9 @@ import 'package:get/get.dart';
 import 'package:mockito/mockito.dart';
 import 'package:questionario/iu/paginas/paginas.dart';
 
-class ApresentacaoAcessoSimulado extends Mock implements ApresentacaoAcesso {}
+class ApresentacaoAcessoSimulado extends Mock implements ApresentadorAcesso {}
 
-ApresentacaoAcesso apresentacao = ApresentacaoAcessoSimulado();
+ApresentadorAcesso apresentacao = ApresentacaoAcessoSimulado();
 StreamController<String> emailComErroController;
 StreamController<String> senhaComErroController;
 StreamController<String> falhaAcessoController;
