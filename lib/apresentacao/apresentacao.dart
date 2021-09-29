@@ -1,3 +1,3 @@
-export 'apresentacao_acesso_getx.dart';
-export 'apresentacao_acesso_transmissor.dart';
-export 'apresentacao_introducao_getx.dart';
+export 'apresentador_acesso_getx.dart';
+export 'apresentador_acesso_transmissor.dart';
+export 'apresentador_introducao_getx.dart';

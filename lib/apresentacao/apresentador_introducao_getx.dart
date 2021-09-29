@@ -11,8 +11,8 @@ class ApresentadorIntroducaoGetx implements ApresentadorIntroducao {
 
   ApresentadorIntroducaoGetx({@required this.carregaContaAtual});
 
-  @override
-  Future<void> verificaContaAtual() async {
+  Future<void> verificaContaAtual({int duracaoEmSegundos = 2}) async {
+    await Future.delayed(Duration(seconds: duracaoEmSegundos));
     try {
       final conta = await carregaContaAtual.carrega();
 

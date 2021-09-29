@@ -26,7 +26,7 @@ void main() {
   });
 
   test('Deveria chamar CarregaContaAtual', () async {
-    await sut.verificaContaAtual();
+    await sut.verificaContaAtual(duracaoEmSegundos: 0);
 
     verify(carregaContaAtual.carrega()).called(1);
   });
@@ -36,7 +36,7 @@ void main() {
     // dentro do list sera chamada uma vez e comparar se a pagina se é a esperada
     sut.navegaParaTransmissor.listen(expectAsync1((pagina) => expect(pagina, '/pesquisas')));
 
-    await sut.verificaContaAtual();
+    await sut.verificaContaAtual(duracaoEmSegundos: 0);
   });
 
   test('Deveria ir para a pagina de acesso quando o resultado for nulo', () async {
@@ -44,7 +44,7 @@ void main() {
 
     sut.navegaParaTransmissor.listen(expectAsync1((pagina) => expect(pagina, '/acesso')));
 
-    await sut.verificaContaAtual();
+    await sut.verificaContaAtual(duracaoEmSegundos: 0);
   });
 
   test('Deveria ir para a pagina de acesso quando houver um erro ou exceção', () async {
@@ -52,7 +52,7 @@ void main() {
 
     sut.navegaParaTransmissor.listen(expectAsync1((pagina) => expect(pagina, '/acesso')));
 
-    await sut.verificaContaAtual();
+    await sut.verificaContaAtual(duracaoEmSegundos: 0);
   });
 }
 
