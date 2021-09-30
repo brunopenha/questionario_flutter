@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../../internacionalizacao/i18n/i18n.dart';
 import '../../componentes/componentes.dart';
 import 'apresentador_acesso.dart';
 import 'componentes/componentes.dart';
@@ -70,7 +71,7 @@ class PaginaAcesso extends StatelessWidget {
                           FlatButton.icon(
                             onPressed: () {},
                             icon: Icon(Icons.person),
-                            label: Text('Criar Conta'),
+                            label: Text(R.strings.adicionaConta),
                           )
                         ],
                       ),

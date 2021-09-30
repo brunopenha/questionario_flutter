@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:questionario/internacionalizacao/i18n/i18n.dart';
 
 import '../iu/componentes/componentes.dart';
 import 'fabricas/fabricas.dart';
@@ -25,7 +26,25 @@ class Aplicativo extends StatelessWidget {
         GetPage(
             name: '/pesquisas',
             page: () => Scaffold(
-                  body: Text('Pesquisas'),
+                  body: Center(
+                    child: Column(
+                      children: [
+                        Text(R.strings.pesquisas),
+                        RaisedButton(
+                          onPressed: () {
+                            R.carrega(Locale('en', 'US'));
+                          },
+                          child: Text('English'),
+                        ),
+                        RaisedButton(
+                          onPressed: () {
+                            R.carrega(Locale('pt', 'BR'));
+                          },
+                          child: Text('Português'),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
             transition: Transition.fade),
       ],
