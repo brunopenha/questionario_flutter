@@ -60,4 +60,12 @@ void main() {
 
     expect(future, throwsA(ErrosDominio.inesperado));
   });
+
+  test("Deveria lançar ErroInesperado se o ClienteHttp retornar 500", () async {
+    mockErrosHttp(ErrosHttp.serverError);
+
+    final future = sut.adiciona(parametros);
+
+    expect(future, throwsA(ErrosDominio.inesperado));
+  });
 }
