@@ -94,4 +94,11 @@ void main() {
 
     expect(conta.token, dadosValidos['tokenAcesso']);
   });
+
+  test("Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos", () async {
+    mockDadosHttp({'tokenAcesso': 'chave_invalida'});
+
+    final future = sut.adiciona(parametros);
+    expect(future, throwsA(ErrosDominio.inesperado));
+  });
 }
