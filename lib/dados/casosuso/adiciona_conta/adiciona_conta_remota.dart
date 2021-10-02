@@ -1,17 +1,21 @@
 import 'package:meta/meta.dart';
 import 'package:questionario/dados/http/http.dart';
+import 'package:questionario/dados/modelos/modelos.dart';
+import 'package:questionario/dominios/casosuso/casosuso.dart';
+import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:questionario/dominios/erros/erros.dart';
 
-class AdicionaContaRemota {
+class AdicionaContaRemota implements AdicionaConta {
   final ClienteHttp clienteHttp;
   final String url;
 
   AdicionaContaRemota({@required this.clienteHttp, @required this.url});
 
-  Future<void> adiciona(ParametrosAdicionaContaRemota parametro) async {
+  Future<Conta> adiciona(ParametrosAdicionaConta parametro) async {
     final body = ParametrosAdicionaContaRemota.aPartirDoDominio(parametro).criaJson();
     try {
-      await clienteHttp.requisita(url: url, metodo: 'post', corpo: body);
+      final responseHttp = await clienteHttp.requisita(url: url, metodo: 'post', corpo: body);
+      return ContaRemotaModel.doJson(responseHttp).paraEntidade();
     } on ErrosHttp catch (erro) {
       throw erro == ErrosHttp.forbidden ? ErrosDominio.emailEmUso : ErrosDominio.inesperado;
     }
@@ -27,7 +31,7 @@ class ParametrosAdicionaContaRemota {
   ParametrosAdicionaContaRemota(
       {@required this.nome, @required this.email, @required this.senha, @required this.confirmaSenha});
 
-  factory ParametrosAdicionaContaRemota.aPartirDoDominio(ParametrosAdicionaContaRemota entidade) =>
+  factory ParametrosAdicionaContaRemota.aPartirDoDominio(ParametrosAdicionaConta entidade) =>
       ParametrosAdicionaContaRemota(
           nome: entidade.nome,
           email: entidade.email,
