@@ -1,1 +1,1 @@
-enum ErrosDominio { inesperado, credenciaisInvalidas }
+enum ErrosDominio { inesperado, credenciaisInvalidas, emailEmUso }

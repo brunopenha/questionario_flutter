@@ -68,4 +68,12 @@ void main() {
 
     expect(future, throwsA(ErrosDominio.inesperado));
   });
+
+  test("Deveria lançar CredenciaisInvalidas se o ClienteHttp retornar 403", () async {
+    mockErrosHttp(ErrosHttp.forbidden);
+
+    final future = sut.adiciona(parametros);
+
+    expect(future, throwsA(ErrosDominio.emailEmUso));
+  });
 }
