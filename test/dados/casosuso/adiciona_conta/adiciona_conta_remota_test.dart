@@ -52,4 +52,12 @@ void main() {
 
     expect(future, throwsA(ErrosDominio.inesperado));
   });
+
+  test("Deveria lançar ErroInesperado se o ClienteHttp retornar 404", () async {
+    mockErrosHttp(ErrosHttp.notFound);
+
+    final future = sut.adiciona(parametros);
+
+    expect(future, throwsA(ErrosDominio.inesperado));
+  });
 }
