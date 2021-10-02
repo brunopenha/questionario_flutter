@@ -1,43 +1,11 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
+import 'package:questionario/dados/casosuso/adiciona_conta/adiciona_conta.dart';
 import 'package:questionario/dados/http/http.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
 
 class ClienteHttpSimulado extends Mock implements ClienteHttp {}
-
-class AdicionaContaRemota {
-  final ClienteHttp clienteHttp;
-  final String url;
-
-  AdicionaContaRemota({@required this.clienteHttp, @required this.url});
-
-  Future<void> adiciona(ParametrosAdicionaContaRemota parametro) async {
-    final body = ParametrosAdicionaContaRemota.aPartirDoDominio(parametro).criaJson();
-    await clienteHttp.requisita(url: url, metodo: 'post', corpo: body);
-  }
-}
-
-class ParametrosAdicionaContaRemota {
-  final String nome;
-  final String email;
-  final String senha;
-  final String confirmaSenha;
-
-  ParametrosAdicionaContaRemota(
-      {@required this.nome, @required this.email, @required this.senha, @required this.confirmaSenha});
-
-  factory ParametrosAdicionaContaRemota.aPartirDoDominio(ParametrosAdicionaContaRemota entidade) =>
-      ParametrosAdicionaContaRemota(
-          nome: entidade.nome,
-          email: entidade.email,
-          senha: entidade.senha,
-          confirmaSenha: entidade.confirmaSenha);
-
-  // acesso a API para verificar os parametros:
-  // https://fordevs.herokuapp.com/api-docs/#/Login/post_signup
-  Map criaJson() => {'name': nome, 'email': email, 'password': senha, 'passwordConfirmation': confirmaSenha};
-}
 
 void main() {
   // sut - System Under Test - "Quem estou testando?"
@@ -47,6 +15,13 @@ void main() {
   String urlSimulada;
   String senhaSimulada = faker.internet.password();
   ParametrosAdicionaContaRemota parametros;
+
+  PostExpectation requisicaoMockada() =>
+      when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')));
+
+  void mockErrosHttp(ErrosHttp erro) {
+    requisicaoMockada().thenThrow(erro);
+  }
 
   setUp(() {
     clienteHttp = ClienteHttpSimulado();
@@ -68,5 +43,13 @@ void main() {
       'password': parametros.senha,
       'passwordConfirmation': parametros.confirmaSenha
     }));
+  });
+
+  test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async {
+    mockErrosHttp(ErrosHttp.badRequest);
+
+    final future = sut.adiciona(parametros);
+
+    expect(future, throwsA(ErrosDominio.inesperado));
   });
 }
