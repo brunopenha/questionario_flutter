@@ -27,4 +27,7 @@ class PtBr implements Strings {
 
   @override
   String get senha => 'Senha';
+
+  @override
+  String get entrar => 'Entrar';
 }

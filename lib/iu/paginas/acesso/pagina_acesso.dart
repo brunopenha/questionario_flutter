@@ -53,7 +53,7 @@ class PaginaAcesso extends StatelessWidget {
               children: <Widget>[
                 CabecalhoAcesso(),
                 Titulo1(
-                  texto: 'Login',
+                  texto: R.strings.entrar,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(32),

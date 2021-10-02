@@ -16,4 +16,6 @@ abstract class Strings {
   String get email;
 
   String get senha;
+
+  String get entrar;
 }

@@ -27,4 +27,7 @@ class EnUs implements Strings {
 
   @override
   String get senha => 'Password';
+
+  @override
+  String get entrar => 'Login';
 }
