@@ -1,18 +1,19 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:questionario/iu/paginas/paginas.dart';
 
 import '../dominios/casosuso/casosuso.dart';
 import '../dominios/erros/erros.dart';
+import '../iu/erros/erros.dart';
+import '../iu/paginas/paginas.dart';
 import 'dependencias/dependencias.dart';
 
 class EstadoAcesso {
   String email;
   String senha;
-  String erroEmail;
-  String erroSenha;
-  String erroSistema;
+  ErrosIU erroEmail;
+  ErrosIU erroSenha;
+  ErrosIU erroSistema;
   bool estaCarregando = false;
 
   // estaValido ele é um valor calculado caso algum dos campos não estejam validos
@@ -32,13 +33,13 @@ class ApresentacaoAcessoTransmissor implements ApresentadorAcesso {
   ApresentacaoAcessoTransmissor({@required this.validador, @required this.autenticador});
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
-  Stream<String> get emailComErroStream => _controlador?.stream
+  Stream<ErrosIU> get emailComErroStream => _controlador?.stream
       ?.map((estado) => estado.erroEmail)
       ?.distinct(); // Esse distict faz com que o transmissor emita apenas valores diferente do anterior, evita enviar dois valores iguais seguidamente
 
-  Stream<String> get senhaComErroStream =>
+  Stream<ErrosIU> get senhaComErroStream =>
       _controlador?.stream?.map((estado) => estado.erroSenha)?.distinct();
-  Stream<String> get falhaAcessoStream =>
+  Stream<ErrosIU> get falhaAcessoStream =>
       _controlador?.stream?.map((estado) => estado.erroSistema)?.distinct();
   Stream<String> get navegaParaStream => throw UnimplementedError();
 
@@ -50,15 +51,30 @@ class ApresentacaoAcessoTransmissor implements ApresentadorAcesso {
 
   void _atualiza() => _controlador?.add(_estado);
 
+  ErrosIU _validaCampo({String campo, String valor}) {
+    final erro = validador.valida(campo: campo, valor: valor);
+    switch (erro) {
+      case ErroValidacao.DADO_INVALIDO:
+        return ErrosIU.DADO_INVALIDO;
+      case ErroValidacao.EMAIL_INVALIDO:
+        return ErrosIU.EMAIL_INVALIDO;
+      case ErroValidacao.EMAIL_INVALIDO:
+        return ErrosIU.EMAIL_INVALIDO;
+
+      default:
+        return null;
+    }
+  }
+
   void validaEmail(String textoEmail) {
     _estado.email = textoEmail;
-    _estado.erroEmail = validador.valida(campo: 'email', valor: textoEmail);
+    _estado.erroEmail = _validaCampo(campo: 'email', valor: textoEmail);
     _atualiza();
   }
 
   void validaSenha(String textoSenha) {
     _estado.senha = textoSenha;
-    _estado.erroSenha = validador.valida(campo: 'senha', valor: textoSenha);
+    _estado.erroSenha = _validaCampo(campo: 'senha', valor: textoSenha);
     _atualiza();
   }
 
@@ -69,7 +85,13 @@ class ApresentacaoAcessoTransmissor implements ApresentadorAcesso {
     try {
       await autenticador.autoriza(ParametrosAutenticador(email: _estado.email, senha: _estado.senha));
     } on ErrosDominio catch (erro) {
-      _estado.erroSistema = erro.descricao;
+      switch (erro) {
+        case ErrosDominio.credenciaisInvalidas:
+          _estado.erroSistema = ErrosIU.CREDENCIAIS_INVALIDAS;
+          break;
+        default:
+          _estado.erroSistema = ErrosIU.INESPERADO;
+      }
     } finally {
       _estado.estaCarregando = false;
       _atualiza();

@@ -9,13 +9,13 @@ class ValidacaoComposta implements Validador {
   ValidacaoComposta(this.validadores);
 
   @override
-  String valida({@required String campo, @required String valor}) {
-    String erro;
+  ErroValidacao valida({@required String campo, @required String valor}) {
+    ErroValidacao erro;
 
     for (final validacao in validadores.where((val) => val.campo == campo)) {
       erro = validacao.valida(valor);
 
-      if (erro?.isNotEmpty == true) {
+      if (erro != null) {
         break;
       }
     }

@@ -1,5 +1,7 @@
+import '../../apresentacao/apresentacao.dart';
+
 abstract class ValidaCampos {
   String get campo;
 
-  String valida(String valor);
+  ErroValidacao valida(String valor);
 }

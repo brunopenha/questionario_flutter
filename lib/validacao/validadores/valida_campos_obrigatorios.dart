@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../apresentacao/apresentacao.dart';
 import '../dependencias/dependencias.dart';
 
 class ValidaCamposObrigatorios extends Equatable implements ValidaCampos {
@@ -12,7 +13,7 @@ class ValidaCamposObrigatorios extends Equatable implements ValidaCampos {
   ValidaCamposObrigatorios(this.campo);
 
   @override
-  String valida(String valor) {
-    return valor?.isNotEmpty == true ? null : 'Campo obrigatório';
+  ErroValidacao valida(String valor) {
+    return valor?.isNotEmpty == true ? null : ErroValidacao.CAMPO_OBRIGATORIO;
   }
 }

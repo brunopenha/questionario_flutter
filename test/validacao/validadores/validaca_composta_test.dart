@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/validacao/dependencias/dependencias.dart';
 import 'package:questionario/validacao/validadores/validadores.dart';
 
@@ -11,15 +12,15 @@ void main() {
   ValidaCamposSimulado validacao2;
   ValidaCamposSimulado validacao3;
 
-  void validacao1Simulado(String erro) {
+  void validacao1Simulado(ErroValidacao erro) {
     when(validacao1.valida(any)).thenReturn(erro);
   }
 
-  void validacao2Simulado(String erro) {
+  void validacao2Simulado(ErroValidacao erro) {
     when(validacao2.valida(any)).thenReturn(erro);
   }
 
-  void validacao3Simulado(String erro) {
+  void validacao3Simulado(ErroValidacao erro) {
     when(validacao3.valida(any)).thenReturn(erro);
   }
 
@@ -40,15 +41,15 @@ void main() {
   });
 
   test('retornar null se todos os validadores retorne null ou vazio', () {
-    validacao2Simulado('');
     expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), null);
   });
 
   test('Deveria Deveria retornar erro no primeiro campo validado', () {
-    validacao1Simulado('erro 1');
-    validacao2Simulado('erro 2');
-    validacao3Simulado('erro 3');
+    validacao1Simulado(ErroValidacao.CAMPO_OBRIGATORIO);
+    validacao2Simulado(ErroValidacao.CAMPO_OBRIGATORIO);
+    validacao3Simulado(ErroValidacao.DADO_INVALIDO);
 
-    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), 'erro 2');
+    expect(
+        sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), ErroValidacao.CAMPO_OBRIGATORIO); // 2
   });
 }

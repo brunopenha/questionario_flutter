@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import 'package:questionario/iu/paginas/paginas.dart';
 
 import '../dominios/casosuso/casosuso.dart';
 import '../dominios/erros/erros.dart';
+import '../iu/erros/erros.dart';
+import '../iu/paginas/paginas.dart';
 import 'dependencias/dependencias.dart';
 
 class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcesso {
@@ -15,9 +16,9 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
   String _senha;
 
   // Cria um Observer do get e esse observer é possível atribuir o Stream dentro dele
-  var _emailComErro = RxString();
-  var _senhaComErro = RxString();
-  var _falhaAcesso = RxString();
+  var _emailComErro = Rx<ErrosIU>();
+  var _senhaComErro = Rx<ErrosIU>();
+  var _falhaAcesso = Rx<ErrosIU>();
   var _navegaPara = RxString();
   var _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
   var _estaCarregando = false.obs;
@@ -26,24 +27,40 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
       {@required this.validador, @required this.autenticador, @required this.salvaContaAtual});
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
-  Stream<String> get emailComErroStream => _emailComErro.stream;
-
-  Stream<String> get senhaComErroStream => _senhaComErro.stream;
-  Stream<String> get falhaAcessoStream => _falhaAcesso.stream;
+  Stream<ErrosIU> get emailComErroStream => _emailComErro.stream;
+  Stream<ErrosIU> get senhaComErroStream => _senhaComErro.stream;
+  Stream<ErrosIU> get falhaAcessoStream => _falhaAcesso.stream;
   Stream<String> get navegaParaStream => _navegaPara.stream;
 
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
   Stream<bool> get estaCarregandoStream => _estaCarregando.stream;
 
+  ErrosIU _validaCampo({String campo, String valor}) {
+    final erro = validador.valida(campo: campo, valor: valor);
+    switch (erro) {
+      case ErroValidacao.CAMPO_OBRIGATORIO:
+        return ErrosIU.CAMPO_OBRIGATORIO;
+      case ErroValidacao.DADO_INVALIDO:
+        return ErrosIU.DADO_INVALIDO;
+      case ErroValidacao.EMAIL_INVALIDO:
+        return ErrosIU.EMAIL_INVALIDO;
+      case ErroValidacao.EMAIL_INVALIDO:
+        return ErrosIU.EMAIL_INVALIDO;
+
+      default:
+        return null;
+    }
+  }
+
   void validaEmail(String textoEmail) {
     _email = textoEmail;
-    _emailComErro.value = validador.valida(campo: 'email', valor: textoEmail);
+    _emailComErro.value = _validaCampo(campo: 'email', valor: textoEmail);
     _validaFormulario();
   }
 
   void validaSenha(String textoSenha) {
     _senha = textoSenha;
-    _senhaComErro.value = validador.valida(campo: 'senha', valor: textoSenha);
+    _senhaComErro.value = _validaCampo(campo: 'senha', valor: textoSenha);
     _validaFormulario();
   }
 
@@ -61,7 +78,13 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
       await salvaContaAtual.salva(conta);
       _navegaPara.value = '/pesquisas';
     } on ErrosDominio catch (erro) {
-      _falhaAcesso.value = erro.descricao;
+      switch (erro) {
+        case ErrosDominio.credenciaisInvalidas:
+          _falhaAcesso.value = ErrosIU.CREDENCIAIS_INVALIDAS;
+          break;
+        default:
+          _falhaAcesso.value = ErrosIU.INESPERADO;
+      }
     } finally {
       _estaCarregando.value = false;
     }

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../iu/erros/erros.dart';
+import '../../../../iu/internacionalizacao/i18n/i18n.dart';
 import '../../paginas.dart';
 
 class EntradaEmail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apresentacao = Provider.of<ApresentadorAcesso>(context);
-    return StreamBuilder<String>(
+    return StreamBuilder<ErrosIU>(
       stream: apresentacao.emailComErroStream,
       builder: (context, snapshot) {
         return TextFormField(
           decoration: InputDecoration(
-            labelText: 'Email',
+            labelText: R.strings.email,
             icon: Icon(
               Icons.email,
               color: Theme.of(context).primaryColorLight,
             ),
-            errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+            // Validamos se o erro é diferente de nulo, retorna o erro
+            errorText: snapshot.hasData ? snapshot.data.descricao : null,
           ),
           keyboardType: TextInputType.emailAddress,
           onChanged: apresentacao.validaEmail,

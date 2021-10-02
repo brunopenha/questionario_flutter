@@ -1,7 +1,9 @@
+import '../../../iu/erros/erros.dart';
+
 abstract class ApresentadorAcesso {
-  Stream<String> get emailComErroStream;
-  Stream<String> get senhaComErroStream;
-  Stream<String> get falhaAcessoStream;
+  Stream<ErrosIU> get emailComErroStream;
+  Stream<ErrosIU> get senhaComErroStream;
+  Stream<ErrosIU> get falhaAcessoStream;
   Stream<String> get navegaParaStream;
   Stream<bool> get camposSaoValidosStream;
   Stream<bool> get estaCarregandoStream;

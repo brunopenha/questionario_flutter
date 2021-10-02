@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/validacao/validadores/validadores.dart';
 
 void main() {
@@ -21,6 +22,6 @@ void main() {
   });
 
   test('Deveria retornar erro se o email for invalido', () {
-    expect(sut.valida('bruno.penha.nom.br'), 'Email inválido');
+    expect(sut.valida('bruno.penha.nom.br'), ErroValidacao.EMAIL_INVALIDO);
   });
 }

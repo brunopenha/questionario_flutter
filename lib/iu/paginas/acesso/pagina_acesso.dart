@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import '../../../internacionalizacao/i18n/i18n.dart';
+import '../../../iu/erros/erros.dart';
+import '../../../iu/internacionalizacao/i18n/i18n.dart';
 import '../../componentes/componentes.dart';
 import 'apresentador_acesso.dart';
 import 'componentes/componentes.dart';
@@ -31,9 +32,9 @@ class PaginaAcesso extends StatelessWidget {
           }
         });
 
-        apresentacao.falhaAcessoStream.listen((erro) {
+        apresentacao.falhaAcessoStream.listen((ErrosIU erro) {
           if (erro != null) {
-            exibeMensagemErro(context, erro);
+            exibeMensagemErro(context, erro.descricao);
           }
         });
 

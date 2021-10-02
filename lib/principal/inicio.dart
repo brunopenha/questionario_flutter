@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:questionario/internacionalizacao/i18n/i18n.dart';
 
 import '../iu/componentes/componentes.dart';
+import '../iu/internacionalizacao/i18n/i18n.dart';
 import 'fabricas/fabricas.dart';
 
 void main() {

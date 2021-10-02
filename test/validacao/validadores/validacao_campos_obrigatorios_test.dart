@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/validacao/validadores/validadores.dart';
 
 void main() {
@@ -13,10 +14,10 @@ void main() {
   });
 
   test('Deveria retornar erro se o valor estiver vazio', () {
-    expect(sut.valida(''), 'Campo obrigatório');
+    expect(sut.valida(''), ErroValidacao.CAMPO_OBRIGATORIO);
   });
 
   test('Deveria retornar erro se o valor estiver nulo', () {
-    expect(sut.valida(null), 'Campo obrigatório');
+    expect(sut.valida(null), ErroValidacao.CAMPO_OBRIGATORIO);
   });
 }

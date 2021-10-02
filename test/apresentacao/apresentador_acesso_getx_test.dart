@@ -8,6 +8,7 @@ import 'package:questionario/apresentacao/dependencias/dependencias.dart';
 import 'package:questionario/dominios/casosuso/casosuso.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:questionario/dominios/erros/erros.dart';
+import 'package:questionario/iu/erros/erros.dart';
 
 class ValidadorSimulado extends Mock implements Validador {}
 
@@ -28,7 +29,7 @@ void main() {
   PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
       campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
 
-  void chamaValidadorSimulado({String campo, String valor}) {
+  void chamaValidadorSimulado({String campo, ErroValidacao valor}) {
     chamadaValidadorSimulado(campo).thenReturn(valor);
   }
 
@@ -69,12 +70,24 @@ void main() {
     verify(validadorSimulado.valida(campo: 'email', valor: textoEmail)).called(1);
   });
 
-  test('Deveria transmitir erro no email se a validação falhar', () {
-    chamaValidadorSimulado(valor: 'Erro no email');
+  test('Deveria transmitir mensagem de dado inválido no email se o email for inválido', () {
+    chamaValidadorSimulado(valor: ErroValidacao.DADO_INVALIDO);
 
     // O ouvinte abaixo cada captura do erro
     // Se executar mais de uma vez, o teste falha
-    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro no email')));
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.DADO_INVALIDO)));
+
+    sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
+
+    sut.validaEmail(textoEmail);
+  });
+
+  test('Deveria transmitir a mensagem de campo obrigatório no email se o email estiver vazio', () {
+    chamaValidadorSimulado(valor: ErroValidacao.CAMPO_OBRIGATORIO);
+
+    // O ouvinte abaixo cada captura do erro
+    // Se executar mais de uma vez, o teste falha
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.CAMPO_OBRIGATORIO)));
 
     sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
 
@@ -99,12 +112,25 @@ void main() {
     verify(validadorSimulado.valida(campo: 'senha', valor: textoSenha)).called(1);
   });
 
-  test('Deveria transmitir erro na senha se a validação falhar', () {
-    chamaValidadorSimulado(valor: 'Erro na senha');
+  test('Deveria transmitir erro na senha se estiver vazia', () {
+    chamaValidadorSimulado(valor: ErroValidacao.CAMPO_OBRIGATORIO);
 
     // O ouvinte abaixo cada captura do erro
     // Se executar mais de uma vez, o teste falha
-    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro na senha')));
+    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.CAMPO_OBRIGATORIO)));
+
+    sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
+
+    sut.validaSenha(textoSenha);
+    sut.validaSenha(textoSenha);
+  });
+
+  test('Deveria transmitir erro na senha se a validação falhar', () {
+    chamaValidadorSimulado(valor: ErroValidacao.DADO_INVALIDO);
+
+    // O ouvinte abaixo cada captura do erro
+    // Se executar mais de uma vez, o teste falha
+    sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.DADO_INVALIDO)));
 
     sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
 
@@ -126,9 +152,9 @@ void main() {
   test('Deveria transmitir erro se a validacao conter erros apenas no email', () {
     // O ouvinte abaixo cada captura do erro
     // Se executar mais de uma vez, o teste falha
-    chamaValidadorSimulado(campo: 'email', valor: 'Erro no Email');
+    chamaValidadorSimulado(campo: 'email', valor: ErroValidacao.EMAIL_INVALIDO);
 
-    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, 'Erro no Email')));
+    sut.emailComErroStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.EMAIL_INVALIDO)));
     sut.senhaComErroStream.listen(expectAsync1((erro) => expect(erro, null)));
 
     sut.camposSaoValidosStream.listen(expectAsync1((estaValido) => expect(estaValido, false)));
@@ -175,7 +201,7 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, 'Credenciais inválidas')));
+    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.CREDENCIAIS_INVALIDAS)));
 
     await sut.autenticacao();
   });
@@ -193,8 +219,7 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaAcessoStream
-        .listen(expectAsync1((erro) => expect(erro, 'Algo errado aconteceu. Tente novamente em breve.')));
+    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
 
     await sut.autenticacao();
   });
@@ -221,8 +246,7 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaAcessoStream
-        .listen(expectAsync1((erro) => expect(erro, 'Algo errado aconteceu. Tente novamente em breve.')));
+    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
 
     await sut.autenticacao();
   });
