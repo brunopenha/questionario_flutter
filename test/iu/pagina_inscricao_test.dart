@@ -183,4 +183,32 @@ void main() {
         findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Senha');
   });
+
+  testWidgets(
+      "Deveria exibir um erro se a confirmação da senha for invalida, em branco e remover o erro caso tudo esteja ok",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    confirmacaoSenhaComErroController.add(ErrosIU.DADO_INVALIDO); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text(R.strings.dadoInvalido), findsOneWidget);
+
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    confirmacaoSenhaComErroController.add(ErrosIU.CAMPO_OBRIGATORIO); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text(R.strings.campoObrigatorio), findsOneWidget);
+
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    confirmacaoSenhaComErroController.add(null); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(
+        find.descendant(of: find.bySemanticsLabel(R.strings.confirmacaoSenha), matching: find.byType(Text)),
+        findsOneWidget,
+        reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Repita a Senha');
+  });
 }

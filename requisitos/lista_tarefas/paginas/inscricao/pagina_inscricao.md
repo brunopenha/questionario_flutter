@@ -23,4 +23,4 @@
 19. Chamar o método de criar conta
 20. Exibir mensagem de erro caso a criação da conta falhe
 21. Esconder o loading no fim da criação da conta
-22. Fechar streams quando a página for encerrada
+22. ✅ kFechar streams quando a página for encerrada
