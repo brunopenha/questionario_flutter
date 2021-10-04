@@ -6,7 +6,7 @@ import 'traducoes/traducoes.dart';
  * Centraliza todos os recursos do aplicativ
  */
 class R {
-  static Strings strings = EnUs();
+  static Strings strings = PtBr();
 
   static void carrega(Locale local) {
     switch (local.toString()) {

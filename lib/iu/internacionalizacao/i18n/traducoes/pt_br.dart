@@ -30,4 +30,10 @@ class PtBr implements Strings {
 
   @override
   String get entrar => 'Entrar';
+
+  @override
+  String get nome => 'Nome';
+
+  @override
+  String get confirmacaoSenha => 'Repita a senha';
 }

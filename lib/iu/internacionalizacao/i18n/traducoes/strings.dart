@@ -18,4 +18,8 @@ abstract class Strings {
   String get senha;
 
   String get entrar;
+
+  String get nome;
+
+  String get confirmacaoSenha;
 }

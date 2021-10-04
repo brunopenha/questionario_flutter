@@ -30,4 +30,10 @@ class EnUs implements Strings {
 
   @override
   String get entrar => 'Login';
+
+  @override
+  String get nome => 'Name';
+
+  @override
+  String get confirmacaoSenha => 'Repeat Password';
 }
