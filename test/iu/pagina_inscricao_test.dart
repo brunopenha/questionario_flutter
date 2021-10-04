@@ -104,7 +104,8 @@ void main() {
     verify(apresentador.validaConfirmaSenha(textoSenha));
   });
 
-  testWidgets("Deveria exibir um erro se o email for invalido, em branco ",
+  testWidgets(
+      "Deveria exibir um erro se o email for invalido, em branco e remover o erro caso tudo esteja ok",
       (WidgetTester widgetTester) async {
     await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
 
@@ -128,5 +129,31 @@ void main() {
     expect(find.descendant(of: find.bySemanticsLabel(R.strings.email), matching: find.byType(Text)),
         findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Email');
+  });
+
+  testWidgets("Deveria exibir um erro se o nome for invalido, em branco e remover o erro caso tudo esteja ok",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    nomeComErroController.add(ErrosIU.DADO_INVALIDO); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text(R.strings.dadoInvalido), findsOneWidget);
+
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    nomeComErroController.add(ErrosIU.CAMPO_OBRIGATORIO); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text(R.strings.campoObrigatorio), findsOneWidget);
+
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    nomeComErroController.add(null); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.descendant(of: find.bySemanticsLabel(R.strings.nome), matching: find.byType(Text)),
+        findsOneWidget,
+        reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Nome');
   });
 }
