@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:questionario/iu/paginas/inscricao/inscricao.dart';
 
 import '../../../iu/internacionalizacao/i18n/i18n.dart';
 import '../../componentes/componentes.dart';
 import 'componentes/componentes.dart';
 
 class PaginaInscricao extends StatelessWidget {
+  final ApresentadorInscricao apresentador;
+
+  PaginaInscricao(this.apresentador);
+
   @override
   Widget build(BuildContext context) {
     void _escondeTeclado() {
@@ -28,26 +34,29 @@ class PaginaInscricao extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(32),
-                  child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        EntradaNome(),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: EntradaEmail(),
-                        ),
-                        EntradaSenha(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0, bottom: 32),
-                          child: EntradaConfirmarSenha(),
-                        ),
-                        BotaoInscricao(),
-                        FlatButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.exit_to_app),
-                          label: Text(R.strings.adicionaConta),
-                        )
-                      ],
+                  child: Provider(
+                    create: (_) => apresentador,
+                    child: Form(
+                      child: Column(
+                        children: <Widget>[
+                          EntradaNome(),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: EntradaEmail(),
+                          ),
+                          EntradaSenha(),
+                          Padding(
+                            padding: EdgeInsets.only(top: 8.0, bottom: 32),
+                            child: EntradaConfirmarSenha(),
+                          ),
+                          BotaoInscricao(),
+                          FlatButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.exit_to_app),
+                            label: Text(R.strings.adicionaConta),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
