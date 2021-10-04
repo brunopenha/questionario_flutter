@@ -103,4 +103,30 @@ void main() {
     await widgetTester.enterText(find.bySemanticsLabel(R.strings.confirmacaoSenha), textoSenha);
     verify(apresentador.validaConfirmaSenha(textoSenha));
   });
+
+  testWidgets("Deveria exibir um erro se o email for invalido, em branco ",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    emailComErroController.add(ErrosIU.EMAIL_INVALIDO); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text(R.strings.emailInvalido), findsOneWidget);
+
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    emailComErroController.add(ErrosIU.CAMPO_OBRIGATORIO); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.text(R.strings.campoObrigatorio), findsOneWidget);
+
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    emailComErroController.add(null); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    expect(find.descendant(of: find.bySemanticsLabel(R.strings.email), matching: find.byType(Text)),
+        findsOneWidget,
+        reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Email');
+  });
 }
