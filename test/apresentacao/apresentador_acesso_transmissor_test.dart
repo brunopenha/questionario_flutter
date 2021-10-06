@@ -157,7 +157,7 @@ void main() {
     sut.validaSenha(textoSenha);
 
     expectLater(
-        sut.estaCarregandoStream,
+        sut.paginaEstaCarregandoStream,
         emitsInOrder([
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
@@ -174,7 +174,7 @@ void main() {
     sut.validaSenha(textoSenha);
 
     expectLater(
-        sut.estaCarregandoStream,
+        sut.paginaEstaCarregandoStream,
         emitsInOrder([
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada

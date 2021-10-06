@@ -18,6 +18,7 @@ void main() {
   StreamController<ErrosIU> senhaComErroController;
   StreamController<ErrosIU> confirmacaoSenhaComErroController;
   StreamController<bool> camposSaoValidosController;
+  StreamController<bool> paginaEstaCarregandoController;
 
   void simulaStreams() {
     when(apresentador.nomeComErroStream).thenAnswer((_) => nomeComErroController.stream);
@@ -25,6 +26,7 @@ void main() {
     when(apresentador.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
     when(apresentador.confirmaSenhaComErroStream).thenAnswer((_) => confirmacaoSenhaComErroController.stream);
     when(apresentador.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
+    when(apresentador.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
   }
 
   void inicializaStreams() {
@@ -33,6 +35,7 @@ void main() {
     senhaComErroController = StreamController<ErrosIU>();
     confirmacaoSenhaComErroController = StreamController<ErrosIU>();
     camposSaoValidosController = StreamController<bool>();
+    paginaEstaCarregandoController = StreamController<bool>();
   }
 
   void encerraStreams() {
@@ -41,6 +44,7 @@ void main() {
     senhaComErroController.close();
     confirmacaoSenhaComErroController.close();
     camposSaoValidosController.close();
+    paginaEstaCarregandoController.close();
   }
 
   Future carregaPagina(WidgetTester widgetTester) async {
@@ -250,5 +254,25 @@ void main() {
     await widgetTester.pump(); // recarrego a tela
 
     verify(apresentador.inscreve()).called(1);
+  });
+
+  testWidgets("Deveria aprensentar a mensagem Carregando", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    paginaEstaCarregandoController.add(true); // apresento o carregando...
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+  });
+
+  testWidgets("Deveria esconder a mensagem Carregando", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    paginaEstaCarregandoController.add(true); // apresento o carregando...
+    await widgetTester.pump(); // recarrego a tela
+    paginaEstaCarregandoController.add(false); // escondo o carregando...
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.byType(CircularProgressIndicator), findsNothing);
   });
 }

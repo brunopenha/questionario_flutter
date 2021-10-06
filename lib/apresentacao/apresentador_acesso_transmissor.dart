@@ -46,7 +46,7 @@ class ApresentacaoAcessoTransmissor implements ApresentadorAcesso {
   Stream<bool> get camposSaoValidosStream =>
       _controlador?.stream?.map((estado) => estado.estaValido)?.distinct();
 
-  Stream<bool> get estaCarregandoStream =>
+  Stream<bool> get paginaEstaCarregandoStream =>
       _controlador?.stream?.map((estado) => estado.estaCarregando)?.distinct();
 
   void _atualiza() => _controlador?.add(_estado);

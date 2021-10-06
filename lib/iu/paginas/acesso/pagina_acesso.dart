@@ -9,9 +9,9 @@ import 'apresentador_acesso.dart';
 import 'componentes/componentes.dart';
 
 class PaginaAcesso extends StatelessWidget {
-  final ApresentadorAcesso apresentacao;
+  final ApresentadorAcesso apresentador;
 
-  const PaginaAcesso(this.apresentacao);
+  const PaginaAcesso(this.apresentador);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class PaginaAcesso extends StatelessWidget {
 
     return Scaffold(body: Builder(
       builder: (context) {
-        apresentacao.estaCarregandoStream.listen((estaCarregando) {
+        apresentador.paginaEstaCarregandoStream.listen((estaCarregando) {
           if (estaCarregando) {
             exibeCarregando(context);
           } else {
@@ -32,14 +32,14 @@ class PaginaAcesso extends StatelessWidget {
           }
         });
 
-        apresentacao.falhaAcessoStream.listen((ErrosIU erro) {
+        apresentador.falhaAcessoStream.listen((ErrosIU erro) {
           if (erro != null) {
             exibeMensagemErro(context, erro.descricao);
           }
         });
 
         // Toda vez que receber uma notificacao do NavegarPara
-        apresentacao.navegaParaStream.listen((pagina) {
+        apresentador.navegaParaStream.listen((pagina) {
           if (pagina?.isNotEmpty == true) {
             Get.offAllNamed(pagina);
           }
@@ -59,7 +59,7 @@ class PaginaAcesso extends StatelessWidget {
                   padding: const EdgeInsets.all(32),
                   child: Provider(
                     create: (_) =>
-                        apresentacao, // Estou compartilhando esse presenter com toda a arvore de filhos
+                        apresentador, // Estou compartilhando esse presenter com toda a arvore de filhos
                     child: Form(
                       child: Column(
                         children: <Widget>[

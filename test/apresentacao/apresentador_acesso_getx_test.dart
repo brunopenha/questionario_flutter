@@ -195,7 +195,7 @@ void main() {
     sut.validaSenha(textoSenha);
 
     expectLater(
-        sut.estaCarregandoStream,
+        sut.paginaEstaCarregandoStream,
         emitsInOrder([
           true,
           false
@@ -213,7 +213,7 @@ void main() {
     sut.validaSenha(textoSenha);
 
     expectLater(
-        sut.estaCarregandoStream,
+        sut.paginaEstaCarregandoStream,
         emitsInOrder([
           true,
           false
@@ -240,7 +240,7 @@ void main() {
     sut.validaSenha(textoSenha);
 
     expectLater(
-        sut.estaCarregandoStream,
+        sut.paginaEstaCarregandoStream,
         emitsInOrder([
           true,
           false

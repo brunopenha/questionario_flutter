@@ -22,6 +22,13 @@ class PaginaInscricao extends StatelessWidget {
 
     return Scaffold(body: Builder(
       builder: (context) {
+        apresentador.paginaEstaCarregandoStream.listen((estaCarregando) {
+          if (estaCarregando) {
+            exibeCarregando(context);
+          } else {
+            escondeCarregando(context);
+          }
+        });
         return GestureDetector(
           onTap: _escondeTeclado,
           child: SingleChildScrollView(

@@ -33,7 +33,7 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
   Stream<String> get navegaParaStream => _navegaPara.stream;
 
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
-  Stream<bool> get estaCarregandoStream => _estaCarregando.stream;
+  Stream<bool> get paginaEstaCarregandoStream => _estaCarregando.stream;
 
   ErrosIU _validaCampo({String campo, String valor}) {
     final erro = validador.valida(campo: campo, valor: valor);

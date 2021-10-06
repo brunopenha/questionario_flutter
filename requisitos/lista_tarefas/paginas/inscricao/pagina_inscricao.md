@@ -15,12 +15,12 @@
 11. ✅ Mostar mensagem de erro se o nome for inválido
 12, ✅ Remover mensagem de erro se o nome do usuário for válido
 13. ✅ Validar a confirmação de senha quando o usuário digitar no campo
-14. Mostrar mensagem de erro se a confirmação de senha for inválida
-15. Remover mensagem de erro se a confirmação de senha for válida
+14. ✅ Mostrar mensagem de erro se a confirmação de senha for inválida
+15. ✅ Remover mensagem de erro se a confirmação de senha for válida
 16. ✅ Habilitar o botão de criar conta quando todos os campos forem válidos
 17. ✅ Desabilitar o botão de criar conta quando houver algum campo inválido
-18. Exibir o carregando no início da ação de criar a conta
+18. ✅ Exibir o carregando no início da ação de criar a conta
 19. ✅ Chamar o método de criar conta
 20. Exibir mensagem de erro caso a criação da conta falhe
-21. Esconder o loading no fim da criação da conta
+21. ✅ Esconder o loading no fim da criação da conta
 22. ✅ kFechar streams quando a página for encerrada
