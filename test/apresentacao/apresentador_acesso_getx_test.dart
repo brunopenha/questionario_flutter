@@ -224,6 +224,29 @@ void main() {
     await sut.autenticacao();
   });
 
+  test('Deveria habilitar o botao caso todos os campos são validos', () async {
+    expectLater(sut.camposSaoValidosStream, emitsInOrder([false, true]));
+
+    sut.validaEmail(textoEmail);
+    await Future.delayed(Duration.zero);
+    sut.validaSenha(textoSenha);
+    await Future.delayed(Duration.zero);
+
+    await sut.autenticacao();
+
+    verify(autenticadorSimulado.autoriza(ParametrosAutenticador(email: textoEmail, senha: textoSenha)));
+  });
+
+  test('Deveria chamar Autenticador com os valores corretos', () async {
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    await sut.autenticacao();
+
+    verify(autenticadorSimulado.autoriza(ParametrosAutenticador(email: textoEmail, senha: textoSenha)))
+        .called(1);
+  });
+
   test('Deveria chamar o SalvaContaAtual com o valore correto', () async {
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
@@ -247,15 +270,6 @@ void main() {
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
     sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
-
-    await sut.autenticacao();
-  });
-
-  test('Deveria mudar de pagina em caso de acesso com sucesso', () async {
-    sut.validaEmail(textoEmail);
-    sut.validaSenha(textoSenha);
-
-    sut.navegaParaStream.listen((pagina) => expect(pagina, '/pesquisas'));
 
     await sut.autenticacao();
   });
