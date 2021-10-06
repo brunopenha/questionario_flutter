@@ -235,4 +235,20 @@ void main() {
     final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
     expect(botao.onPressed, null);
   });
+
+  testWidgets("Deveria chamar o metodo inscreve quando o formulario for enviado",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(true); // habilito o botão
+    await widgetTester.pump(); // recarrego a tela
+
+    final botao = find.byType(RaisedButton);
+    await widgetTester.ensureVisible(botao); // garante que o botao está visivel antes de testar o clique nele
+
+    await widgetTester.tap(botao); // cliquei no botão
+    await widgetTester.pump(); // recarrego a tela
+
+    verify(apresentador.inscreve()).called(1);
+  });
 }

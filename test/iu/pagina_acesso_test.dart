@@ -11,7 +11,7 @@ import 'package:questionario/iu/paginas/paginas.dart';
 
 class ApresentacaoAcessoSimulado extends Mock implements ApresentadorAcesso {}
 
-ApresentadorAcesso apresentacao = ApresentacaoAcessoSimulado();
+ApresentadorAcesso apresentador = ApresentacaoAcessoSimulado();
 StreamController<ErrosIU> emailComErroController;
 StreamController<ErrosIU> senhaComErroController;
 StreamController<ErrosIU> falhaAcessoController;
@@ -20,7 +20,7 @@ StreamController<bool> camposSaoValidosController;
 StreamController<bool> paginaEstaCarregandoController;
 
 Future carregaPagina(WidgetTester widgetTester) async {
-  apresentacao = ApresentacaoAcessoSimulado();
+  apresentador = ApresentacaoAcessoSimulado();
 
   inicializaStreams();
 
@@ -29,7 +29,7 @@ Future carregaPagina(WidgetTester widgetTester) async {
   final pagAcesso = GetMaterialApp(
     initialRoute: '/acesso',
     getPages: [
-      GetPage(name: '/acesso', page: () => PaginaAcesso(apresentacao)),
+      GetPage(name: '/acesso', page: () => PaginaAcesso(apresentador)),
       GetPage(
           name: '/qualquer_rota',
           page: () => Scaffold(
@@ -42,12 +42,12 @@ Future carregaPagina(WidgetTester widgetTester) async {
 }
 
 void simulaStreams() {
-  when(apresentacao.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
-  when(apresentacao.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
-  when(apresentacao.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
-  when(apresentacao.navegaParaStream).thenAnswer((_) => navegaParaControlador.stream);
-  when(apresentacao.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
-  when(apresentacao.estaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
+  when(apresentador.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
+  when(apresentador.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
+  when(apresentador.falhaAcessoStream).thenAnswer((_) => falhaAcessoController.stream);
+  when(apresentador.navegaParaStream).thenAnswer((_) => navegaParaControlador.stream);
+  when(apresentador.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
+  when(apresentador.estaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
 }
 
 void inicializaStreams() {
@@ -97,11 +97,11 @@ void main() {
 
     final textoEmail = faker.internet.email();
     await widgetTester.enterText(find.bySemanticsLabel(R.strings.email), textoEmail);
-    verify(apresentacao.validaEmail(textoEmail));
+    verify(apresentador.validaEmail(textoEmail));
 
     final textoSenha = faker.internet.password();
     await widgetTester.enterText(find.bySemanticsLabel(R.strings.senha), textoSenha);
-    verify(apresentacao.validaSenha(textoSenha));
+    verify(apresentador.validaSenha(textoSenha));
   });
 
   testWidgets("Deveria exibir um erro se o email for invalido", (WidgetTester widgetTester) async {
@@ -198,10 +198,13 @@ void main() {
     camposSaoValidosController.add(true); // habilito o botão
     await widgetTester.pump(); // recarrego a tela
 
-    await widgetTester.tap(find.byType(RaisedButton)); // cliquei no botão
+    final botao = find.byType(RaisedButton);
+    await widgetTester.ensureVisible(botao); // garante que o botao está visivel antes de testar o clique nele
+
+    await widgetTester.tap(botao); // cliquei no botão
     await widgetTester.pump(); // recarrego a tela
 
-    verify(apresentacao.autenticacao()).called(1);
+    verify(apresentador.autenticacao()).called(1);
   });
 
   testWidgets("Deveria aprensentar a mensagem Carregando", (WidgetTester widgetTester) async {
