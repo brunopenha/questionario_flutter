@@ -21,6 +21,6 @@
 17. ✅ Desabilitar o botão de criar conta quando houver algum campo inválido
 18. ✅ Exibir o carregando no início da ação de criar a conta
 19. ✅ Chamar o método de criar conta
-20. Exibir mensagem de erro caso a criação da conta falhe
+20. ✅ Exibir mensagem de erro caso a criação da conta falhe
 21. ✅ Esconder o loading no fim da criação da conta
 22. ✅ kFechar streams quando a página for encerrada

@@ -36,4 +36,7 @@ class EnUs implements Strings {
 
   @override
   String get confirmacaoSenha => 'Repeat Password';
+
+  @override
+  String get emailEmUso => 'This email is already in use';
 }

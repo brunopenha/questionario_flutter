@@ -17,6 +17,7 @@ void main() {
   StreamController<ErrosIU> emailComErroController;
   StreamController<ErrosIU> senhaComErroController;
   StreamController<ErrosIU> confirmacaoSenhaComErroController;
+  StreamController<ErrosIU> falhaInscricaoController;
   StreamController<bool> camposSaoValidosController;
   StreamController<bool> paginaEstaCarregandoController;
 
@@ -27,6 +28,7 @@ void main() {
     when(apresentador.confirmaSenhaComErroStream).thenAnswer((_) => confirmacaoSenhaComErroController.stream);
     when(apresentador.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
     when(apresentador.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
+    when(apresentador.falhaInscricaoStream).thenAnswer((_) => falhaInscricaoController.stream);
   }
 
   void inicializaStreams() {
@@ -34,6 +36,7 @@ void main() {
     emailComErroController = StreamController<ErrosIU>();
     senhaComErroController = StreamController<ErrosIU>();
     confirmacaoSenhaComErroController = StreamController<ErrosIU>();
+    falhaInscricaoController = StreamController<ErrosIU>();
     camposSaoValidosController = StreamController<bool>();
     paginaEstaCarregandoController = StreamController<bool>();
   }
@@ -45,6 +48,7 @@ void main() {
     confirmacaoSenhaComErroController.close();
     camposSaoValidosController.close();
     paginaEstaCarregandoController.close();
+    falhaInscricaoController.close();
   }
 
   Future carregaPagina(WidgetTester widgetTester) async {
@@ -274,5 +278,24 @@ void main() {
     await widgetTester.pump(); // recarrego a tela
 
     expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets("Deveria apresentar mensagem de erro se a inscricao falhar", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    falhaInscricaoController.add(ErrosIU.EMAIL_EM_USO); // apresento o motivo da falha
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.text('Esse email já está em uso'), findsOneWidget);
+  });
+
+  testWidgets("Deveria apresentar mensagem de erro se a autenticacao lançar uma exceão",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    falhaInscricaoController.add(ErrosIU.INESPERADO); // apresento o motivo da falha
+    await widgetTester.pump(); // recarrego a tela
+
+    expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
   });
 }

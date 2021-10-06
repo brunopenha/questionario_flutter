@@ -36,4 +36,7 @@ class PtBr implements Strings {
 
   @override
   String get confirmacaoSenha => 'Repita a senha';
+
+  @override
+  String get emailEmUso => 'Esse email já está em uso';
 }

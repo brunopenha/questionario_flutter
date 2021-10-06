@@ -5,6 +5,7 @@ abstract class ApresentadorInscricao {
   Stream<ErrosIU> get emailComErroStream;
   Stream<ErrosIU> get senhaComErroStream;
   Stream<ErrosIU> get confirmaSenhaComErroStream;
+  Stream<ErrosIU> get falhaInscricaoStream;
   Stream<bool> get camposSaoValidosStream;
   Stream<bool> get paginaEstaCarregandoStream;
 

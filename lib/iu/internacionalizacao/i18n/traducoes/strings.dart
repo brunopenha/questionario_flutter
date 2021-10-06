@@ -22,4 +22,6 @@ abstract class Strings {
   String get nome;
 
   String get confirmacaoSenha;
+
+  String get emailEmUso;
 }

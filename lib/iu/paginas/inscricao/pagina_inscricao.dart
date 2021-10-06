@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:questionario/iu/paginas/inscricao/inscricao.dart';
 
+import '../../../iu/erros/erros.dart';
 import '../../../iu/internacionalizacao/i18n/i18n.dart';
+import '../../../iu/paginas/inscricao/inscricao.dart';
 import '../../componentes/componentes.dart';
 import 'componentes/componentes.dart';
 
@@ -29,6 +30,13 @@ class PaginaInscricao extends StatelessWidget {
             escondeCarregando(context);
           }
         });
+
+        apresentador.falhaInscricaoStream.listen((ErrosIU erro) {
+          if (erro != null) {
+            exibeMensagemErro(context, erro.descricao);
+          }
+        });
+
         return GestureDetector(
           onTap: _escondeTeclado,
           child: SingleChildScrollView(
