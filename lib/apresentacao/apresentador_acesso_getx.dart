@@ -44,8 +44,6 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
         return ErrosIU.DADO_INVALIDO;
       case ErroValidacao.EMAIL_INVALIDO:
         return ErrosIU.EMAIL_INVALIDO;
-      case ErroValidacao.EMAIL_INVALIDO:
-        return ErrosIU.EMAIL_INVALIDO;
 
       default:
         return null;
