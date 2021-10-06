@@ -5,9 +5,12 @@ abstract class ApresentadorInscricao {
   Stream<ErrosIU> get emailComErroStream;
   Stream<ErrosIU> get senhaComErroStream;
   Stream<ErrosIU> get confirmaSenhaComErroStream;
+  Stream<bool> get camposSaoValidosStream;
 
   void validaNome(String nome);
   void validaEmail(String email);
   void validaSenha(String senha);
   void validaConfirmaSenha(String confirmaSenha);
+
+  Future<void> inscreve();
 }

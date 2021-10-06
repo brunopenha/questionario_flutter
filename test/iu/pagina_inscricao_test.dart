@@ -17,12 +17,14 @@ void main() {
   StreamController<ErrosIU> emailComErroController;
   StreamController<ErrosIU> senhaComErroController;
   StreamController<ErrosIU> confirmacaoSenhaComErroController;
+  StreamController<bool> camposSaoValidosController;
 
   void simulaStreams() {
     when(apresentador.nomeComErroStream).thenAnswer((_) => nomeComErroController.stream);
     when(apresentador.emailComErroStream).thenAnswer((_) => emailComErroController.stream);
     when(apresentador.senhaComErroStream).thenAnswer((_) => senhaComErroController.stream);
     when(apresentador.confirmaSenhaComErroStream).thenAnswer((_) => confirmacaoSenhaComErroController.stream);
+    when(apresentador.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
   }
 
   void inicializaStreams() {
@@ -30,6 +32,7 @@ void main() {
     emailComErroController = StreamController<ErrosIU>();
     senhaComErroController = StreamController<ErrosIU>();
     confirmacaoSenhaComErroController = StreamController<ErrosIU>();
+    camposSaoValidosController = StreamController<bool>();
   }
 
   void encerraStreams() {
@@ -37,6 +40,7 @@ void main() {
     emailComErroController.close();
     senhaComErroController.close();
     confirmacaoSenhaComErroController.close();
+    camposSaoValidosController.close();
   }
 
   Future carregaPagina(WidgetTester widgetTester) async {
@@ -210,5 +214,25 @@ void main() {
         find.descendant(of: find.bySemanticsLabel(R.strings.confirmacaoSenha), matching: find.byType(Text)),
         findsOneWidget,
         reason: 'O teste irá passar se encontrar apenas um componente de Text no campo Repita a Senha');
+  });
+
+  testWidgets("Habilita o botão se os campos forem validos", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(true); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(botao.onPressed, isNotNull);
+  });
+
+  testWidgets("Desabilita o botão se os campos forem invalidos", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(false); // Emito um evento qualquer
+    await widgetTester.pump();
+
+    final botao = widgetTester.widget<RaisedButton>(find.byType(RaisedButton));
+    expect(botao.onPressed, null);
   });
 }

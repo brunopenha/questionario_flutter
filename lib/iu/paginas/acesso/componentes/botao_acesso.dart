@@ -9,7 +9,7 @@ class BotaoAcesso extends StatelessWidget {
   Widget build(BuildContext context) {
     final apresentacao = Provider.of<ApresentadorAcesso>(context);
 
-    return StreamBuilder(
+    return StreamBuilder<bool>(
       stream: apresentacao.camposSaoValidosStream,
       builder: (context, snapshot) {
         return RaisedButton(
