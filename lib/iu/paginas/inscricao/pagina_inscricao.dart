@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../../../iu/erros/erros.dart';
@@ -34,6 +35,13 @@ class PaginaInscricao extends StatelessWidget {
         apresentador.falhaInscricaoStream.listen((ErrosIU erro) {
           if (erro != null) {
             exibeMensagemErro(context, erro.descricao);
+          }
+        });
+
+        // Toda vez que receber uma notificacao do NavegarPara
+        apresentador.navegaParaStream.listen((pagina) {
+          if (pagina?.isNotEmpty == true) {
+            Get.offAllNamed(pagina);
           }
         });
 

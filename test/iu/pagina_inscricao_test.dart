@@ -20,6 +20,7 @@ void main() {
   StreamController<ErrosIU> falhaInscricaoController;
   StreamController<bool> camposSaoValidosController;
   StreamController<bool> paginaEstaCarregandoController;
+  StreamController<String> navegaParaControlador;
 
   void simulaStreams() {
     when(apresentador.nomeComErroStream).thenAnswer((_) => nomeComErroController.stream);
@@ -29,6 +30,7 @@ void main() {
     when(apresentador.camposSaoValidosStream).thenAnswer((_) => camposSaoValidosController.stream);
     when(apresentador.paginaEstaCarregandoStream).thenAnswer((_) => paginaEstaCarregandoController.stream);
     when(apresentador.falhaInscricaoStream).thenAnswer((_) => falhaInscricaoController.stream);
+    when(apresentador.navegaParaStream).thenAnswer((_) => navegaParaControlador.stream);
   }
 
   void inicializaStreams() {
@@ -39,6 +41,7 @@ void main() {
     falhaInscricaoController = StreamController<ErrosIU>();
     camposSaoValidosController = StreamController<bool>();
     paginaEstaCarregandoController = StreamController<bool>();
+    navegaParaControlador = StreamController<String>();
   }
 
   void encerraStreams() {
@@ -49,6 +52,7 @@ void main() {
     camposSaoValidosController.close();
     paginaEstaCarregandoController.close();
     falhaInscricaoController.close();
+    navegaParaControlador.close();
   }
 
   Future carregaPagina(WidgetTester widgetTester) async {
@@ -58,14 +62,19 @@ void main() {
 
     simulaStreams();
 
-    final pagInscricao = GetMaterialApp(
+    final pagAcesso = GetMaterialApp(
       initialRoute: '/inscricao',
       getPages: [
         GetPage(name: '/inscricao', page: () => PaginaInscricao(apresentador)),
+        GetPage(
+            name: '/qualquer_rota',
+            page: () => Scaffold(
+                  body: Text('Pagina Falsa'),
+                ))
       ],
     );
 
-    await widgetTester.pumpWidget(pagInscricao); // É aqui que o componente é carregado para ser testado
+    await widgetTester.pumpWidget(pagAcesso); // É aqui que o componente é carregado para ser testado
   }
 
   testWidgets("Deveria carregar com o estado inicial", (WidgetTester widgetTester) async {
@@ -297,5 +306,30 @@ void main() {
     await widgetTester.pump(); // recarrego a tela
 
     expect(find.text('Algo errado aconteceu. Tente novamente em breve.'), findsOneWidget);
+  });
+
+  testWidgets("Deveria mudar de pagina", (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    navegaParaControlador
+        .add('/qualquer_rota'); // o valor que eu emitir aqui tem que ser o valor que sera recebido na tela
+    await widgetTester.pumpAndSettle(); // A tela demora um pouco aparecer por isso o pumpAndSettle
+
+    expect(Get.currentRoute,
+        '/qualquer_rota'); // Verifico que o nome da pagina que for recebida no Streamer tem que ser o mesmo nome do destino
+    expect(find.text('Pagina Falsa'), findsOneWidget);
+  });
+
+  testWidgets('Não deveria mudar a pagina', (WidgetTester widgetTester) async {
+    // Carregamos a tela
+    await carregaPagina(widgetTester);
+
+    navegaParaControlador.add('');
+    await widgetTester.pump();
+    expect(Get.currentRoute, '/inscricao');
+
+    navegaParaControlador.add(null);
+    await widgetTester.pump();
+    expect(Get.currentRoute, '/inscricao');
   });
 }
