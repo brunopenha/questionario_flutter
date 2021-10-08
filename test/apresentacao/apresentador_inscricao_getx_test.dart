@@ -12,10 +12,13 @@ class ValidadorSimulado extends Mock implements Validador {}
 
 class AdicionaContaSimulado extends Mock implements AdicionaConta {}
 
+class SalvaContaAtualSimulado extends Mock implements SalvaContaAtual {}
+
 void main() {
   ApresentacaoInscricaoGetx sut;
   ValidadorSimulado validadorSimulado;
   AdicionaConta adicionaContaSimulado;
+  SalvaContaAtualSimulado salvaContaAtualSimulado;
 
   String textoEmail;
   String textoNome;
@@ -39,7 +42,11 @@ void main() {
   setUp(() {
     validadorSimulado = ValidadorSimulado();
     adicionaContaSimulado = AdicionaContaSimulado();
-    sut = ApresentacaoInscricaoGetx(validador: validadorSimulado, adicionaConta: adicionaContaSimulado);
+    salvaContaAtualSimulado = SalvaContaAtualSimulado();
+    sut = ApresentacaoInscricaoGetx(
+        validador: validadorSimulado,
+        adicionaConta: adicionaContaSimulado,
+        salvaContaAtual: salvaContaAtualSimulado);
     textoEmail = faker.internet.email();
     textoNome = faker.person.name();
     textoSenha = faker.internet.password();
@@ -239,10 +246,21 @@ void main() {
     sut.validaSenha(textoSenha);
     sut.validaConfirmaSenha(textoConfirmaSenha);
 
-    await sut.adiciona();
+    await sut.inscreve();
 
     verify(adicionaContaSimulado.adicionaConta(ParametrosAdicionaConta(
             nome: textoNome, email: textoEmail, senha: textoSenha, confirmaSenha: textoConfirmaSenha)))
         .called(1);
+  });
+
+  test('Deveria chamar o SalvaContaAtual com os valores corretos', () async {
+    sut.validaNome(textoNome);
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaConfirmaSenha(textoConfirmaSenha);
+
+    await sut.inscreve();
+
+    verify(salvaContaAtualSimulado.salva(Conta(token: textoToken))).called(1);
   });
 }

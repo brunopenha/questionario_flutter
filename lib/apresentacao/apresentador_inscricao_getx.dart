@@ -8,6 +8,7 @@ import 'dependencias/dependencias.dart';
 class ApresentacaoInscricaoGetx extends GetxController {
   final Validador validador;
   final AdicionaConta adicionaConta;
+  final SalvaContaAtual salvaContaAtual;
 
   String _email;
   String _nome;
@@ -28,7 +29,8 @@ class ApresentacaoInscricaoGetx extends GetxController {
   Stream<ErrosIU> get confirmaSenhaComErroStream => _confirmaSenhaComErro.stream;
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
 
-  ApresentacaoInscricaoGetx({@required this.validador, @required this.adicionaConta});
+  ApresentacaoInscricaoGetx(
+      {@required this.validador, @required this.adicionaConta, @required this.salvaContaAtual});
 
   ErrosIU _validaCampo({String campo, String valor}) {
     final erro = validador.valida(campo: campo, valor: valor);
@@ -80,8 +82,9 @@ class ApresentacaoInscricaoGetx extends GetxController {
         _senha != null;
   }
 
-  Future<void> adiciona() async {
-    await adicionaConta.adicionaConta(
+  Future<void> inscreve() async {
+    final conta = await adicionaConta.adicionaConta(
         ParametrosAdicionaConta(nome: _nome, email: _email, senha: _senha, confirmaSenha: _confirmaSenha));
+    await salvaContaAtual.salva(conta);
   }
 }

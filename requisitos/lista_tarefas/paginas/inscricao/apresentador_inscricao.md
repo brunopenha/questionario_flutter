@@ -29,7 +29,7 @@
 25. Notificar o paginaEstaCarregandoStream como false no fim de AdicionaConta
 26. Notificar o falhaInscricaoStream caso o AdicionaConta retorne um erro
 27. Fechar todos os Streams no dispose
-28. Gravar a Conta no cache em caso de sucesso
+28. ✅ Gravar a Conta no cache em caso de sucesso
 29. Notificar o falhaInscricaoStream caso o SalvaContaAtual retorne erro
 30. Levar o usuário para a tela de Pesquisas em caso de sucesso
 31. Levar o usuário para a tela de Acesso ao pressionar o botão de voltar para o acesso
