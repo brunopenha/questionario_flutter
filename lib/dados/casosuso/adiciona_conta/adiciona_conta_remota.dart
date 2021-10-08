@@ -11,7 +11,7 @@ class AdicionaContaRemota implements AdicionaConta {
 
   AdicionaContaRemota({@required this.clienteHttp, @required this.url});
 
-  Future<Conta> adiciona(ParametrosAdicionaConta parametro) async {
+  Future<Conta> adicionaConta(ParametrosAdicionaConta parametro) async {
     final body = ParametrosAdicionaContaRemota.aPartirDoDominio(parametro).criaJson();
     try {
       final responseHttp = await clienteHttp.requisita(url: url, metodo: 'post', corpo: body);

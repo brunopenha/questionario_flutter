@@ -24,7 +24,7 @@
 20. ✅ Notificar o camposSaoValidosStream após alterar a confirmação da senha
 21. ✅ Para o formulário estar válido, todos os Streams de erro precisam estar null e todos os campos obrigatórios não 
 22. ✅ Não notificar o camposSaoValidos se o valor for igual ao ultimo
-23. Chamar o AdicionaConta com valores corretos
+23. ✅ Chamar o AdicionaConta com valores corretos
 24. Notificar o paginaEstaCarregandoStream como true antes de chamar o AdicionaConta
 25. Notificar o paginaEstaCarregandoStream como false no fim de AdicionaConta
 26. Notificar o falhaInscricaoStream caso o AdicionaConta retorne um erro

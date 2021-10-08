@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
+import '../dominios/casosuso/casosuso.dart';
 import '../iu/erros/erros.dart';
 import 'dependencias/dependencias.dart';
 
 class ApresentacaoInscricaoGetx extends GetxController {
   final Validador validador;
+  final AdicionaConta adicionaConta;
 
   String _email;
   String _nome;
@@ -26,7 +28,7 @@ class ApresentacaoInscricaoGetx extends GetxController {
   Stream<ErrosIU> get confirmaSenhaComErroStream => _confirmaSenhaComErro.stream;
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
 
-  ApresentacaoInscricaoGetx({@required this.validador});
+  ApresentacaoInscricaoGetx({@required this.validador, @required this.adicionaConta});
 
   ErrosIU _validaCampo({String campo, String valor}) {
     final erro = validador.valida(campo: campo, valor: valor);
@@ -76,5 +78,10 @@ class ApresentacaoInscricaoGetx extends GetxController {
         _email != null &&
         _confirmaSenha != null &&
         _senha != null;
+  }
+
+  Future<void> adiciona() async {
+    await adicionaConta.adicionaConta(
+        ParametrosAdicionaConta(nome: _nome, email: _email, senha: _senha, confirmaSenha: _confirmaSenha));
   }
 }

@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import '../entidades/conta.dart';
 
 abstract class AdicionaConta {
-  Future<Conta> adiciona(ParametrosAdicionaConta parametros);
+  Future<Conta> adicionaConta(ParametrosAdicionaConta parametros);
 }
 
 class ParametrosAdicionaConta extends Equatable {

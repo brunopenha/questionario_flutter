@@ -43,7 +43,7 @@ void main() {
   });
 
   test("Deveria chamar o ClienteHttp com a URL correta", () async {
-    await sut.adiciona(parametros);
+    await sut.adicionaConta(parametros);
 
     verify(clienteHttp.requisita(url: urlSimulada, metodo: 'post', corpo: {
       'name': parametros.nome,
@@ -56,7 +56,7 @@ void main() {
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async {
     mockErrosHttp(ErrosHttp.badRequest);
 
-    final future = sut.adiciona(parametros);
+    final future = sut.adicionaConta(parametros);
 
     expect(future, throwsA(ErrosDominio.inesperado));
   });
@@ -64,7 +64,7 @@ void main() {
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 404", () async {
     mockErrosHttp(ErrosHttp.notFound);
 
-    final future = sut.adiciona(parametros);
+    final future = sut.adicionaConta(parametros);
 
     expect(future, throwsA(ErrosDominio.inesperado));
   });
@@ -72,7 +72,7 @@ void main() {
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 500", () async {
     mockErrosHttp(ErrosHttp.serverError);
 
-    final future = sut.adiciona(parametros);
+    final future = sut.adicionaConta(parametros);
 
     expect(future, throwsA(ErrosDominio.inesperado));
   });
@@ -80,7 +80,7 @@ void main() {
   test("Deveria lançar CredenciaisInvalidas se o ClienteHttp retornar 403", () async {
     mockErrosHttp(ErrosHttp.forbidden);
 
-    final future = sut.adiciona(parametros);
+    final future = sut.adicionaConta(parametros);
 
     expect(future, throwsA(ErrosDominio.emailEmUso));
   });
@@ -90,7 +90,7 @@ void main() {
 
     mockDadosHttp(dadosValidos);
 
-    final conta = await sut.adiciona(parametros);
+    final conta = await sut.adicionaConta(parametros);
 
     expect(conta.token, dadosValidos['tokenAcesso']);
   });
@@ -98,7 +98,7 @@ void main() {
   test("Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos", () async {
     mockDadosHttp({'tokenAcesso': 'chave_invalida'});
 
-    final future = sut.adiciona(parametros);
+    final future = sut.adicionaConta(parametros);
     expect(future, throwsA(ErrosDominio.inesperado));
   });
 }

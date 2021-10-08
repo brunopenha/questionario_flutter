@@ -4,18 +4,24 @@ import 'package:mockito/mockito.dart';
 //
 import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/apresentacao/dependencias/dependencias.dart';
+import 'package:questionario/dominios/casosuso/casosuso.dart';
+import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:questionario/iu/erros/erros.dart';
 
 class ValidadorSimulado extends Mock implements Validador {}
 
+class AdicionaContaSimulado extends Mock implements AdicionaConta {}
+
 void main() {
   ApresentacaoInscricaoGetx sut;
   ValidadorSimulado validadorSimulado;
+  AdicionaConta adicionaContaSimulado;
 
   String textoEmail;
   String textoNome;
   String textoSenha;
   String textoConfirmaSenha;
+  String textoToken;
 
   PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
       campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
@@ -24,15 +30,24 @@ void main() {
     chamadaValidadorSimulado(campo).thenReturn(valor);
   }
 
+  PostExpectation chamadaAdicionaContaSimulado() => when(adicionaContaSimulado.adicionaConta(any));
+
+  void chamaAdicionaContaSimulado() {
+    chamadaAdicionaContaSimulado().thenAnswer((_) async => Conta(token: textoToken));
+  }
+
   setUp(() {
     validadorSimulado = ValidadorSimulado();
-    sut = ApresentacaoInscricaoGetx(validador: validadorSimulado);
+    adicionaContaSimulado = AdicionaContaSimulado();
+    sut = ApresentacaoInscricaoGetx(validador: validadorSimulado, adicionaConta: adicionaContaSimulado);
     textoEmail = faker.internet.email();
     textoNome = faker.person.name();
     textoSenha = faker.internet.password();
     textoConfirmaSenha = faker.internet.password();
+    textoToken = faker.guid.guid();
 
     chamaValidadorSimulado();
+    chamaAdicionaContaSimulado();
   });
 
   test('Deveria chamar o Validador com o email correto', () {
@@ -216,5 +231,18 @@ void main() {
     await Future.delayed(Duration.zero);
     sut.validaConfirmaSenha(textoConfirmaSenha);
     await Future.delayed(Duration.zero);
+  });
+
+  test('Deveria chamar AdicionaConta com os valores corretos', () async {
+    sut.validaNome(textoNome);
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaConfirmaSenha(textoConfirmaSenha);
+
+    await sut.adiciona();
+
+    verify(adicionaContaSimulado.adicionaConta(ParametrosAdicionaConta(
+            nome: textoNome, email: textoEmail, senha: textoSenha, confirmaSenha: textoConfirmaSenha)))
+        .called(1);
   });
 }
