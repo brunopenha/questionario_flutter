@@ -290,4 +290,15 @@ void main() {
 
     await sut.inscreve();
   });
+
+  test('Deveria emitir os eventos corretos quando AdicionaConta não tiver erros', () async {
+    sut.validaNome(textoNome);
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaConfirmaSenha(textoConfirmaSenha);
+
+    expectLater(sut.paginaEstaCarregandoStream, emits([true]));
+
+    await sut.inscreve();
+  });
 }
