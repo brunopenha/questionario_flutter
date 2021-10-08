@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 
 import '../dominios/casosuso/casosuso.dart';
 import '../iu/erros/erros.dart';
@@ -19,15 +20,20 @@ class ApresentacaoInscricaoGetx extends GetxController {
   final _emailComErro = Rx<ErrosIU>();
   final _nomeComErro = Rx<ErrosIU>();
   final _senhaComErro = Rx<ErrosIU>();
+  final _falhaAcesso = Rx<ErrosIU>();
   final _confirmaSenhaComErro = Rx<ErrosIU>();
   final _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
+  final _paginaEstaCarregando = false.obs;
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
   Stream<ErrosIU> get emailComErroStream => _emailComErro.stream;
   Stream<ErrosIU> get nomeComErroStream => _nomeComErro.stream;
   Stream<ErrosIU> get senhaComErroStream => _senhaComErro.stream;
   Stream<ErrosIU> get confirmaSenhaComErroStream => _confirmaSenhaComErro.stream;
+  Stream<ErrosIU> get falhaAcessoStream => _falhaAcesso.stream;
+
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
+  Stream<bool> get paginaEstaCarregandoStream => _paginaEstaCarregando.stream;
 
   ApresentacaoInscricaoGetx(
       {@required this.validador, @required this.adicionaConta, @required this.salvaContaAtual});
@@ -83,8 +89,21 @@ class ApresentacaoInscricaoGetx extends GetxController {
   }
 
   Future<void> inscreve() async {
-    final conta = await adicionaConta.adicionaConta(
-        ParametrosAdicionaConta(nome: _nome, email: _email, senha: _senha, confirmaSenha: _confirmaSenha));
-    await salvaContaAtual.salva(conta);
+    _paginaEstaCarregando.value = true;
+    try {
+      final conta = await adicionaConta.adicionaConta(
+          ParametrosAdicionaConta(nome: _nome, email: _email, senha: _senha, confirmaSenha: _confirmaSenha));
+      await salvaContaAtual.salva(conta);
+    } on ErrosDominio catch (erro) {
+      switch (erro) {
+        case ErrosDominio.credenciaisInvalidas:
+          _falhaAcesso.value = ErrosIU.CREDENCIAIS_INVALIDAS;
+          break;
+        default:
+          _falhaAcesso.value = ErrosIU.INESPERADO;
+      }
+    } finally {
+      _paginaEstaCarregando.value = false;
+    }
   }
 }

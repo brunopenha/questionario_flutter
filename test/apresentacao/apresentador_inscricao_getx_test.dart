@@ -6,6 +6,7 @@ import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/apresentacao/dependencias/dependencias.dart';
 import 'package:questionario/dominios/casosuso/casosuso.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 import 'package:questionario/iu/erros/erros.dart';
 
 class ValidadorSimulado extends Mock implements Validador {}
@@ -37,6 +38,12 @@ void main() {
 
   void chamaAdicionaContaSimulado() {
     chamadaAdicionaContaSimulado().thenAnswer((_) async => Conta(token: textoToken));
+  }
+
+  PostExpectation chamadaSalvaContaAtualSimulado() => when(salvaContaAtualSimulado.salva(any));
+
+  void chamaSalvaContaAtualSimuladoComErro() {
+    chamadaSalvaContaAtualSimulado().thenThrow(ErrosDominio.inesperado);
   }
 
   setUp(() {
@@ -262,5 +269,25 @@ void main() {
     await sut.inscreve();
 
     verify(salvaContaAtualSimulado.salva(Conta(token: textoToken))).called(1);
+  });
+
+  test('Deveria lançar um erro inesperado se SalvaContaAtual tiver algum erro', () async {
+    chamaSalvaContaAtualSimuladoComErro();
+
+    sut.validaNome(textoNome);
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaConfirmaSenha(textoConfirmaSenha);
+
+    expectLater(
+        sut.paginaEstaCarregandoStream,
+        emitsInOrder([
+          true,
+          false
+        ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
+
+    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
+
+    await sut.inscreve();
   });
 }
