@@ -10,7 +10,9 @@ class ValidadorComparaCampos implements ValidadorCampos {
   ValidadorComparaCampos({@required this.campo, @required this.campoParaComparar});
 
   @override
-  ErroValidacao valida(Map entrada) {
-    return entrada[campoParaComparar] == entrada[campo] ? null : ErroValidacao.DADO_INVALIDO;
-  }
+  ErroValidacao valida(Map entrada) => entrada[campo] != null &&
+          entrada[campoParaComparar] != null &&
+          entrada[campoParaComparar] != entrada[campo]
+      ? ErroValidacao.DADO_INVALIDO
+      : null;
 }

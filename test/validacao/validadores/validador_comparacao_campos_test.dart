@@ -19,4 +19,10 @@ void main() {
     final dadosFormulario = {'qualquer_campo': 'qualquer_valor', 'outro_campo': 'qualquer_valor'};
     expectLater(sut.valida(dadosFormulario), null);
   });
+
+  test('Deveria retornar nulo nos casos invalidos', () {
+    expectLater(sut.valida({'qualquer_campo': 'qualquer_valor'}), null);
+    expectLater(sut.valida({'outro_campo': 'qualquer_valor'}), null);
+    expectLater(sut.valida({}), null);
+  });
 }
