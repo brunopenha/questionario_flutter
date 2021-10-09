@@ -7,7 +7,7 @@ void main() {
   ValidadorTamanhoMinimo sut;
 
   setUp(() {
-    sut = ValidadorTamanhoMinimo(campo: 'qualquer_campo', tamanho: 5);
+    sut = ValidadorTamanhoMinimo(campo: 'qualquer_campo', tamanhoCampo: 5);
   });
 
   test('Deveria retornar um erro se o valor estiver vazio', () {

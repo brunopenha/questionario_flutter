@@ -26,5 +26,10 @@ class ConstroiValidacao {
     return this;
   }
 
+  ConstroiValidacao min(int tamanho) {
+    validacoes.add(ValidadorTamanhoMinimo(campo: nomeCampo, tamanhoCampo: tamanho));
+    return this;
+  }
+
   List<ValidadorCampos> constroi() => validacoes;
 }

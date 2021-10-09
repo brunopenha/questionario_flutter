@@ -13,6 +13,6 @@ List<ValidadorCampos> criaValidacoesAcesso() {
   // "..." == SPREAD OPERATOR --> Pega todos os elementos da lista, separa eles e colocar dentro da lista mais externa
   return [
     ...ConstroiValidacao.campo('email').obrigatorio().email().constroi(),
-    ...ConstroiValidacao.campo('senha').obrigatorio().constroi(),
+    ...ConstroiValidacao.campo('senha').obrigatorio().min(3).constroi(),
   ];
 }

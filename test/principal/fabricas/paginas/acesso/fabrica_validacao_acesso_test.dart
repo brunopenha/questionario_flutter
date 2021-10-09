@@ -9,7 +9,8 @@ void main() {
     expect(validacoes, [
       ValidadorCamposObrigatorios('email'),
       ValidadorEmail('email'),
-      ValidadorCamposObrigatorios('senha')
+      ValidadorCamposObrigatorios('senha'),
+      ValidadorTamanhoMinimo(campo: 'senha', tamanhoCampo: 3)
     ]);
   });
 }
