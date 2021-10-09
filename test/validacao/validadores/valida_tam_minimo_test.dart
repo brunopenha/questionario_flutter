@@ -12,7 +12,7 @@ class ValidacaoTamanhoMinimo implements ValidaCampos {
 
   @override
   ErroValidacao valida(String valor) {
-    return valor?.length == tamanho ? null : ErroValidacao.DADO_INVALIDO;
+    return valor != null && valor.length >= tamanho ? null : ErroValidacao.DADO_INVALIDO;
   }
 }
 
@@ -37,5 +37,9 @@ void main() {
 
   test('Deveria retornar um erro se o valor igual ao tamanho minimo', () {
     expectLater(sut.valida(faker.randomGenerator.string(5, min: 5)), null);
+  });
+
+  test('Deveria retornar um erro se o valor mairo que o tamanho minimo', () {
+    expectLater(sut.valida(faker.randomGenerator.string(10, min: 6)), null);
   });
 }
