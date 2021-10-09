@@ -28,7 +28,7 @@ void main() {
   String textoToken;
 
   PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
-      campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
+      campo: campoParam == null ? anyNamed('campo') : campoParam, entrada: anyNamed('entrada')));
 
   void chamaValidadorSimulado({String campo, ErroValidacao valor}) {
     chamadaValidadorSimulado(campo).thenReturn(valor);
@@ -65,9 +65,11 @@ void main() {
   });
 
   test('Deveria chamar o Validador com o email correto', () {
+    final dadosFormulario = {'nome': null, 'email': textoEmail, 'senha': null, 'confirmaSenha': null};
+
     sut.validaEmail(textoEmail);
 
-    verify(validadorSimulado.valida(campo: 'email', valor: textoEmail)).called(1);
+    verify(validadorSimulado.valida(campo: 'email', entrada: dadosFormulario)).called(1);
   });
 
   test('Deveria transmitir mensagem de dado inválido no campo email se o email for inválido', () {
@@ -107,9 +109,11 @@ void main() {
   });
 
   test('Deveria chamar o Validador com o nome correto', () {
+    final dadosFormulario = {'nome': textoNome, 'email': null, 'senha': null, 'confirmaSenha': null};
+
     sut.validaNome(textoNome);
 
-    verify(validadorSimulado.valida(campo: 'nome', valor: textoNome)).called(1);
+    verify(validadorSimulado.valida(campo: 'nome', entrada: dadosFormulario)).called(1);
   });
 
   test('Deveria transmitir mensagem de dado inválido no campo nome se o nome for inválido', () {
@@ -149,9 +153,11 @@ void main() {
   });
 
   test('Deveria chamar o Validador com a senha correta', () {
+    final dadosFormulario = {'nome': null, 'email': null, 'senha': textoSenha, 'confirmaSenha': null};
+
     sut.validaSenha(textoSenha);
 
-    verify(validadorSimulado.valida(campo: 'senha', valor: textoSenha)).called(1);
+    verify(validadorSimulado.valida(campo: 'senha', entrada: dadosFormulario)).called(1);
   });
 
   test('Deveria transmitir mensagem de dado inválido no campo senha se a senha for inválida', () {
@@ -191,9 +197,11 @@ void main() {
   });
 
   test('Deveria chamar o Validador com a confirmação da senha correta', () {
+    final dadosFormulario = {'nome': null, 'email': null, 'senha': null, 'confirmaSenha': textoConfirmaSenha};
+
     sut.validaConfirmaSenha(textoConfirmaSenha);
 
-    verify(validadorSimulado.valida(campo: 'confirmaSenha', valor: textoConfirmaSenha)).called(1);
+    verify(validadorSimulado.valida(campo: 'confirmaSenha', entrada: dadosFormulario)).called(1);
   });
 
   test(

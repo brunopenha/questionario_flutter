@@ -10,18 +10,18 @@ void main() {
   });
 
   test('Deveria retornar null se o email estiver vazio', () {
-    expect(sut.valida(''), null);
+    expect(sut.valida({'qualquer_campo': ''}), null);
   });
 
   test('Deveria retornar null se o email estiver vazio', () {
-    expect(sut.valida(null), null);
+    expect(sut.valida({'qualquer_campo': null}), null);
   });
 
   test('Deveria retornar null se o email for valido', () {
-    expect(sut.valida('dev@bruno.penha.nom.br'), null);
+    expect(sut.valida({'qualquer_campo': 'dev@bruno.penha.nom.br'}), null);
   });
 
   test('Deveria retornar erro se o email for invalido', () {
-    expect(sut.valida('bruno.penha.nom.br'), ErroValidacao.EMAIL_INVALIDO);
+    expect(sut.valida({'qualquer_campo': 'bruno.penha.nom.br'}), ErroValidacao.EMAIL_INVALIDO);
   });
 }

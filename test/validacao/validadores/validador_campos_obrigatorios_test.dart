@@ -10,14 +10,14 @@ void main() {
   });
 
   test('Deveria retornar null se o valor não estiver vazio', () {
-    expect(sut.valida('qualquer_campo'), null);
+    expect(sut.valida({'qualquer_campo': 'qualquer_valor'}), null);
   });
 
   test('Deveria retornar erro se o valor estiver vazio', () {
-    expect(sut.valida(''), ErroValidacao.CAMPO_OBRIGATORIO);
+    expect(sut.valida({'qualquer_campo': ''}), ErroValidacao.CAMPO_OBRIGATORIO);
   });
 
   test('Deveria retornar erro se o valor estiver nulo', () {
-    expect(sut.valida(null), ErroValidacao.CAMPO_OBRIGATORIO);
+    expect(sut.valida({'qualquer_campo': null}), ErroValidacao.CAMPO_OBRIGATORIO);
   });
 }

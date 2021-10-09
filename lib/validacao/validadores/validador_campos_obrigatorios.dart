@@ -13,7 +13,7 @@ class ValidadorCamposObrigatorios extends Equatable implements ValidadorCampos {
   ValidadorCamposObrigatorios(this.campo);
 
   @override
-  ErroValidacao valida(String valor) {
-    return valor?.isNotEmpty == true ? null : ErroValidacao.CAMPO_OBRIGATORIO;
+  ErroValidacao valida(Map entrada) {
+    return entrada[campo]?.isNotEmpty == true ? null : ErroValidacao.CAMPO_OBRIGATORIO;
   }
 }

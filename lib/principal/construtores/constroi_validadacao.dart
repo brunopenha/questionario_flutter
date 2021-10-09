@@ -31,5 +31,10 @@ class ConstroiValidacao {
     return this;
   }
 
+  ConstroiValidacao igualAo(String campoASerComparado) {
+    validacoes.add(ValidadorComparaCampos(campo: nomeCampo, campoParaComparar: campoASerComparado));
+    return this;
+  }
+
   List<ValidadorCampos> constroi() => validacoes;
 }

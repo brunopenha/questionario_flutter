@@ -35,8 +35,13 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
   Stream<bool> get paginaEstaCarregandoStream => _estaCarregando.stream;
 
-  ErrosIU _validaCampo({String campo, String valor}) {
-    final erro = validador.valida(campo: campo, valor: valor);
+  ErrosIU _validaCampo(String campo) {
+    final dadosFormulario = {
+      'email': _email,
+      'senha': _senha,
+    };
+
+    final erro = validador.valida(campo: campo, entrada: dadosFormulario);
     switch (erro) {
       case ErroValidacao.CAMPO_OBRIGATORIO:
         return ErrosIU.CAMPO_OBRIGATORIO;
@@ -52,13 +57,13 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
 
   void validaEmail(String textoEmail) {
     _email = textoEmail;
-    _emailComErro.value = _validaCampo(campo: 'email', valor: textoEmail);
+    _emailComErro.value = _validaCampo('email');
     _validaFormulario();
   }
 
   void validaSenha(String textoSenha) {
     _senha = textoSenha;
-    _senhaComErro.value = _validaCampo(campo: 'senha', valor: textoSenha);
+    _senhaComErro.value = _validaCampo('senha');
     _validaFormulario();
   }
 

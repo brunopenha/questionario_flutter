@@ -9,11 +9,11 @@ class ValidadorComposto implements Validador {
   ValidadorComposto(this.validadores);
 
   @override
-  ErroValidacao valida({@required String campo, @required String valor}) {
+  ErroValidacao valida({@required String campo, @required Map entrada}) {
     ErroValidacao erro;
 
     for (final validacao in validadores.where((val) => val.campo == campo)) {
-      erro = validacao.valida(valor);
+      erro = validacao.valida(entrada);
 
       if (erro != null) {
         break;

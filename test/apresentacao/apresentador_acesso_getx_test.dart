@@ -27,7 +27,7 @@ void main() {
   String textoToken;
 
   PostExpectation chamadaValidadorSimulado(String campoParam) => when(validadorSimulado.valida(
-      campo: campoParam == null ? anyNamed('campo') : campoParam, valor: anyNamed('valor')));
+      campo: campoParam == null ? anyNamed('campo') : campoParam, entrada: anyNamed('entrada')));
 
   void chamaValidadorSimulado({String campo, ErroValidacao valor}) {
     chamadaValidadorSimulado(campo).thenReturn(valor);
@@ -65,9 +65,11 @@ void main() {
   });
 
   test('Deveria chamar o Validador com o email correto', () {
+    final dadosFormulario = {'email': textoEmail, 'senha': null};
+
     sut.validaEmail(textoEmail);
 
-    verify(validadorSimulado.valida(campo: 'email', valor: textoEmail)).called(1);
+    verify(validadorSimulado.valida(campo: 'email', entrada: dadosFormulario)).called(1);
   });
 
   test('Deveria transmitir mensagem de dado inválido no email se o email for inválido', () {
@@ -107,9 +109,11 @@ void main() {
   });
 
   test('Deveria chamar o Validador com a senha correta', () {
+    final dadosFormulario = {'email': null, 'senha': textoSenha};
+
     sut.validaSenha(textoSenha);
 
-    verify(validadorSimulado.valida(campo: 'senha', valor: textoSenha)).called(1);
+    verify(validadorSimulado.valida(campo: 'senha', entrada: dadosFormulario)).called(1);
   });
 
   test('Deveria transmitir erro na senha se estiver vazia', () {

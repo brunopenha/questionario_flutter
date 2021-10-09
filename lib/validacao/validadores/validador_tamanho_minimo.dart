@@ -14,7 +14,9 @@ class ValidadorTamanhoMinimo extends Equatable implements ValidadorCampos {
   ValidadorTamanhoMinimo({@required this.campo, @required this.tamanhoCampo});
 
   @override
-  ErroValidacao valida(String valor) {
-    return valor != null && valor.length >= tamanhoCampo ? null : ErroValidacao.DADO_INVALIDO;
+  ErroValidacao valida(Map entrada) {
+    return entrada[campo] != null && entrada[campo].length >= tamanhoCampo
+        ? null
+        : ErroValidacao.DADO_INVALIDO;
   }
 }

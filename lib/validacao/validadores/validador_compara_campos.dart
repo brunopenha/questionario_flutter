@@ -5,12 +5,12 @@ import '../dependencias/dependencias.dart';
 
 class ValidadorComparaCampos implements ValidadorCampos {
   final String campo;
-  final String valorParaComparar;
+  final String campoParaComparar;
 
-  ValidadorComparaCampos({@required this.campo, @required this.valorParaComparar});
+  ValidadorComparaCampos({@required this.campo, @required this.campoParaComparar});
 
   @override
-  ErroValidacao valida(String valorASerComparado) {
-    return valorParaComparar == valorASerComparado ? null : ErroValidacao.DADO_INVALIDO;
+  ErroValidacao valida(Map entrada) {
+    return entrada[campoParaComparar] == entrada[campo] ? null : ErroValidacao.DADO_INVALIDO;
   }
 }

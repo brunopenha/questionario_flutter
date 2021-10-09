@@ -41,7 +41,7 @@ void main() {
   });
 
   test('retornar null se todos os validadores retorne null ou vazio', () {
-    expect(sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), null);
+    expect(sut.valida(campo: 'qualquer_campo', entrada: {'qualquer_campo': 'qualquer_valor'}), null);
   });
 
   test('Deveria Deveria retornar erro no primeiro campo validado', () {
@@ -49,7 +49,7 @@ void main() {
     validacao2Simulado(ErroValidacao.CAMPO_OBRIGATORIO);
     validacao3Simulado(ErroValidacao.DADO_INVALIDO);
 
-    expect(
-        sut.valida(campo: 'qualquer_campo', valor: 'qualquer_valor'), ErroValidacao.CAMPO_OBRIGATORIO); // 2
+    expect(sut.valida(campo: 'qualquer_campo', entrada: {'qualquer_campo': 'qualquer_valor'}),
+        ErroValidacao.CAMPO_OBRIGATORIO); // 2
   });
 }

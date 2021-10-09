@@ -42,8 +42,14 @@ class ApresentacaoInscricaoGetx extends GetxController implements ApresentadorIn
   ApresentacaoInscricaoGetx(
       {@required this.validador, @required this.adicionaConta, @required this.salvaContaAtual});
 
-  ErrosIU _validaCampo({String campo, String valor}) {
-    final erro = validador.valida(campo: campo, valor: valor);
+  ErrosIU _validaCampo(String campo) {
+    final dadosFormulario = {
+      'nome': _nome,
+      'email': _email,
+      'senha': _senha,
+      'confirmaSenha': _confirmaSenha
+    };
+    final erro = validador.valida(campo: campo, entrada: dadosFormulario);
     switch (erro) {
       case ErroValidacao.CAMPO_OBRIGATORIO:
         return ErrosIU.CAMPO_OBRIGATORIO;
@@ -58,25 +64,25 @@ class ApresentacaoInscricaoGetx extends GetxController implements ApresentadorIn
 
   void validaEmail(String textoEmail) {
     _email = textoEmail;
-    _emailComErro.value = _validaCampo(campo: 'email', valor: textoEmail);
+    _emailComErro.value = _validaCampo('email');
     _validaFormulario();
   }
 
   void validaNome(String textoNome) {
     _nome = textoNome;
-    _nomeComErro.value = _validaCampo(campo: 'nome', valor: textoNome);
+    _nomeComErro.value = _validaCampo('nome');
     _validaFormulario();
   }
 
   void validaSenha(String textoSenha) {
     _senha = textoSenha;
-    _senhaComErro.value = _validaCampo(campo: 'senha', valor: textoSenha);
+    _senhaComErro.value = _validaCampo('senha');
     _validaFormulario();
   }
 
   void validaConfirmaSenha(String textoConfirmaSenha) {
     _confirmaSenha = textoConfirmaSenha;
-    _confirmaSenhaComErro.value = _validaCampo(campo: 'confirmaSenha', valor: textoConfirmaSenha);
+    _confirmaSenhaComErro.value = _validaCampo('confirmaSenha');
     _validaFormulario();
   }
 
