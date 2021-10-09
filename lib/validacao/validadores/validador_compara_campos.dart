@@ -11,6 +11,6 @@ class ValidadorComparaCampos implements ValidadorCampos {
 
   @override
   ErroValidacao valida(String valorASerComparado) {
-    return ErroValidacao.DADO_INVALIDO;
+    return valorParaComparar == valorASerComparado ? null : ErroValidacao.DADO_INVALIDO;
   }
 }
