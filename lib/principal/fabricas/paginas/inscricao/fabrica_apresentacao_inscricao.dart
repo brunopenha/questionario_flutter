@@ -1,11 +1,9 @@
-import 'package:questionario/iu/paginas/paginas.dart';
-
 import '../../../../apresentacao/apresentacao.dart';
+import '../../../../iu/paginas/paginas.dart';
 import '../../fabricas.dart';
+import '../paginas.dart';
 
-ApresentadorAcesso criaApresentadorAcessoGetx() {
-  return ApresentacaoAcessoGetx(
-      autenticador: criaAuteticacaoRemota(),
-      validador: criaValidadorAcesso(),
-      salvaContaAtual: criaSalvaContaAtualLocalmente());
-}
+ApresentadorInscricao criaApresentadorInscricaoGetx() => ApresentacaoInscricaoGetx(
+    adicionaConta: criaAdicionaContaRemota(),
+    validador: criaValidadorInscricao(),
+    salvaContaAtual: criaSalvaContaAtualLocalmente());

@@ -23,6 +23,7 @@ class Aplicativo extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: criaPaginaIntroducao, transition: Transition.fade),
         GetPage(name: '/acesso', page: criaPaginaAcesso, transition: Transition.fade),
+        GetPage(name: '/inscricao', page: criaPaginaInscricao),
         GetPage(
             name: '/pesquisas',
             page: () => Scaffold(
