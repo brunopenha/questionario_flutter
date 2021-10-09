@@ -47,6 +47,14 @@ void main() {
     await sut.verificaContaAtual(duracaoEmSegundos: 0);
   });
 
+  test('Deveria ir para a pagina de acesso quando o token for nulo', () async {
+    carregaContaAtualSimulada(conta: Conta(token: null));
+
+    sut.navegaParaTransmissor.listen(expectAsync1((pagina) => expect(pagina, '/acesso')));
+
+    await sut.verificaContaAtual(duracaoEmSegundos: 0);
+  });
+
   test('Deveria ir para a pagina de acesso quando houver um erro ou exceção', () async {
     carregaContaAtualSimuladaComErro();
 

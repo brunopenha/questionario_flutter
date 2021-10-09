@@ -7,6 +7,9 @@ import '../iu/paginas/introducao/introducao.dart';
 class ApresentadorIntroducaoGetx implements ApresentadorIntroducao {
   final CarregaContaAtual carregaContaAtual;
 
+  @override
+  Stream<String> get navegaParaTransmissor => _navegaPara.stream;
+
   var _navegaPara = RxString();
 
   ApresentadorIntroducaoGetx({@required this.carregaContaAtual});
@@ -16,12 +19,9 @@ class ApresentadorIntroducaoGetx implements ApresentadorIntroducao {
     try {
       final conta = await carregaContaAtual.carrega();
 
-      _navegaPara.value = conta == null ? '/acesso' : '/pesquisas';
+      _navegaPara.value = conta?.token == null ? '/acesso' : '/pesquisas';
     } catch (e) {
       _navegaPara.value = '/acesso';
     }
   }
-
-  @override
-  Stream<String> get navegaParaTransmissor => _navegaPara.stream;
 }
