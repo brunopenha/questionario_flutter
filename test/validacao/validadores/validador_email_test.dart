@@ -24,4 +24,8 @@ void main() {
   test('Deveria retornar erro se o email for invalido', () {
     expect(sut.valida({'qualquer_campo': 'bruno.penha.nom.br'}), ErroValidacao.EMAIL_INVALIDO);
   });
+
+  test('Deveria retornar nulo num caso inválido', () {
+    expect(sut.valida({}), null);
+  });
 }
