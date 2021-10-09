@@ -96,8 +96,8 @@ class ApresentacaoInscricaoGetx extends GetxController {
       await salvaContaAtual.salva(conta);
     } on ErrosDominio catch (erro) {
       switch (erro) {
-        case ErrosDominio.credenciaisInvalidas:
-          _falhaAcesso.value = ErrosIU.CREDENCIAIS_INVALIDAS;
+        case ErrosDominio.emailEmUso:
+          _falhaAcesso.value = ErrosIU.EMAIL_EM_USO;
           break;
         default:
           _falhaAcesso.value = ErrosIU.INESPERADO;

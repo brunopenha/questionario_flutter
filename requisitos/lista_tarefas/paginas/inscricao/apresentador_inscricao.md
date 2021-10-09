@@ -27,7 +27,7 @@
 23. ✅ Chamar o AdicionaConta com valores corretos
 24. ✅ Notificar o paginaEstaCarregandoStream como true antes de chamar o AdicionaConta
 25. ✅ Notificar o paginaEstaCarregandoStream como false no fim de AdicionaConta
-26. Notificar o falhaInscricaoStream caso o AdicionaConta retorne um erro
+26. ✅ Notificar o falhaInscricaoStream caso o AdicionaConta retorne um erro
 27. ✅ Fechar todos os Streams no dispose
 28. ✅ Gravar a Conta no cache em caso de sucesso
 29. ✅ Notificar o falhaInscricaoStream caso o SalvaContaAtual retorne erro

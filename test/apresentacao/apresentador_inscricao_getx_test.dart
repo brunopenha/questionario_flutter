@@ -42,8 +42,8 @@ void main() {
 
   PostExpectation chamadaSalvaContaAtualSimulado() => when(salvaContaAtualSimulado.salva(any));
 
-  void chamaSalvaContaAtualSimuladoComErro() {
-    chamadaSalvaContaAtualSimulado().thenThrow(ErrosDominio.inesperado);
+  void chamaSalvaContaAtualSimuladoComErro(ErrosDominio erro) {
+    chamadaSalvaContaAtualSimulado().thenThrow(erro);
   }
 
   setUp(() {
@@ -272,7 +272,7 @@ void main() {
   });
 
   test('Deveria lançar um erro inesperado se SalvaContaAtual tiver algum erro', () async {
-    chamaSalvaContaAtualSimuladoComErro();
+    chamaSalvaContaAtualSimuladoComErro(ErrosDominio.inesperado);
 
     sut.validaNome(textoNome);
     sut.validaEmail(textoEmail);
@@ -291,13 +291,22 @@ void main() {
     await sut.inscreve();
   });
 
-  test('Deveria emitir os eventos corretos quando AdicionaConta não tiver erros', () async {
+  test('Deveria transmitor o evento EmailEmUsoErro', () async {
+    chamaSalvaContaAtualSimuladoComErro(ErrosDominio.emailEmUso);
+
     sut.validaNome(textoNome);
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
     sut.validaConfirmaSenha(textoConfirmaSenha);
 
-    expectLater(sut.paginaEstaCarregandoStream, emits([true]));
+    expectLater(
+        sut.paginaEstaCarregandoStream,
+        emitsInOrder([
+          true,
+          false
+        ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
+
+    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.EMAIL_EM_USO)));
 
     await sut.inscreve();
   });
