@@ -273,4 +273,13 @@ void main() {
 
     await sut.autenticacao();
   });
+
+  test('Deveria mudar de pagina em caso de sucesso', () async {
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    sut.navegaParaStream.listen((pagina) => expect(pagina, '/pesquisas'));
+
+    await sut.autenticacao();
+  });
 }

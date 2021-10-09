@@ -310,4 +310,15 @@ void main() {
 
     await sut.inscreve();
   });
+
+  test('Deveria mudar de pagina em caso de sucesso', () async {
+    sut.validaNome(textoNome);
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaConfirmaSenha(textoConfirmaSenha);
+
+    sut.navegaParaStream.listen((pagina) => expect(pagina, '/acesso'));
+
+    await sut.inscreve();
+  });
 }

@@ -24,6 +24,7 @@ class ApresentacaoInscricaoGetx extends GetxController {
   final _confirmaSenhaComErro = Rx<ErrosIU>();
   final _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
   final _paginaEstaCarregando = false.obs;
+  final _navegaPara = RxString();
 
   // Toda vez que houver uma alteração nesse estado, algo deverá ser feito
   Stream<ErrosIU> get emailComErroStream => _emailComErro.stream;
@@ -34,6 +35,8 @@ class ApresentacaoInscricaoGetx extends GetxController {
 
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
   Stream<bool> get paginaEstaCarregandoStream => _paginaEstaCarregando.stream;
+
+  Stream<String> get navegaParaStream => _navegaPara.stream;
 
   ApresentacaoInscricaoGetx(
       {@required this.validador, @required this.adicionaConta, @required this.salvaContaAtual});
@@ -94,6 +97,7 @@ class ApresentacaoInscricaoGetx extends GetxController {
       final conta = await adicionaConta.adicionaConta(
           ParametrosAdicionaConta(nome: _nome, email: _email, senha: _senha, confirmaSenha: _confirmaSenha));
       await salvaContaAtual.salva(conta);
+      _navegaPara.value = '/acesso';
     } on ErrosDominio catch (erro) {
       switch (erro) {
         case ErrosDominio.emailEmUso:
