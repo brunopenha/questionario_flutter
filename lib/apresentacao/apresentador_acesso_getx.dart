@@ -97,6 +97,6 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
 
   @override
   void vaParaInscricao() {
-    _navegaPara.value = '/pesquisas';
+    _navegaPara.value = '/inscricao';
   }
 }
