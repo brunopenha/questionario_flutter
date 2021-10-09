@@ -16,4 +16,5 @@ abstract class ApresentadorInscricao {
   void validaConfirmaSenha(String confirmaSenha);
 
   Future<void> inscreve();
+  void vaParaAcesso();
 }

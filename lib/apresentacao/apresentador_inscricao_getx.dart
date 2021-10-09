@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
-import 'package:questionario/dominios/erros/erros.dart';
 
 import '../dominios/casosuso/casosuso.dart';
+import '../dominios/erros/erros.dart';
 import '../iu/erros/erros.dart';
+import '../iu/paginas/inscricao/inscricao.dart';
 import 'dependencias/dependencias.dart';
 
-class ApresentacaoInscricaoGetx extends GetxController {
+class ApresentacaoInscricaoGetx extends GetxController implements ApresentadorInscricao {
   final Validador validador;
   final AdicionaConta adicionaConta;
   final SalvaContaAtual salvaContaAtual;
@@ -20,7 +21,7 @@ class ApresentacaoInscricaoGetx extends GetxController {
   final _emailComErro = Rx<ErrosIU>();
   final _nomeComErro = Rx<ErrosIU>();
   final _senhaComErro = Rx<ErrosIU>();
-  final _falhaAcesso = Rx<ErrosIU>();
+  final _falhaInscricao = Rx<ErrosIU>();
   final _confirmaSenhaComErro = Rx<ErrosIU>();
   final _camposSaoValidos = false.obs; // Nesse caso ele começa com um valor default
   final _paginaEstaCarregando = false.obs;
@@ -31,7 +32,7 @@ class ApresentacaoInscricaoGetx extends GetxController {
   Stream<ErrosIU> get nomeComErroStream => _nomeComErro.stream;
   Stream<ErrosIU> get senhaComErroStream => _senhaComErro.stream;
   Stream<ErrosIU> get confirmaSenhaComErroStream => _confirmaSenhaComErro.stream;
-  Stream<ErrosIU> get falhaAcessoStream => _falhaAcesso.stream;
+  Stream<ErrosIU> get falhaInscricaoStream => _falhaInscricao.stream;
 
   Stream<bool> get camposSaoValidosStream => _camposSaoValidos.stream;
   Stream<bool> get paginaEstaCarregandoStream => _paginaEstaCarregando.stream;
@@ -101,13 +102,18 @@ class ApresentacaoInscricaoGetx extends GetxController {
     } on ErrosDominio catch (erro) {
       switch (erro) {
         case ErrosDominio.emailEmUso:
-          _falhaAcesso.value = ErrosIU.EMAIL_EM_USO;
+          _falhaInscricao.value = ErrosIU.EMAIL_EM_USO;
           break;
         default:
-          _falhaAcesso.value = ErrosIU.INESPERADO;
+          _falhaInscricao.value = ErrosIU.INESPERADO;
       }
     } finally {
       _paginaEstaCarregando.value = false;
     }
+  }
+
+  @override
+  void vaParaAcesso() {
+    _navegaPara.value = '/acesso';
   }
 }

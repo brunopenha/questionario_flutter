@@ -286,7 +286,7 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
+    sut.falhaInscricaoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
 
     await sut.inscreve();
   });
@@ -306,7 +306,7 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.EMAIL_EM_USO)));
+    sut.falhaInscricaoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.EMAIL_EM_USO)));
 
     await sut.inscreve();
   });
@@ -320,5 +320,10 @@ void main() {
     sut.navegaParaStream.listen((pagina) => expect(pagina, '/acesso'));
 
     await sut.inscreve();
+  });
+
+  test('Deveria ir para PaginaAcesso quando o botao for pressionado', () async {
+    sut.navegaParaStream.listen((pagina) => expect(pagina, '/acesso'));
+    sut.vaParaAcesso();
   });
 }

@@ -2,6 +2,9 @@ import 'strings.dart';
 
 class PtBr implements Strings {
   @override
+  String get acesso => 'Voltar ao Acesso';
+
+  @override
   String get adicionaConta => 'Criar Conta';
 
   @override

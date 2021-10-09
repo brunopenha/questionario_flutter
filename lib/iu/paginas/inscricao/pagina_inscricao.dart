@@ -74,9 +74,9 @@ class PaginaInscricao extends StatelessWidget {
                           ),
                           BotaoInscricao(),
                           FlatButton.icon(
-                            onPressed: () {},
+                            onPressed: apresentador.vaParaAcesso,
                             icon: Icon(Icons.exit_to_app),
-                            label: Text(R.strings.adicionaConta),
+                            label: Text(R.strings.acesso),
                           )
                         ],
                       ),

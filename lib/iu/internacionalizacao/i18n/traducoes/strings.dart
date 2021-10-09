@@ -1,4 +1,6 @@
 abstract class Strings {
+  String get acesso;
+
   String get adicionaConta;
 
   String get pesquisas;

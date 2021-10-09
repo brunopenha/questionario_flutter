@@ -32,4 +32,4 @@
 28. ✅ Gravar a Conta no cache em caso de sucesso
 29. ✅ Notificar o falhaInscricaoStream caso o SalvaContaAtual retorne erro
 30. ✅ Levar o usuário para a tela de Pesquisas em caso de sucesso
-31. Levar o usuário para a tela de Acesso ao pressionar o botão de voltar para o acesso
+31. ✅ Levar o usuário para a tela de Acesso ao pressionar o botão de voltar para o acesso

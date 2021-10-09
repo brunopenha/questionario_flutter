@@ -2,6 +2,9 @@ import 'strings.dart';
 
 class EnUs implements Strings {
   @override
+  String get acesso => 'Back to Login';
+
+  @override
   String get adicionaConta => 'Create an Account';
 
   @override
