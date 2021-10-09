@@ -74,6 +74,7 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
   }
 
   Future<void> autenticacao() async {
+    _falhaAcesso.value = null;
     _estaCarregando.value = true;
 
     try {

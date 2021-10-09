@@ -287,6 +287,8 @@ void main() {
     sut.validaSenha(textoSenha);
     sut.validaConfirmaSenha(textoConfirmaSenha);
 
+    expectLater(sut.falhaInscricaoStream, emitsInOrder([null, ErrosIU.INESPERADO]));
+
     expectLater(
         sut.paginaEstaCarregandoStream,
         emitsInOrder([
@@ -294,12 +296,10 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaInscricaoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
-
     await sut.inscreve();
   });
 
-  test('Deveria transmitor o evento EmailEmUsoErro', () async {
+  test('Deveria transmitir o evento EmailEmUsoErro', () async {
     chamaSalvaContaAtualSimuladoComErro(ErrosDominio.emailEmUso);
 
     sut.validaNome(textoNome);
@@ -307,6 +307,8 @@ void main() {
     sut.validaSenha(textoSenha);
     sut.validaConfirmaSenha(textoConfirmaSenha);
 
+    expectLater(sut.falhaInscricaoStream, emitsInOrder([null, ErrosIU.EMAIL_EM_USO]));
+
     expectLater(
         sut.paginaEstaCarregandoStream,
         emitsInOrder([
@@ -314,7 +316,17 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaInscricaoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.EMAIL_EM_USO)));
+    await sut.inscreve();
+  });
+
+  test('Deveria transmitir os eventos corretos quando AdicionaConta não tiver erro', () async {
+    sut.validaNome(textoNome);
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+    sut.validaConfirmaSenha(textoConfirmaSenha);
+
+    expectLater(sut.falhaInscricaoStream, emits(null));
+    expectLater(sut.paginaEstaCarregandoStream, emits(true));
 
     await sut.inscreve();
   });

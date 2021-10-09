@@ -99,6 +99,7 @@ class ApresentacaoInscricaoGetx extends GetxController implements ApresentadorIn
   }
 
   Future<void> inscreve() async {
+    _falhaInscricao.value = null;
     _paginaEstaCarregando.value = true;
     try {
       final conta = await adicionaConta.adicionaConta(

@@ -198,14 +198,14 @@ void main() {
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
 
+    expectLater(sut.falhaAcessoStream, emitsInOrder([null, ErrosIU.CREDENCIAIS_INVALIDAS]));
+
     expectLater(
         sut.paginaEstaCarregandoStream,
         emitsInOrder([
           true,
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
-
-    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.CREDENCIAIS_INVALIDAS)));
 
     await sut.autenticacao();
   });
@@ -216,14 +216,13 @@ void main() {
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
 
+    expectLater(sut.falhaAcessoStream, emitsInOrder([null, ErrosIU.INESPERADO]));
     expectLater(
         sut.paginaEstaCarregandoStream,
         emitsInOrder([
           true,
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
-
-    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
 
     await sut.autenticacao();
   });
@@ -266,6 +265,7 @@ void main() {
     sut.validaEmail(textoEmail);
     sut.validaSenha(textoSenha);
 
+    expectLater(sut.falhaAcessoStream, emitsInOrder([null, ErrosIU.INESPERADO]));
     expectLater(
         sut.paginaEstaCarregandoStream,
         emitsInOrder([
@@ -273,7 +273,15 @@ void main() {
           false
         ])); // Por enquanto não é possível verificar quando a tela de carregando foi ativada, apenas quando foi desativada
 
-    sut.falhaAcessoStream.listen(expectAsync1((erro) => expect(erro, ErrosIU.INESPERADO)));
+    await sut.autenticacao();
+  });
+
+  test('Deveria transmitir os eventos corretos quando Autenticacao não tiver erro', () async {
+    sut.validaEmail(textoEmail);
+    sut.validaSenha(textoSenha);
+
+    expectLater(sut.falhaAcessoStream, emits(null));
+    expectLater(sut.paginaEstaCarregandoStream, emits(true));
 
     await sut.autenticacao();
   });
@@ -288,7 +296,7 @@ void main() {
   });
 
   test('Deveria ir para PaginaInscricao quando o botao for pressionado', () async {
-    sut.navegaParaStream.listen((pagina) => expect(pagina, '/pesquisas'));
+    sut.navegaParaStream.listen((pagina) => expect(pagina, '/inscricao'));
     sut.vaParaInscricao();
   });
 }

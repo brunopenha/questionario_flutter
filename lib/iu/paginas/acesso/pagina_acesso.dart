@@ -11,7 +11,7 @@ import 'componentes/componentes.dart';
 class PaginaAcesso extends StatelessWidget {
   final ApresentadorAcesso apresentador;
 
-  const PaginaAcesso(this.apresentador);
+  PaginaAcesso(this.apresentador);
 
   @override
   Widget build(BuildContext context) {
