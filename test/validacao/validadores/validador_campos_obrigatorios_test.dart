@@ -3,10 +3,10 @@ import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/validacao/validadores/validadores.dart';
 
 void main() {
-  ValidaCamposObrigatorios sut;
+  ValidadorCamposObrigatorios sut;
 
   setUp(() {
-    sut = ValidaCamposObrigatorios('qualquer_campo');
+    sut = ValidadorCamposObrigatorios('qualquer_campo');
   });
 
   test('Deveria retornar null se o valor não estiver vazio', () {

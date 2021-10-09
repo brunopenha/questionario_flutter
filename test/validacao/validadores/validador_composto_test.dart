@@ -4,13 +4,13 @@ import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/validacao/dependencias/dependencias.dart';
 import 'package:questionario/validacao/validadores/validadores.dart';
 
-class ValidaCamposSimulado extends Mock implements ValidaCampos {}
+class ValidadorCamposSimulado extends Mock implements ValidadorCampos {}
 
 void main() {
-  ValidacaoComposta sut;
-  ValidaCamposSimulado validacao1;
-  ValidaCamposSimulado validacao2;
-  ValidaCamposSimulado validacao3;
+  ValidadorComposto sut;
+  ValidadorCamposSimulado validacao1;
+  ValidadorCamposSimulado validacao2;
+  ValidadorCamposSimulado validacao3;
 
   void validacao1Simulado(ErroValidacao erro) {
     when(validacao1.valida(any)).thenReturn(erro);
@@ -25,19 +25,19 @@ void main() {
   }
 
   setUp(() {
-    validacao1 = ValidaCamposSimulado();
+    validacao1 = ValidadorCamposSimulado();
     when(validacao1.campo).thenReturn('outro_campo');
     validacao1Simulado(null);
 
-    validacao2 = ValidaCamposSimulado();
+    validacao2 = ValidadorCamposSimulado();
     when(validacao2.campo).thenReturn('qualquer_campo');
     validacao2Simulado(null);
 
-    validacao3 = ValidaCamposSimulado();
+    validacao3 = ValidadorCamposSimulado();
     when(validacao3.campo).thenReturn('qualquer_campo');
     validacao3Simulado(null);
 
-    sut = ValidacaoComposta([validacao1, validacao2, validacao3]);
+    sut = ValidadorComposto([validacao1, validacao2, validacao3]);
   });
 
   test('retornar null se todos os validadores retorne null ou vazio', () {

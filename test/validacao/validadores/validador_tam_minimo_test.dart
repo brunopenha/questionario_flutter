@@ -4,10 +4,10 @@ import 'package:questionario/validacao/validadores/validadores.dart';
 import 'package:test/test.dart';
 
 void main() {
-  ValidaTamanhoMinimo sut;
+  ValidadorTamanhoMinimo sut;
 
   setUp(() {
-    sut = ValidaTamanhoMinimo(campo: 'qualquer_campo', tamanho: 5);
+    sut = ValidadorTamanhoMinimo(campo: 'qualquer_campo', tamanho: 5);
   });
 
   test('Deveria retornar um erro se o valor estiver vazio', () {

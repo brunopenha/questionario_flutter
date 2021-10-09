@@ -3,11 +3,11 @@ import 'package:meta/meta.dart';
 import '../../apresentacao/apresentacao.dart';
 import '../dependencias/dependencias.dart';
 
-class ValidaTamanhoMinimo implements ValidaCampos {
+class ValidadorTamanhoMinimo implements ValidadorCampos {
   final String campo;
   final int tamanho;
 
-  ValidaTamanhoMinimo({@required this.campo, @required this.tamanho});
+  ValidadorTamanhoMinimo({@required this.campo, @required this.tamanho});
 
   @override
   ErroValidacao valida(String valor) {

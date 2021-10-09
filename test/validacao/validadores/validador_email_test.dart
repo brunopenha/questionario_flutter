@@ -3,10 +3,10 @@ import 'package:questionario/apresentacao/apresentacao.dart';
 import 'package:questionario/validacao/validadores/validadores.dart';
 
 void main() {
-  ValidaEmail sut;
+  ValidadorEmail sut;
 
   setUp(() {
-    sut = ValidaEmail('qualquer_campo');
+    sut = ValidadorEmail('qualquer_campo');
   });
 
   test('Deveria retornar null se o email estiver vazio', () {

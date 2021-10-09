@@ -4,11 +4,11 @@ import '../../../../validacao/validadores/validadores.dart';
 import '../../../construtores/construtores.dart';
 
 Validador criaValidadorAcesso() {
-  return ValidacaoComposta(criaValidacoesAcesso());
+  return ValidadorComposto(criaValidacoesAcesso());
 }
 
 // Builder Design Pattern
-List<ValidaCampos> criaValidacoesAcesso() {
+List<ValidadorCampos> criaValidacoesAcesso() {
   // Para concatenar duas listas, utilize o SPREAD OPERATOR
   // "..." == SPREAD OPERATOR --> Pega todos os elementos da lista, separa eles e colocar dentro da lista mais externa
   return [

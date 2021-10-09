@@ -6,7 +6,10 @@ void main() {
   test('Deveria retornar os validadores corretos', () {
     final validacoes = criaValidacoesAcesso();
 
-    expect(validacoes,
-        [ValidaCamposObrigatorios('email'), ValidaEmail('email'), ValidaCamposObrigatorios('senha')]);
+    expect(validacoes, [
+      ValidadorCamposObrigatorios('email'),
+      ValidadorEmail('email'),
+      ValidadorCamposObrigatorios('senha')
+    ]);
   });
 }

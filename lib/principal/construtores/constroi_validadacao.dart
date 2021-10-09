@@ -5,7 +5,7 @@ class ConstroiValidacao {
   static ConstroiValidacao _instancia;
 
   String nomeCampo;
-  List<ValidaCampos> validacoes = [];
+  List<ValidadorCampos> validacoes = [];
 
   ConstroiValidacao._(); // Torna o construtor como privado - estrategia do Singleton no Dartl
 
@@ -17,14 +17,14 @@ class ConstroiValidacao {
   }
 
   ConstroiValidacao obrigatorio() {
-    validacoes.add(ValidaCamposObrigatorios(nomeCampo));
+    validacoes.add(ValidadorCamposObrigatorios(nomeCampo));
     return this;
   }
 
   ConstroiValidacao email() {
-    validacoes.add(ValidaEmail(nomeCampo));
+    validacoes.add(ValidadorEmail(nomeCampo));
     return this;
   }
 
-  List<ValidaCampos> constroi() => validacoes;
+  List<ValidadorCampos> constroi() => validacoes;
 }

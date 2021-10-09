@@ -3,10 +3,10 @@ import 'package:meta/meta.dart';
 import '../../apresentacao/dependencias/dependencias.dart';
 import '../dependencias/dependencias.dart';
 
-class ValidacaoComposta implements Validador {
-  final List<ValidaCampos> validadores;
+class ValidadorComposto implements Validador {
+  final List<ValidadorCampos> validadores;
 
-  ValidacaoComposta(this.validadores);
+  ValidadorComposto(this.validadores);
 
   @override
   ErroValidacao valida({@required String campo, @required String valor}) {
