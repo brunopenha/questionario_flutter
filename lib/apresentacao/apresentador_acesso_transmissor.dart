@@ -102,4 +102,9 @@ class ApresentacaoAcessoTransmissor implements ApresentadorAcesso {
     _controlador?.close();
     _controlador = null;
   }
+
+  @override
+  void vaParaInscricao() {
+    // Nada a fazer, pois esta classe está obsoleta
+  }
 }

@@ -89,4 +89,9 @@ class ApresentacaoAcessoGetx extends GetxController implements ApresentadorAcess
   }
 
   void liberaMemoria() {}
+
+  @override
+  void vaParaInscricao() {
+    _navegaPara.value = '/pesquisas';
+  }
 }

@@ -282,4 +282,9 @@ void main() {
 
     await sut.autenticacao();
   });
+
+  test('Deveria ir para PaginaInscricao quando o botao for pressionado', () async {
+    sut.navegaParaStream.listen((pagina) => expect(pagina, '/pesquisas'));
+    sut.vaParaInscricao();
+  });
 }

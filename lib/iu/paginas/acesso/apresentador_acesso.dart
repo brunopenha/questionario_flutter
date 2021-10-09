@@ -12,4 +12,5 @@ abstract class ApresentadorAcesso {
   void validaSenha(String senha);
   Future<void> autenticacao();
   void liberaMemoria();
+  void vaParaInscricao();
 }

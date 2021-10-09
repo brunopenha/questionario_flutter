@@ -70,7 +70,7 @@ class PaginaAcesso extends StatelessWidget {
                           ),
                           BotaoAcesso(),
                           FlatButton.icon(
-                            onPressed: () {},
+                            onPressed: apresentador.vaParaInscricao,
                             icon: Icon(Icons.person),
                             label: Text(R.strings.adicionaConta),
                           )

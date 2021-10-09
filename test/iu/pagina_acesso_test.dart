@@ -271,4 +271,20 @@ void main() {
     await widgetTester.pump();
     expect(Get.currentRoute, '/acesso');
   });
+
+  testWidgets("Deveria chamar a vaParaInscricao quando o botao Inscreva-se for pressionado",
+      (WidgetTester widgetTester) async {
+    await carregaPagina(widgetTester); // É aqui que o componente é carregado para ser testado
+
+    camposSaoValidosController.add(true); // habilito o botão
+    await widgetTester.pump(); // recarrego a tela
+
+    final botao = find.text(R.strings.adicionaConta);
+    await widgetTester.ensureVisible(botao); // garante que o botao está visivel antes de testar o clique nele
+
+    await widgetTester.tap(botao); // cliquei no botão
+    await widgetTester.pump(); // recarrego a tela
+
+    verify(apresentador.vaParaInscricao()).called(1);
+  });
 }
