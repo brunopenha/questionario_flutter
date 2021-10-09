@@ -16,19 +16,17 @@ class ValidacaoTamanhoMinimo implements ValidaCampos {
 }
 
 void main() {
+  ValidacaoTamanhoMinimo sut;
+
+  setUp(() {
+    sut = ValidacaoTamanhoMinimo(campo: 'qualquer_campo', tamanho: 5);
+  });
+
   test('Deveria retornar um erro se o valor estiver vazio', () {
-    final sut = ValidacaoTamanhoMinimo(campo: 'qualquer_campo', tamanho: 5);
-
-    final erro = sut.valida('');
-
-    expectLater(erro, ErroValidacao.DADO_INVALIDO);
+    expectLater(sut.valida(''), ErroValidacao.DADO_INVALIDO);
   });
 
   test('Deveria retornar um erro se o valor estiver nulo', () {
-    final sut = ValidacaoTamanhoMinimo(campo: 'qualquer_campo', tamanho: 5);
-
-    final erro = sut.valida(null);
-
-    expectLater(erro, ErroValidacao.DADO_INVALIDO);
+    expectLater(sut.valida(null), ErroValidacao.DADO_INVALIDO);
   });
 }
