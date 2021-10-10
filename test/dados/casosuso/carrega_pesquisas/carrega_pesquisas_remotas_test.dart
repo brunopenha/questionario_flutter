@@ -18,12 +18,17 @@ class CarregaPesquisasRemota {
 class ClienteHttpSimulado extends Mock implements ClienteHttp {}
 
 void main() {
+  String url;
+  ClienteHttp clienteHttp;
+  CarregaPesquisasRemota sut;
+
+  setUp(() {
+    url = faker.internet.httpUrl();
+    clienteHttp = ClienteHttpSimulado();
+    sut = CarregaPesquisasRemota(caminho: url, clienteHttp: clienteHttp);
+  });
+
   test('Deveria chamar o ClienteHttp com os valores corretos', () async {
-    final url = faker.internet.httpUrl();
-    final clienteHttp = ClienteHttpSimulado();
-
-    final sut = CarregaPesquisasRemota(caminho: url, clienteHttp: clienteHttp);
-
     await sut.carrega();
 
     verify(clienteHttp.requisita(caminho: url, metodo: 'get'));
