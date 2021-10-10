@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../../dados/http/http.dart';
 import '../../dominios/entidades/entidades.dart';
 
 class ModeloPesquisaRemota {
@@ -15,6 +16,11 @@ class ModeloPesquisaRemota {
       @required this.respondida});
 
   factory ModeloPesquisaRemota.doJson(Map json) {
+    if (!json.keys
+        .toSet()
+        .containsAll(['id', 'question', 'date', 'didAnswer'])) {
+      throw ErrosHttp.invalidData;
+    }
     return ModeloPesquisaRemota(
         id: json['id'],
         pergunta: json['question'],

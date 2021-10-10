@@ -2,8 +2,10 @@ import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:questionario/dados/http/cliente_http.dart';
+import 'package:questionario/dados/http/http.dart';
 import 'package:questionario/dados/modelos/modelos.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
+import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
 
 class CarregaPesquisasRemota {
@@ -13,11 +15,15 @@ class CarregaPesquisasRemota {
   CarregaPesquisasRemota({@required this.caminho, @required this.clienteHttp});
 
   Future<List<Pesquisa>> carrega() async {
-    final retornoHttp =
-        await clienteHttp.requisita(caminho: caminho, metodo: 'get');
-    return retornoHttp
-        .map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade())
-        .toList();
+    try {
+      final retornoHttp =
+          await clienteHttp.requisita(caminho: caminho, metodo: 'get');
+      return retornoHttp
+          .map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade())
+          .toList();
+    } on ErrosHttp {
+      throw ErrosDominio.inesperado;
+    }
   }
 }
 
@@ -82,5 +88,17 @@ void main() {
     ];
 
     expectLater(pesquisas, listaEsperada);
+  });
+
+  test(
+      "Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos",
+      () async {
+    simulaDadosHttp([
+      {'chave_invalida': 'valor_invalido'}
+    ]);
+
+    final future = sut.carrega();
+
+    expect(future, throwsA(ErrosDominio.inesperado));
   });
 }
