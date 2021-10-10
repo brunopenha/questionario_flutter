@@ -12,12 +12,16 @@ class AdicionaContaRemota implements AdicionaConta {
   AdicionaContaRemota({@required this.clienteHttp, @required this.url});
 
   Future<Conta> adicionaConta(ParametrosAdicionaConta parametro) async {
-    final body = ParametrosAdicionaContaRemota.aPartirDoDominio(parametro).criaJson();
+    final body =
+        ParametrosAdicionaContaRemota.aPartirDoDominio(parametro).criaJson();
     try {
-      final responseHttp = await clienteHttp.requisita(url: url, metodo: 'post', corpo: body);
+      final responseHttp = await clienteHttp.requisita(
+          caminho: url, metodo: 'post', corpo: body);
       return ContaRemotaModel.doJson(responseHttp).paraEntidade();
     } on ErrosHttp catch (erro) {
-      throw erro == ErrosHttp.forbidden ? ErrosDominio.emailEmUso : ErrosDominio.inesperado;
+      throw erro == ErrosHttp.forbidden
+          ? ErrosDominio.emailEmUso
+          : ErrosDominio.inesperado;
     }
   }
 }
@@ -29,9 +33,13 @@ class ParametrosAdicionaContaRemota {
   final String confirmaSenha;
 
   ParametrosAdicionaContaRemota(
-      {@required this.nome, @required this.email, @required this.senha, @required this.confirmaSenha});
+      {@required this.nome,
+      @required this.email,
+      @required this.senha,
+      @required this.confirmaSenha});
 
-  factory ParametrosAdicionaContaRemota.aPartirDoDominio(ParametrosAdicionaConta entidade) =>
+  factory ParametrosAdicionaContaRemota.aPartirDoDominio(
+          ParametrosAdicionaConta entidade) =>
       ParametrosAdicionaContaRemota(
           nome: entidade.nome,
           email: entidade.email,
@@ -40,5 +48,10 @@ class ParametrosAdicionaContaRemota {
 
   // acesso a API para verificar os parametros:
   // https://fordevs.herokuapp.com/api-docs/#/Login/post_signup
-  Map criaJson() => {'name': nome, 'email': email, 'password': senha, 'passwordConfirmation': confirmaSenha};
+  Map criaJson() => {
+        'name': nome,
+        'email': email,
+        'password': senha,
+        'passwordConfirmation': confirmaSenha
+      };
 }

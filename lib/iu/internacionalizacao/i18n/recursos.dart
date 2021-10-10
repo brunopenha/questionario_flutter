@@ -2,9 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'traducoes/traducoes.dart';
 
-/**
- * Centraliza todos os recursos do aplicativ
- */
+/// Centraliza todos os recursos do aplicativ
 class R {
   static Strings strings = PtBr();
 

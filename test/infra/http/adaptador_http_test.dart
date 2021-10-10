@@ -21,7 +21,7 @@ void main() {
   group('comum', () {
     test('Deveria lançar ServerError se for enviado um metodo HTTP invalido',
         () async {
-      final future = sut.requisita(url: url, metodo: 'INVALIDO');
+      final future = sut.requisita(caminho: url, metodo: 'INVALIDO');
 
       expect(future, throwsA(ErrosHttp.serverError));
     });
@@ -46,7 +46,7 @@ void main() {
 
     test('Deveria chamar o POST com os valores corretos', () async {
       await sut.requisita(
-          url: url,
+          caminho: url,
           metodo: 'post',
           corpo: {'qualquer_chave': 'qualquer_valor'});
 
@@ -59,13 +59,13 @@ void main() {
     });
 
     test('Deveria chamar o POST sem o corpo na requisição', () async {
-      await sut.requisita(url: url, metodo: 'post');
+      await sut.requisita(caminho: url, metodo: 'post');
 
       verify(cliente.post(any, headers: anyNamed("headers")));
     });
 
     test('Deveria retornar algum dado se o POST retornar 200', () async {
-      final retorno = await sut.requisita(url: url, metodo: 'post');
+      final retorno = await sut.requisita(caminho: url, metodo: 'post');
 
       expect(retorno, {'qualquer_valor': 'qualquer_chave'});
     });
@@ -73,21 +73,21 @@ void main() {
     test('Deveria retornar null se o POST retornar 200 sem dados no corpo',
         () async {
       retornoMockado(200, corpo: '');
-      final retorno = await sut.requisita(url: url, metodo: 'post');
+      final retorno = await sut.requisita(caminho: url, metodo: 'post');
 
       expect(retorno, null);
     });
 
     test('Deveria retornar null se o POST retornar 204', () async {
       retornoMockado(204, corpo: '');
-      final retorno = await sut.requisita(url: url, metodo: 'post');
+      final retorno = await sut.requisita(caminho: url, metodo: 'post');
 
       expect(retorno, null);
     });
 
     test('Deveria retornar null se o POST retornar 204 com dados', () async {
       retornoMockado(204);
-      final retorno = await sut.requisita(url: url, metodo: 'post');
+      final retorno = await sut.requisita(caminho: url, metodo: 'post');
 
       expect(retorno, null);
     });
@@ -95,7 +95,7 @@ void main() {
     test('Deveria retornar BadRequestError se o POST retornar 400', () async {
       retornoMockado(400);
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.badRequest));
     });
@@ -103,7 +103,7 @@ void main() {
     test('Deveria retornar BadRequestError se o POST retornar 400', () async {
       retornoMockado(400, corpo: '');
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.badRequest));
     });
@@ -111,7 +111,7 @@ void main() {
     test('Deveria retornar UnauthorizedError se o POST retornar 401', () async {
       retornoMockado(401);
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.unauthorized));
     });
@@ -119,7 +119,7 @@ void main() {
     test('Deveria retornar ForbiddenError se o POST retornar 403', () async {
       retornoMockado(403);
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.forbidden));
     });
@@ -127,7 +127,7 @@ void main() {
     test('Deveria retornar NorFoundError se o POST retornar 404', () async {
       retornoMockado(404);
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.notFound));
     });
@@ -135,7 +135,7 @@ void main() {
     test('Deveria retornar ServerError se o POST retornar 500', () async {
       retornoMockado(500);
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.serverError));
     });
@@ -143,7 +143,7 @@ void main() {
     test('Deveria retornar ServerError se o POST lançar uma exceção', () async {
       erroMockado();
 
-      final future = sut.requisita(url: url, metodo: 'post');
+      final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.serverError));
     });

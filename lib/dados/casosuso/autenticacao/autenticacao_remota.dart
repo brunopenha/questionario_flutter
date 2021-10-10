@@ -13,12 +13,16 @@ class AutenticacaoRemota implements Autenticador {
   AutenticacaoRemota({@required this.clienteHttp, @required this.url});
 
   Future<Conta> autoriza(ParametrosAutenticador parametro) async {
-    final body = ParametrosAutenticacaoRemota.aPartirDoDominio(parametro).criaJson();
+    final body =
+        ParametrosAutenticacaoRemota.aPartirDoDominio(parametro).criaJson();
     try {
-      final responseHttp = await clienteHttp.requisita(url: url, metodo: 'post', corpo: body);
+      final responseHttp = await clienteHttp.requisita(
+          caminho: url, metodo: 'post', corpo: body);
       return ContaRemotaModel.doJson(responseHttp).paraEntidade();
     } on ErrosHttp catch (erro) {
-      throw erro == ErrosHttp.unauthorized ? ErrosDominio.credenciaisInvalidas : ErrosDominio.inesperado;
+      throw erro == ErrosHttp.unauthorized
+          ? ErrosDominio.credenciaisInvalidas
+          : ErrosDominio.inesperado;
     }
   }
 }
@@ -29,8 +33,10 @@ class ParametrosAutenticacaoRemota {
 
   ParametrosAutenticacaoRemota({@required this.email, @required this.senha});
 
-  factory ParametrosAutenticacaoRemota.aPartirDoDominio(ParametrosAutenticador entidade) =>
-      ParametrosAutenticacaoRemota(email: entidade.email, senha: entidade.senha);
+  factory ParametrosAutenticacaoRemota.aPartirDoDominio(
+          ParametrosAutenticador entidade) =>
+      ParametrosAutenticacaoRemota(
+          email: entidade.email, senha: entidade.senha);
 
   // acesso a API para verificar os parametros:
   // https://fordevs.herokuapp.com/api-docs/#/Login/post_login

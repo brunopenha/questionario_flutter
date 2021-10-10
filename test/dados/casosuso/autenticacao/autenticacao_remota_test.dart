@@ -16,10 +16,13 @@ void main() {
   String urlSimulada;
   ParametrosAutenticador parametros;
 
-  Map mockDadosValidos() => {'tokenAcesso': faker.guid.guid(), 'nome': faker.person.name()};
+  Map mockDadosValidos() =>
+      {'tokenAcesso': faker.guid.guid(), 'nome': faker.person.name()};
 
-  PostExpectation requisicaoMockada() =>
-      when(clienteHttp.requisita(url: anyNamed('url'), metodo: anyNamed('metodo'), corpo: anyNamed('corpo')));
+  PostExpectation requisicaoMockada() => when(clienteHttp.requisita(
+      caminho: anyNamed('url'),
+      metodo: anyNamed('metodo'),
+      corpo: anyNamed('corpo')));
 
   void mockDadosHttp(Map dados) {
     requisicaoMockada().thenAnswer((_) async => dados);
@@ -33,7 +36,8 @@ void main() {
     clienteHttp = ClienteHttpSimulado();
     urlSimulada = faker.internet.httpUrl();
     sut = AutenticacaoRemota(clienteHttp: clienteHttp, url: urlSimulada);
-    parametros = ParametrosAutenticador(email: faker.internet.email(), senha: faker.internet.password());
+    parametros = ParametrosAutenticador(
+        email: faker.internet.email(), senha: faker.internet.password());
     mockDadosHttp(mockDadosValidos());
   });
 
@@ -41,7 +45,9 @@ void main() {
     await sut.autoriza(parametros);
 
     verify(clienteHttp.requisita(
-        url: urlSimulada, metodo: 'post', corpo: {'email': parametros.email, 'password': parametros.senha}));
+        caminho: urlSimulada,
+        metodo: 'post',
+        corpo: {'email': parametros.email, 'password': parametros.senha}));
   });
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 400", () async {
@@ -68,7 +74,8 @@ void main() {
     expect(future, throwsA(ErrosDominio.inesperado));
   });
 
-  test("Deveria lançar CredenciaisInvalidas se o ClienteHttp retornar 401", () async {
+  test("Deveria lançar CredenciaisInvalidas se o ClienteHttp retornar 401",
+      () async {
     mockErrosHttp(ErrosHttp.unauthorized);
 
     final future = sut.autoriza(parametros);
@@ -86,7 +93,9 @@ void main() {
     expect(conta.token, dadosValidos['tokenAcesso']);
   });
 
-  test("Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos", () async {
+  test(
+      "Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos",
+      () async {
     mockDadosHttp({'tokenAcesso': 'chave_invalida'});
 
     final future = sut.autoriza(parametros);
