@@ -7,7 +7,7 @@ import '../../http/http.dart'; // Para incluir parametros obrigatorios
 import '../../modelos/modelos.dart';
 
 class AutenticacaoRemota implements Autenticador {
-  final ClienteHttp clienteHttp;
+  final ClienteHttp<Map> clienteHttp;
   final String url;
 
   AutenticacaoRemota({@required this.clienteHttp, @required this.url});
@@ -18,7 +18,7 @@ class AutenticacaoRemota implements Autenticador {
     try {
       final responseHttp = await clienteHttp.requisita(
           caminho: url, metodo: 'post', corpo: body);
-      return ContaRemotaModel.doJson(responseHttp).paraEntidade();
+      return ModeloContaRemota.doJson(responseHttp).paraEntidade();
     } on ErrosHttp catch (erro) {
       throw erro == ErrosHttp.unauthorized
           ? ErrosDominio.credenciaisInvalidas

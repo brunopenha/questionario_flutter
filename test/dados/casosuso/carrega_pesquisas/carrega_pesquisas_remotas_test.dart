@@ -2,35 +2,85 @@ import 'package:faker/faker.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:questionario/dados/http/cliente_http.dart';
+import 'package:questionario/dados/modelos/modelos.dart';
+import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:test/test.dart';
 
 class CarregaPesquisasRemota {
   final String caminho;
-  final ClienteHttp clienteHttp;
+  final ClienteHttp<List<Map>> clienteHttp;
 
   CarregaPesquisasRemota({@required this.caminho, @required this.clienteHttp});
 
-  Future<void> carrega() async {
-    await clienteHttp.requisita(caminho: caminho, metodo: 'get');
+  Future<List<Pesquisa>> carrega() async {
+    final retornoHttp =
+        await clienteHttp.requisita(caminho: caminho, metodo: 'get');
+    return retornoHttp
+        .map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade())
+        .toList();
   }
 }
 
-class ClienteHttpSimulado extends Mock implements ClienteHttp {}
+class ClienteHttpSimulado extends Mock implements ClienteHttp<List<Map>> {}
 
 void main() {
   String url;
   ClienteHttp clienteHttp;
   CarregaPesquisasRemota sut;
+  List<Map> listaDados;
+
+  List<Map> simulaDadosValidos() => [
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'didAnswer': faker.randomGenerator.boolean(),
+          'date': faker.date.dateTime().toIso8601String()
+        },
+        {
+          'id': faker.guid.guid(),
+          'question': faker.randomGenerator.string(50),
+          'didAnswer': faker.randomGenerator.boolean(),
+          'date': faker.date.dateTime().toIso8601String()
+        }
+      ];
+
+  PostExpectation requisitaSimulado() => when(clienteHttp.requisita(
+      caminho: anyNamed('caminho'), metodo: anyNamed('metodo')));
+
+  void simulaDadosHttp(List<Map> dados) {
+    listaDados = dados;
+    requisitaSimulado().thenAnswer((_) async => dados);
+  }
 
   setUp(() {
     url = faker.internet.httpUrl();
     clienteHttp = ClienteHttpSimulado();
     sut = CarregaPesquisasRemota(caminho: url, clienteHttp: clienteHttp);
+    simulaDadosHttp(simulaDadosValidos());
   });
 
   test('Deveria chamar o ClienteHttp com os valores corretos', () async {
     await sut.carrega();
 
     verify(clienteHttp.requisita(caminho: url, metodo: 'get'));
+  });
+
+  test('Deveria retornar as pesquisas quando receber o codigo 200', () async {
+    final pesquisas = await sut.carrega();
+
+    final listaEsperada = [
+      Pesquisa(
+          id: listaDados[0]['id'],
+          pergunta: listaDados[0]['question'],
+          data: DateTime.parse(listaDados[0]['date']),
+          respondida: listaDados[0]['didAnswer']),
+      Pesquisa(
+          id: listaDados[1]['id'],
+          pergunta: listaDados[1]['question'],
+          data: DateTime.parse(listaDados[1]['date']),
+          respondida: listaDados[1]['didAnswer'])
+    ];
+
+    expectLater(pesquisas, listaEsperada);
   });
 }

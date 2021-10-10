@@ -6,7 +6,7 @@ import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:questionario/dominios/erros/erros.dart';
 
 class AdicionaContaRemota implements AdicionaConta {
-  final ClienteHttp clienteHttp;
+  final ClienteHttp<Map> clienteHttp;
   final String url;
 
   AdicionaContaRemota({@required this.clienteHttp, @required this.url});
@@ -17,7 +17,7 @@ class AdicionaContaRemota implements AdicionaConta {
     try {
       final responseHttp = await clienteHttp.requisita(
           caminho: url, metodo: 'post', corpo: body);
-      return ContaRemotaModel.doJson(responseHttp).paraEntidade();
+      return ModeloContaRemota.doJson(responseHttp).paraEntidade();
     } on ErrosHttp catch (erro) {
       throw erro == ErrosHttp.forbidden
           ? ErrosDominio.emailEmUso

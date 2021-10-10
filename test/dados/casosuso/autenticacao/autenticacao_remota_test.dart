@@ -6,7 +6,7 @@ import 'package:questionario/dominios/casosuso/casosuso.dart';
 import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
 
-class ClienteHttpSimulado extends Mock implements ClienteHttp {}
+class ClienteHttpSimulado extends Mock implements ClienteHttp<Map> {}
 
 void main() {
   // sut - System Under Test - "Quem estou testando?"
@@ -20,7 +20,7 @@ void main() {
       {'tokenAcesso': faker.guid.guid(), 'nome': faker.person.name()};
 
   PostExpectation requisicaoMockada() => when(clienteHttp.requisita(
-      caminho: anyNamed('url'),
+      caminho: anyNamed('caminho'),
       metodo: anyNamed('metodo'),
       corpo: anyNamed('corpo')));
 
