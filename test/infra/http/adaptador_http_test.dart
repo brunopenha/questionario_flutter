@@ -180,5 +180,21 @@ void main() {
 
       expect(retorno, null);
     });
+
+    test('Deveria retornar BadRequestError se o GET retornar 400', () async {
+      retornoMockado(400);
+
+      final future = sut.requisita(caminho: url, metodo: 'get');
+
+      expect(future, throwsA(ErrosHttp.badRequest));
+    });
+
+    test('Deveria retornar BadRequestError se o GET retornar 400', () async {
+      retornoMockado(400, corpo: '');
+
+      final future = sut.requisita(caminho: url, metodo: 'get');
+
+      expect(future, throwsA(ErrosHttp.badRequest));
+    });
   });
 }
