@@ -1,28 +1,11 @@
 import 'package:faker/faker.dart';
-import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
+import 'package:questionario/dados/casosuso/casosuso.dart';
 import 'package:questionario/dados/http/cliente_http.dart';
 import 'package:questionario/dados/http/http.dart';
-import 'package:questionario/dados/modelos/modelos.dart';
 import 'package:questionario/dominios/entidades/entidades.dart';
 import 'package:questionario/dominios/erros/erros.dart';
 import 'package:test/test.dart';
-
-class CarregaPesquisasRemota {
-  final String caminho;
-  final ClienteHttp<List<Map>> clienteHttp;
-
-  CarregaPesquisasRemota({@required this.caminho, @required this.clienteHttp});
-
-  Future<List<Pesquisa>> carrega() async {
-    try {
-      final retornoHttp = await clienteHttp.requisita(caminho: caminho, metodo: 'get');
-      return retornoHttp.map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade()).toList();
-    } on ErrosHttp catch (erro) {
-      throw erro == ErrosHttp.forbidden ? ErrosDominio.acessoNegado : ErrosDominio.inesperado;
-    }
-  }
-}
 
 class ClienteHttpSimulado extends Mock implements ClienteHttp<List<Map>> {}
 
