@@ -19,8 +19,7 @@ void main() {
   });
 
   group('comum', () {
-    test('Deveria lançar ServerError se for enviado um metodo HTTP invalido',
-        () async {
+    test('Deveria lançar ServerError se for enviado um metodo HTTP invalido', () async {
       final future = sut.requisita(caminho: url, metodo: 'INVALIDO');
 
       expect(future, throwsA(ErrosHttp.serverError));
@@ -28,11 +27,9 @@ void main() {
   });
 
   group('post', () {
-    PostExpectation requisicaoMockada() => when(cliente.post(any,
-        headers: anyNamed('headers'), body: anyNamed('body')));
+    PostExpectation requisicaoMockada() => when(cliente.post(any, headers: anyNamed('headers'), body: anyNamed('body')));
 
-    void retornoMockado(int statusCode,
-        {String corpo = '{"qualquer_valor" : "qualquer_chave"}'}) {
+    void retornoMockado(int statusCode, {String corpo = '{"qualquer_valor" : "qualquer_chave"}'}) {
       requisicaoMockada().thenAnswer((_) async => Response(corpo, statusCode));
     }
 
@@ -45,17 +42,9 @@ void main() {
     });
 
     test('Deveria chamar o POST com os valores corretos', () async {
-      await sut.requisita(
-          caminho: url,
-          metodo: 'post',
-          corpo: {'qualquer_chave': 'qualquer_valor'});
+      await sut.requisita(caminho: url, metodo: 'post', corpo: {'qualquer_chave': 'qualquer_valor'});
 
-      verify(cliente.post(url,
-          headers: {
-            'content-type': 'application/json',
-            'accept': 'application/json'
-          },
-          body: '{"qualquer_chave":"qualquer_valor"}'));
+      verify(cliente.post(url, headers: {'content-type': 'application/json', 'accept': 'application/json'}, body: '{"qualquer_chave":"qualquer_valor"}'));
     });
 
     test('Deveria chamar o POST sem o corpo na requisição', () async {
@@ -70,8 +59,7 @@ void main() {
       expect(retorno, {'qualquer_valor': 'qualquer_chave'});
     });
 
-    test('Deveria retornar null se o POST retornar 200 sem dados no corpo',
-        () async {
+    test('Deveria retornar null se o POST retornar 200 sem dados no corpo', () async {
       retornoMockado(200, corpo: '');
       final retorno = await sut.requisita(caminho: url, metodo: 'post');
 
@@ -146,6 +134,24 @@ void main() {
       final future = sut.requisita(caminho: url, metodo: 'post');
 
       expect(future, throwsA(ErrosHttp.serverError));
+    });
+  });
+
+  group('get', () {
+    PostExpectation requisicaoMockada() => when(cliente.get(any, headers: anyNamed('headers')));
+
+    void retornoMockado(int statusCode, {String corpo = '{"qualquer_valor" : "qualquer_chave"}'}) {
+      requisicaoMockada().thenAnswer((_) async => Response(corpo, statusCode));
+    }
+
+    setUp(() {
+      retornoMockado(200);
+    });
+
+    test('Deveria chamar o GET com os valores corretos', () async {
+      await sut.requisita(caminho: url, metodo: 'get');
+
+      verify(cliente.get(url, headers: {'content-type': 'application/json', 'accept': 'application/json'}));
     });
   });
 }

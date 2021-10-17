@@ -11,20 +11,21 @@ class AdaptadorHttp implements ClienteHttp {
   AdaptadorHttp(this.cliente);
 
   @override
-  Future<Map> requisita(
-      {@required String caminho, @required String metodo, Map corpo}) async {
-    final cabecalho = {
-      'content-type': 'application/json',
-      'accept': 'application/json'
-    };
+  Future<Map> requisita({@required String caminho, @required String metodo, Map corpo}) async {
+    final cabecalho = {'content-type': 'application/json', 'accept': 'application/json'};
     final corpoJson = corpo != null ? jsonEncode(corpo) : null;
     var retorno = Response('', 500);
 
     try {
       switch (metodo) {
         case 'post':
-          retorno =
-              await cliente.post(caminho, headers: cabecalho, body: corpoJson);
+          retorno = await cliente.post(caminho, headers: cabecalho, body: corpoJson);
+          print("Retorno do request:");
+          print(retorno.body);
+          print(retorno.toString());
+          break;
+        case 'get':
+          retorno = await cliente.get(caminho, headers: cabecalho);
           print("Retorno do request:");
           print(retorno.body);
           print(retorno.toString());
