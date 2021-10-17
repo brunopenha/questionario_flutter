@@ -153,5 +153,18 @@ void main() {
 
       verify(cliente.get(url, headers: {'content-type': 'application/json', 'accept': 'application/json'}));
     });
+
+    test('Deveria retornar algum dado se o GET retornar 200', () async {
+      final retorno = await sut.requisita(caminho: url, metodo: 'get');
+
+      expect(retorno, {'qualquer_valor': 'qualquer_chave'});
+    });
+
+    test('Deveria retornar null se o GET retornar 200 sem dados no corpo', () async {
+      retornoMockado(200, corpo: '');
+      final retorno = await sut.requisita(caminho: url, metodo: 'get');
+
+      expect(retorno, null);
+    });
   });
 }
