@@ -18,8 +18,8 @@ class CarregaPesquisasRemota {
     try {
       final retornoHttp = await clienteHttp.requisita(caminho: caminho, metodo: 'get');
       return retornoHttp.map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade()).toList();
-    } on ErrosHttp {
-      throw ErrosDominio.inesperado;
+    } on ErrosHttp catch (erro) {
+      throw erro == ErrosHttp.forbidden ? ErrosDominio.acessoNegado : ErrosDominio.inesperado;
     }
   }
 }
@@ -32,8 +32,7 @@ void main() {
   CarregaPesquisasRemota sut;
   List<Map> listaDados;
 
-  List<Map> simulaDadosValidos() =>
-      [
+  List<Map> simulaDadosValidos() => [
         {
           'id': faker.guid.guid(),
           'question': faker.randomGenerator.string(50),
@@ -109,5 +108,13 @@ void main() {
     final future = sut.carrega();
 
     expect(future, throwsA(ErrosDominio.inesperado));
+  });
+
+  test("Deveria lançar o erro AcessoNegado se o ClienteHttp retornar 403", () async {
+    mockErrosHttp(ErrosHttp.forbidden);
+
+    final future = sut.carrega();
+
+    expect(future, throwsA(ErrosDominio.acessoNegado));
   });
 }
