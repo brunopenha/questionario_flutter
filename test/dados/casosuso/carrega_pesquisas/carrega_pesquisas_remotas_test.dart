@@ -32,7 +32,8 @@ void main() {
   CarregaPesquisasRemota sut;
   List<Map> listaDados;
 
-  List<Map> simulaDadosValidos() => [
+  List<Map> simulaDadosValidos() =>
+      [
         {
           'id': faker.guid.guid(),
           'question': faker.randomGenerator.string(50),
@@ -96,6 +97,14 @@ void main() {
 
   test("Deveria lançar ErroInesperado se o ClienteHttp retornar 404", () async {
     mockErrosHttp(ErrosHttp.notFound);
+
+    final future = sut.carrega();
+
+    expect(future, throwsA(ErrosDominio.inesperado));
+  });
+
+  test("Deveria lançar ErroInesperado se o ClienteHttp retornar 500", () async {
+    mockErrosHttp(ErrosHttp.serverError);
 
     final future = sut.carrega();
 
