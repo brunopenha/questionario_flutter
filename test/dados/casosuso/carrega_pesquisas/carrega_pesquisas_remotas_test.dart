@@ -16,11 +16,8 @@ class CarregaPesquisasRemota {
 
   Future<List<Pesquisa>> carrega() async {
     try {
-      final retornoHttp =
-          await clienteHttp.requisita(caminho: caminho, metodo: 'get');
-      return retornoHttp
-          .map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade())
-          .toList();
+      final retornoHttp = await clienteHttp.requisita(caminho: caminho, metodo: 'get');
+      return retornoHttp.map((json) => ModeloPesquisaRemota.doJson(json).paraEntidade()).toList();
     } on ErrosHttp {
       throw ErrosDominio.inesperado;
     }
@@ -50,12 +47,15 @@ void main() {
         }
       ];
 
-  PostExpectation requisitaSimulado() => when(clienteHttp.requisita(
-      caminho: anyNamed('caminho'), metodo: anyNamed('metodo')));
+  PostExpectation requisicaoSimulado() => when(clienteHttp.requisita(caminho: anyNamed('caminho'), metodo: anyNamed('metodo')));
 
   void simulaDadosHttp(List<Map> dados) {
     listaDados = dados;
-    requisitaSimulado().thenAnswer((_) async => dados);
+    requisicaoSimulado().thenAnswer((_) async => dados);
+  }
+
+  void mockErrosHttp(ErrosHttp erro) {
+    requisicaoSimulado().thenThrow(erro);
   }
 
   setUp(() {
@@ -76,26 +76,26 @@ void main() {
 
     final listaEsperada = [
       Pesquisa(
-          id: listaDados[0]['id'],
-          pergunta: listaDados[0]['question'],
-          data: DateTime.parse(listaDados[0]['date']),
-          respondida: listaDados[0]['didAnswer']),
+          id: listaDados[0]['id'], pergunta: listaDados[0]['question'], data: DateTime.parse(listaDados[0]['date']), respondida: listaDados[0]['didAnswer']),
       Pesquisa(
-          id: listaDados[1]['id'],
-          pergunta: listaDados[1]['question'],
-          data: DateTime.parse(listaDados[1]['date']),
-          respondida: listaDados[1]['didAnswer'])
+          id: listaDados[1]['id'], pergunta: listaDados[1]['question'], data: DateTime.parse(listaDados[1]['date']), respondida: listaDados[1]['didAnswer'])
     ];
 
     expectLater(pesquisas, listaEsperada);
   });
 
-  test(
-      "Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos",
-      () async {
+  test("Deveria retornar ErroNaoEsperado se o ClienteHttp retornar 200 com dados invalidos", () async {
     simulaDadosHttp([
       {'chave_invalida': 'valor_invalido'}
     ]);
+
+    final future = sut.carrega();
+
+    expect(future, throwsA(ErrosDominio.inesperado));
+  });
+
+  test("Deveria lançar ErroInesperado se o ClienteHttp retornar 404", () async {
+    mockErrosHttp(ErrosHttp.notFound);
 
     final future = sut.carrega();
 
