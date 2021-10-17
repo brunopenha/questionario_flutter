@@ -204,5 +204,13 @@ void main() {
 
       expect(future, throwsA(ErrosHttp.unauthorized));
     });
+
+    test('Deveria retornar ForbiddenError se o GET retornar 403', () async {
+      retornoMockado(403);
+
+      final future = sut.requisita(caminho: url, metodo: 'get');
+
+      expect(future, throwsA(ErrosHttp.forbidden));
+    });
   });
 }
