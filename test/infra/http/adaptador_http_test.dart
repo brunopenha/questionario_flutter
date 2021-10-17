@@ -212,5 +212,13 @@ void main() {
 
       expect(future, throwsA(ErrosHttp.forbidden));
     });
+
+    test('Deveria retornar NorFoundError se o GET retornar 404', () async {
+      retornoMockado(404);
+
+      final future = sut.requisita(caminho: url, metodo: 'get');
+
+      expect(future, throwsA(ErrosHttp.notFound));
+    });
   });
 }
