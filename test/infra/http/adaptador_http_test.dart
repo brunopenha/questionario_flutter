@@ -196,5 +196,13 @@ void main() {
 
       expect(future, throwsA(ErrosHttp.badRequest));
     });
+
+    test('Deveria retornar UnauthorizedError se o GET retornar 401', () async {
+      retornoMockado(401);
+
+      final future = sut.requisita(caminho: url, metodo: 'get');
+
+      expect(future, throwsA(ErrosHttp.unauthorized));
+    });
   });
 }
