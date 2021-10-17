@@ -166,5 +166,19 @@ void main() {
 
       expect(retorno, null);
     });
+
+    test('Deveria retornar null se o GET retornar 204', () async {
+      retornoMockado(204, corpo: '');
+      final retorno = await sut.requisita(caminho: url, metodo: 'get');
+
+      expect(retorno, null);
+    });
+
+    test('Deveria retornar null se o GET retornar 204 com dados', () async {
+      retornoMockado(204);
+      final retorno = await sut.requisita(caminho: url, metodo: 'get');
+
+      expect(retorno, null);
+    });
   });
 }
