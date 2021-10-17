@@ -144,6 +144,10 @@ void main() {
       requisicaoMockada().thenAnswer((_) async => Response(corpo, statusCode));
     }
 
+    void erroMockado() {
+      requisicaoMockada().thenThrow(Exception());
+    }
+
     setUp(() {
       retornoMockado(200);
     });
@@ -223,6 +227,14 @@ void main() {
 
     test('Deveria retornar ServerError se o GET retornar 500', () async {
       retornoMockado(500);
+
+      final future = sut.requisita(caminho: url, metodo: 'get');
+
+      expect(future, throwsA(ErrosHttp.serverError));
+    });
+
+    test('Deveria retornar ServerError se o GET lançar uma exceção', () async {
+      erroMockado();
 
       final future = sut.requisita(caminho: url, metodo: 'get');
 
